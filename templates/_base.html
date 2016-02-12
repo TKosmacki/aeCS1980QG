@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quiz Game</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+  </head>
+
+  <body>
+	<div class = "navbar navbar-inverse navbar-fixed-top">
+		<div class = "container">
+			<a href = "/" class = "navbar-brand">PharmaQuizGame</a>
+			<button class = "navbar-toggle" data-toggle= "collapse" data-target = ".navHeaderCollapse">
+			V
+			</button>
+			<div class = "collapse navbar-collapse navHeaderCollapse">
+				<ul class = "nav navbar-nav navbar-right">
+					<li><a href = "/">Home</a></li>
+					<li class = "dropdown">
+						<a href = "/" class = "dropdown-toggle" data-toggle = "dropdown">Questions<b class = "caret"></b></a>
+						<ul class = "dropdown-menu">
+							{% if user_email %}
+							<li><a href="/submitNew">Submit Question</a></li>
+							{% endif %}
+							<li><a href="/review">Review Questions</a></li>
+						</ul>
+					</li>
+					<li>
+						{% if user_email %}
+						<a href="/profile?id={{user_id}}&search={{user_email}}">Profile</a>
+						{% else %}
+						{% endif %}
+					</li>
+					<li>
+						{% if user_email %}
+						<a href="{{ logout_url }}">Sign Out</a>
+						{% else %}
+						<a href="{{ login_url }}">Sign In</a>
+						{% endif %}
+					</li>
+					<li><a href = "/">About Us</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+{% block bodycontent %}{% endblock %}
+
+  </body>
+</html>

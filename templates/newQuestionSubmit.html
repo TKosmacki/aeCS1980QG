@@ -1,0 +1,50 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<title>Add a Question</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<br><br><br>
+	<div class = "container">
+		<form action=/submit-newquestion><font size = 4>
+			Category:
+			<input list="Category" required>
+			<datalist id="Category">
+				<option value="PHARM 2001">
+				<option value="PHARM 3023">
+				<option value="PHARM 3028">
+				<option value="PHARM 3040">
+				<option value="PHARM 5218">
+			</datalist>
+			</br>
+			Question:
+			<input type="text" size = "45" method=POST required>
+			<hr>
+			<ol>
+				<li class="red-text">
+				<input type="text" method=POST required>
+				</li>
+				<li class="blue-text">
+				<input type="text" method=POST required>
+				</li>
+				<li class="green-text">
+				<input type="text" method=POST required>
+				</li>
+				<li class="yellow-text">
+				<input type="text" method=POST required>
+				</li>
+			</ol>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button type="submit" name=one class="red-text">1</button>
+			<button type="submit" name=two class="blue-text">2</button>
+			<button type="submit" name=three class="green-text">3</button>
+			<button type="submit" name=four class="yellow-text">4</button>
+		</form>
+	</div>
+</body>
+</html>
+{% endblock %}

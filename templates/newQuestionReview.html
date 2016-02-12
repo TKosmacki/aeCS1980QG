@@ -1,0 +1,25 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<!DOCTYPE html>
+<html>
+<body>
+	<div class = "container">
+		<br><br><br>
+		<p>Here is a new user question:</p>
+		<p>Who is the spiciest chili pepper at Pitt?</p>
+		<ol>
+			<li class="red-text">Bill Laboon</li>
+			<li class="blue-text">Nick Farnan</li>
+			<li class="green-text">Jon Misurda</li>
+			<li class="yellow-text">Taieb Znati</li>
+		</ol>
+		<p>The answer is:</p><p class = "red-text">Bill Laboon</p>
+		<p>Should this question be added?</p>
+		<form action="submit-review">
+			<button type="submit" name=yes>Yes</button>
+			<button type="submit" name=no>No</button>
+		</form>
+	</div>
+</body>
+</html>
+{% endblock %}
