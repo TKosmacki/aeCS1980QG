@@ -21,6 +21,15 @@ class user_profile(ndb.Model):
 	location = ndb.StringProperty()
 	interests = ndb.StringProperty()
 
+class question_obj(ndb.Model):
+    category = ndb.StringProperty()
+    question = ndb.StringProperty()
+    answer1 = ndb.StringProperty()
+    answer2 = ndb.StringProperty()
+    answer3 = ndb.StringProperty()
+    answer4 = ndb.StringProperty()
+    answerid = ndb.IntegerProperty()
+
 def update_profile(id, name, location, interests):
 	profile = get_user_profile(id)
 	profile.populate(name = name, location = location, interests = interests)
@@ -59,3 +68,18 @@ def create_global_id():
 		id.key = ndb.Key(global_id, "number")
 		id.put()
 		memcache.set("number", id, namespace="global_id")
+
+def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
+    #question_number = get_global_id()
+    question = question_obj()
+    question.populate(category=category,
+    question=question,
+    answer1=answer1,
+    answer2=answer2,
+    answer3=answer3,
+    answer4=answer4,
+    answerid=answerid)
+    #question.key = ndb.Key(question_obj, question_number)
+    #question.put()
+
+    return question_number
