@@ -1,0 +1,38 @@
+<style> 
+p {
+  font-size: 16px;
+  font-family: Monospace;
+}
+
+.blue-text {
+  color: #0266C8;
+  font-size: large;
+}
+
+.green-text {
+  color: #00933B;
+  font-size: large;
+}
+
+.yellow-text {
+  color: #F2B50F;
+  font-size: large;
+}
+
+.red-text {
+  color: #F90101;
+  font-size: large;
+}
+
+.blue-border {
+    border-color: #0266C8;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 50%;
+}
+
+.smaller-image {
+    width: 250px;
+}
+
+</style>

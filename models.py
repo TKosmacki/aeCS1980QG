@@ -50,8 +50,8 @@ def check_if_user_profile_exists(id):
 	q = q.fetch(1)
 
 	##if q == []:
-	return q	
-	
+	return q
+
 def get_user_profile(id):
 	result = memcache.get(id, namespace="profile")
 	if not result:
@@ -70,7 +70,7 @@ def create_global_id():
 		memcache.set("number", id, namespace="global_id")
 
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
-    #question_number = get_global_id()
+    question_number = create_global_id()
     question = question_obj()
     question.populate(category=category,
     question=question,
@@ -79,7 +79,7 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
     answer3=answer3,
     answer4=answer4,
     answerid=answerid)
-    #question.key = ndb.Key(question_obj, question_number)
-    #question.put()
+    question.key = ndb.Key(question_obj, question_number)
+    question.put()
 
     return question_number

@@ -1,6 +1,7 @@
 import cgi
 from google.appengine.api import users
 import webapp2
+import models
 
 MAIN_PAGE_HTML = """\
 <html>
@@ -39,10 +40,10 @@ MAIN_PAGE_HTML = """\
     </li>
   </ol>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button type="submit" name="answerid" value="One" class="red-text">1</button>
-    <button type="submit" name="answerid" value="Two" class="blue-text">2</button>
-    <button type="submit" name="answerid" value="Three" class="green-text">3</button>
-    <button type="submit" name="answerid" value="Four" class="yellow-text">4</button>
+    <input type="submit" name="answerid" value="One" class="red-text">1</button>
+    <input type="submit" name="answerid" value="Two" class="blue-text">2</button>
+    <input type="submit" name="answerid" value="Three" class="green-text">3</button>
+    <input type="submit" name="answerid" value="Four" class="yellow-text">4</button>
   </form>
 </font>
 </body>
@@ -62,7 +63,7 @@ class NewQuestion(webapp2.RequestHandler):
         answer3 = self.request.get('answer3')
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
-        #questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerID)
+        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerID)
         self.response.write('<html><body>You wrote:<pre>');
         self.response.write(category)
         self.response.write('</br>'+question)
