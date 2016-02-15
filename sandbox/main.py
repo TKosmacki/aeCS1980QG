@@ -122,9 +122,6 @@ class ReviewQuestion(webapp2.RequestHandler):
             self.response.write(curr_question.answerid+'<br><br>')
         self.response.write('</body></html>')
 
-
-
-
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/NewQuestion', NewQuestion),
