@@ -118,7 +118,7 @@ class ReviewQuestion(webapp2.RequestHandler):
       self.response.write('</p><ol>')
       self.response.write('<li class="red-text">')
       self.response.write('Bill Laboon')                                #answer1
-      self.response.write('')</li>')
+      self.response.write('</li>')
       self.response.write('<li class="blue-text">')
       self.response.write('Nick Farnan')                                #answer2
       self.response.write('</li>')
@@ -128,7 +128,7 @@ class ReviewQuestion(webapp2.RequestHandler):
       self.response.write('<li class="yellow-text">')
       self.response.write('Taieb Znati')                                #answer4
       self.response.write('</li></ol>')
-      self.response.write('<p>The answer is:</p><p class = "red-text">)'
+      self.response.write('<p>The answer is:</p><p class = "red-text">')
       self.response.write('Bill Laboon')                                #answerid
       self.response.write('</p>')
       self.response.write('<p>Should this question be added?</p>')
