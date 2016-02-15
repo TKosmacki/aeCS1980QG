@@ -8,20 +8,21 @@
 		<br><br><br>
 		<p>Here is a new user question:</p>
 		{% for question_obj in review %}
-		<p>{{review.question}}</p>
+		<p>Here is a new user question:</p>
+		<p>{{question_obj.question}}<br></p>
 		<ol>
-			<li class="red-text">{{review.answer1}}</li>
-			<li class="blue-text">{{review.answer2}}</li>
-			<li class="green-text">{{review.answer3}}</li>
-			<li class="yellow-text">{{review.answer4}}</li>
+			<li class="red-text">{{question_obj.answer1}}</li>
+			<li class="blue-text">{{question_obj.answer2}}</li>
+			<li class="green-text">{{question_obj.answer3}}</li>
+			<li class="yellow-text">{{question_obj.answer4}}</li>
 		</ol>
-		<p>The answer is:</p><p class = "red-text">{{review.answerid}}</p>
+		<p>The answer is:</p><p class = "red-text">{{question_obj.answerid}}</p>
 		<p>Should this question be added?</p>
 		<form action="submit-review">
 			<button type="submit" name=yes>Yes</button>
 			<button type="submit" name=no>No</button>
 		</form>
-		{% endfor %}
+        {% endfor %}
 	</div>
 </body>
 </html>
