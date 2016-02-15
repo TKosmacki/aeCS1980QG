@@ -106,25 +106,24 @@ class NewQuestion(webapp2.RequestHandler):
         self.response.write('</body></html>')
 
 class ReviewQuestion(webapp2.RequestHandler):
-  def get(self):
-      #self.response.write(REVIEW_PAGE_HTML)
-      questionID = self.request.get('yes')
-      self.response.write('<html><link rel="stylesheet" href="stylesheets/style.css">')
-      self.response.write('<body><div class = "container"><br>')
-      self.response.write('<p>Here is a new user question: ')
-      self.response.write(questionID+'</p>')
-      self.response.write('<p>Who is the spiciest chili pepper at Pitt?</p><ol>')
-      self.response.write('<li class="red-text">Bill Laboon</li>')
-      self.response.write('<li class="blue-text">Nick Farnan</li>')
-      self.response.write('<li class="green-text">Jon Misurda</li>')
-      self.response.write('<li class="yellow-text">Taieb Znati</li></ol>')
-      self.response.write('<p>The answer is:</p><p class = "red-text">Bill Laboon</p>')
-      self.response.write('<p>Should this question be added?</p>')
-      self.response.write('<form action="submit-review">')
-      self.response.write('<button type="submit" name=yes>Yes</button>')
-      self.response.write('<button type="submit" name=no>No</button>')
-      self.response.write('</form>')
-      self.response.write("</div></body></html>")
+    def get(self):
+        self.response.write('<html><body>')
+
+        #just loops and prints every question from query
+        review_questions = models.get_oldest_questions()
+        for curr_question in review_questions:
+            self.response.write('Question:')
+            self.response.write(curr_question.question)
+            self.response.write('<br>'+curr_question.answer1)
+            self.response.write('<br>'+curr_question.answer2)
+            self.response.write('<br>'+curr_question.answer3)
+            self.response.write('<br>'+curr_question.answer4)
+            self.response.write('<br>Correct Answer:')
+            self.response.write(curr_question.answerid+'<br><br>')
+        self.response.write('</body></html>')
+
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),

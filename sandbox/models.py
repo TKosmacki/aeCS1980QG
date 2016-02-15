@@ -10,6 +10,8 @@ class question_obj(ndb.Model):
     answer3 = ndb.StringProperty()
     answer4 = ndb.StringProperty()
     answerid = ndb.StringProperty()
+    create_datetime = ndb.DateTimeProperty(auto_now_add=True)
+    score = ndb.IntegerProperty(default=0)
 
 class global_id(ndb.Model):
     next_id = ndb.IntegerProperty()
@@ -51,3 +53,10 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
     question.put()
 
     return question_number
+
+def get_oldest_questions():
+    query= question_obj.query()
+    query.order(question_obj.create_datetime)
+   
+    #returns list of 20 questions, or fewer if there are none left 
+    return query.fetch(20)
