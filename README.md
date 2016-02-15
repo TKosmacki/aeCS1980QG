@@ -8,14 +8,14 @@
 - [x] Integrate newQuestionSubmit.html Functionality </br>
 - [ ] Integrate profile.html Functionality </br>
 - [ ] review landing page table </br>
-&nbsp;&nbsp;&nbsp;&nbsp;- [ ] add new entries to question object for display on page</br>
-&nbsp;&nbsp;&nbsp;&nbsp;- [ ] adapt table from previous project and reformat</br> 
+&nbsp;&nbsp;&nbsp;&nbsp;- add new entries to question object for display on page</br>
+&nbsp;&nbsp;&nbsp;&nbsp;- adapt table from previous project and reformat</br> 
 - [ ] refactor</br> 
 - [ ] bootsrap html pages</br> 
 - [ ] find a frontpage template</br> 
 - [ ] compile list of categories</br>
 - [ ] track question answers</br>
 - [ ] quiz game running 10 questions</br> 
-Future Goals
+</br>Future Goals</br>
 - [ ] reporting questions, duplicates </br>
     - cron job, with email function? </br>
