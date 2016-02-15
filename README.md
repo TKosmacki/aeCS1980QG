@@ -8,8 +8,8 @@
 - [x] Integrate newQuestionSubmit.html Functionality </br>
 - [ ] Integrate profile.html Functionality </br>
 - [ ] review landing page table </br>
-&nbsp;&nbsp;&nbsp;&nbsp;- add new entries to question object for display on page</br>
-&nbsp;&nbsp;&nbsp;&nbsp;- adapt table from previous project and reformat</br> 
+    - add new entries to question object for display on page</br>
+    - adapt table from previous project and reformat</br> 
 - [ ] refactor</br> 
 - [ ] bootsrap html pages</br> 
 - [ ] find a frontpage template</br> 
