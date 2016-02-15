@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="/static/style.css">
+<body>
+	<div class = "container">
+		<br><br><br>
+		<p>Here is a new user question:</p>
+		{% for question_obj in review %}
+		<p>{{review.question}}</p>
+		<ol>
+			<li class="red-text">{{review.answer1}}</li>
+			<li class="blue-text">{{review.answer2}}</li>
+			<li class="green-text">{{review.answer3}}</li>
+			<li class="yellow-text">{{review.answer4}}</li>
+		</ol>
+		<p>The answer is:</p><p class = "red-text">{{review.answerid}}</p>
+		<p>Should this question be added?</p>
+		<form action="submit-review">
+			<button type="submit" name=yes>Yes</button>
+			<button type="submit" name=no>No</button>
+		</form>
+		{% endfor %}
+	</div>
+</body>
+</html>
+{% endblock %}

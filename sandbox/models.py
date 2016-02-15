@@ -59,4 +59,4 @@ def get_oldest_questions():
     query.order(question_obj.create_datetime)
    
     #returns list of 20 questions, or fewer if there are none left 
-    return query.fetch(20)
+    return query.fetch(1)

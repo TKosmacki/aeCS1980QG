@@ -1,7 +1,19 @@
 import cgi
-from google.appengine.api import users
 import webapp2
 import models
+import datetime
+import logging
+import os
+import time
+#import json
+
+from google.appengine.ext.webapp import template
+from google.appengine.api import users
+from google.appengine.ext import ndb
+#from google.appengine.api import images
+#from google.appengine.ext import blobstore
+#from google.appengine.ext.webapp import blobstore_handlers
+
 
 MAIN_PAGE_HTML = """\
 <html>
@@ -72,6 +84,10 @@ REVIEW_PAGE_HTML = """\
     </form>
 """
 
+def render_template(handler, templatename, templatevalues={}):
+  path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
+  html = template.render(path, templatevalues)
+  handler.response.out.write(html)
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -87,7 +103,7 @@ class NewQuestion(webapp2.RequestHandler):
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
         questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
-        self.response.write('<html><body>You wrote:<pre>');
+        self.response.write('<html><body>You wrote:<pre>')
         self.response.write(category)
         self.response.write(questionID)
         self.response.write('</br>'+question)
@@ -107,20 +123,42 @@ class NewQuestion(webapp2.RequestHandler):
 
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
-        self.response.write('<html><body>')
-
         #just loops and prints every question from query
-        review_questions = models.get_oldest_questions()
-        for curr_question in review_questions:
-            self.response.write('Question:')
-            self.response.write(curr_question.question)
-            self.response.write('<br>'+curr_question.answer1)
-            self.response.write('<br>'+curr_question.answer2)
-            self.response.write('<br>'+curr_question.answer3)
-            self.response.write('<br>'+curr_question.answer4)
-            self.response.write('<br>Correct Answer:')
-            self.response.write(curr_question.answerid+'<br><br>')
-        self.response.write('</body></html>')
+		review = models.get_oldest_questions()
+		for question_obj in review:
+			self.response.write('<html><link rel="stylesheet" href="stylesheets/style.css">')
+		    self.response.write('<body><div class = "container"><br>')
+		    self.response.write('<p>Here is a new user question: ')
+		    self.response.write('<p>')
+		    self.response.write(question_obj.question)  #question
+		    self.response.write('</p><ol>')
+		    self.response.write('<li class="red-text">')
+		    self.response.write(question_obj.answer1)                                #answer1
+		    self.response.write('</li>')
+		    self.response.write('<li class="blue-text">')
+		    self.response.write(question_obj.answer2)                                #answer2
+		    self.response.write('</li>')
+		    self.response.write('<li class="green-text">')
+		    self.response.write(question_obj.answer3)                                #answer3
+		    self.response.write('</li>')
+		    self.response.write('<li class="yellow-text">')
+		    self.response.write(question_obj.answer4)                                #answer4
+		    self.response.write('</li></ol>')
+		    self.response.write('<p>The answer is:</p><p class = "red-text">')
+		    self.response.write(question_obj.answerid)                                #answerid
+		    self.response.write('</p>')
+		    self.response.write('<p>Should this question be added?</p>')
+		    self.response.write('<form action="submit-review">')
+		    self.response.write('<button type="submit" name=yes>Yes</button>')
+		    self.response.write('<button type="submit" name=no>No</button>')
+		    self.response.write('</form>')
+		    self.response.write("</div></body></html>")
+		# page_params = {
+		  # 'login_url': users.create_login_url(),
+		  # 'logout_url': users.create_logout_url('/'),
+		  # 'question': question,
+		# }
+		# render_template(self, 'newQuestionReview.html', page_params)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
