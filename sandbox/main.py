@@ -113,12 +113,24 @@ class ReviewQuestion(webapp2.RequestHandler):
       self.response.write('<body><div class = "container"><br>')
       self.response.write('<p>Here is a new user question: ')
       self.response.write(questionID+'</p>')
-      self.response.write('<p>Who is the spiciest chili pepper at Pitt?</p><ol>')
-      self.response.write('<li class="red-text">Bill Laboon</li>')
-      self.response.write('<li class="blue-text">Nick Farnan</li>')
-      self.response.write('<li class="green-text">Jon Misurda</li>')
-      self.response.write('<li class="yellow-text">Taieb Znati</li></ol>')
-      self.response.write('<p>The answer is:</p><p class = "red-text">Bill Laboon</p>')
+      self.response.write('<p>')
+      self.response.write('Who is the spiciest chili pepper at Pitt?')  #question
+      self.response.write('</p><ol>')
+      self.response.write('<li class="red-text">')
+      self.response.write('Bill Laboon')                                #answer1
+      self.response.write('')</li>')
+      self.response.write('<li class="blue-text">')
+      self.response.write('Nick Farnan')                                #answer2
+      self.response.write('</li>')
+      self.response.write('<li class="green-text">')
+      self.response.write('Jon Misurda')                                #answer3
+      self.response.write('</li>')
+      self.response.write('<li class="yellow-text">')
+      self.response.write('Taieb Znati')                                #answer4
+      self.response.write('</li></ol>')
+      self.response.write('<p>The answer is:</p><p class = "red-text">)'
+      self.response.write('Bill Laboon')                                #answerid
+      self.response.write('</p>')
       self.response.write('<p>Should this question be added?</p>')
       self.response.write('<form action="submit-review">')
       self.response.write('<button type="submit" name=yes>Yes</button>')
