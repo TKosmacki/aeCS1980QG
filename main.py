@@ -70,21 +70,7 @@ class ProfilePageHandler(webapp2.RequestHandler):
 
 		models.update_profile(id, name, location, interests)
 
-		self.redirect('/profile?id=' + id + "&search=" + get_user_email())
-
-class ReviewPageHandler(webapp2.RequestHandler):
-	def get(self):
-		id = get_user_id()
-
-		q = models.check_if_user_profile_exists(id)
-
-		page_params = {
-		'user_email': get_user_email(),
-		'login_url': users.create_login_url(),
-		'logout_url': users.create_logout_url('/'),
-		'user_id': id,
-		}
-		render_template(self, 'newQuestionReview.html', page_params)		
+		self.redirect('/profile?id=' + id + "&search=" + get_user_email())		
 
 class SubmitPageHandler(webapp2.RequestHandler):
 	def get(self):
@@ -98,12 +84,44 @@ class SubmitPageHandler(webapp2.RequestHandler):
 		'logout_url': users.create_logout_url('/'),
 		'user_id': id,
 		}
-		render_template(self, 'newQuestionSubmit.html', page_params)		
+		render_template(self, 'newQuestionSubmit.html', page_params)
+
+class NewQuestion(webapp2.RequestHandler):
+    def post(self):
+        category = self.request.get('category')
+        question = self.request.get('questiontext')
+        answer1 = self.request.get('answer1')
+        answer2 = self.request.get('answer2')
+        answer3 = self.request.get('answer3')
+        answer4 = self.request.get('answer4')
+        answerid = self.request.get('answerid')
+        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
+        self.response.write('<html><body>')
+        self.response.write('<p>Would you like to review the question now?</p>')
+        self.response.write('<form action="ReviewQuestion"><button type="submit" name=yes value=')
+        self.response.write(questionID)
+        self.response.write('>')
+        self.response.write('Yes</button><button type="submit" name=no>No</button>')
+        self.response.write('</form>')
+        self.response.write('</body></html>')
+
+class ReviewQuestion(webapp2.RequestHandler):
+    def get(self):
+        #just loops and prints every question from query
+        review = models.get_oldest_questions()
+        page_params = {
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'review': review,
+        }
+        render_template(self, 'newQuestionReview.html', page_params)
+		
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
   ('/profile', ProfilePageHandler),
-  ('/review', ReviewPageHandler),
-  ('/submitNew', SubmitPageHandler)
+  ('/submitNew', SubmitPageHandler),
+  ('/NewQuestion', NewQuestion),
+  ('/ReviewQuestion', ReviewQuestion)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

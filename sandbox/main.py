@@ -125,34 +125,6 @@ class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
         #just loops and prints every question from query
         review = models.get_oldest_questions()
-        # for question_obj in review:
-            # self.response.write('<html><link rel="stylesheet" href="stylesheets/style.css">')
-            # self.response.write('<body><div class = "container"><br>')
-            # self.response.write('<p>Here is a new user question: ')
-            # self.response.write('<p>')
-            # self.response.write(question_obj.question)  #question
-            # self.response.write('</p><ol>')
-            # self.response.write('<li class="red-text">')
-            # self.response.write(question_obj.answer1)                                #answer1
-            # self.response.write('</li>')
-            # self.response.write('<li class="blue-text">')
-            # self.response.write(question_obj.answer2)                                #answer2
-            # self.response.write('</li>')
-            # self.response.write('<li class="green-text">')
-            # self.response.write(question_obj.answer3)                                #answer3
-            # self.response.write('</li>')
-            # self.response.write('<li class="yellow-text">')
-            # self.response.write(question_obj.answer4)                                #answer4
-            # self.response.write('</li></ol>')
-            # self.response.write('<p>The answer is:</p><p class = "red-text">')
-            # self.response.write(question_obj.answerid)                                #answerid
-            # self.response.write('</p>')
-            # self.response.write('<p>Should this question be added?</p>')
-            # self.response.write('<form action="submit-review">')
-            # self.response.write('<button type="submit" name=yes>Yes</button>')
-            # self.response.write('<button type="submit" name=no>No</button>')
-            # self.response.write('</form>')
-            # self.response.write("</div></body></html>")
         page_params = {
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
@@ -163,5 +135,5 @@ class ReviewQuestion(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/NewQuestion', NewQuestion),
-    ('/ReviewQuestion',ReviewQuestion)
+    ('/ReviewQuestion', ReviewQuestion)
 ], debug=True)
