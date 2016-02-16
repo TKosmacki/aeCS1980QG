@@ -16,6 +16,6 @@
 - [ ] compile list of categories</br>
 - [ ] track question answers</br>
 - [ ] quiz game running 10 questions</br> 
-</br>Future Goals</br>
+Future Goals</br>
 - [ ] reporting questions, duplicates </br>
     - cron job, with email function? </br>
