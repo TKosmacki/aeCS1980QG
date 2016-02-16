@@ -96,25 +96,40 @@ class NewQuestion(webapp2.RequestHandler):
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
         questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
-        self.response.write('<html><body>')
+        self.response.write('<html><body><div class="container">')
         self.response.write('<p>Would you like to review the question now?</p>')
         self.response.write('<form action="ReviewQuestion"><button type="submit" name=yes value=')
         self.response.write(questionID)
         self.response.write('>')
-        self.response.write('Yes</button><button type="submit" name=no>No</button>')
+        self.response.write('Yes</button><button type="submit" name=no><a href=/ReviewNewQuestions>No</a></button>')
         self.response.write('</form>')
-        self.response.write('</body></html>')
+        self.response.write('</div></body></html>')
 
+#Pulls the most recent added question from the database for reviewal, need to change
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
         #just loops and prints every question from query
-        review = models.get_oldest_questions()
+        review = models.get_oldest_questions(1)
         page_params = {
+          'user_email': get_user_email(),
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
           'review': review,
         }
         render_template(self, 'newQuestionReview.html', page_params)
+ 
+#Brings up a table that displays information on the most recent 1000 questions
+class ReviewNewQuestions(webapp2.RequestHandler):
+    def get(self):
+        #just loops and prints every question from query
+        review = models.get_oldest_questions(1000)
+        page_params = {
+          'user_email': get_user_email(),
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'review': review,
+        }
+        render_template(self, 'reviewQuestions.html', page_params) 
 		
 ###############################################################################
 mappings = [
@@ -122,6 +137,7 @@ mappings = [
   ('/profile', ProfilePageHandler),
   ('/submitNew', SubmitPageHandler),
   ('/NewQuestion', NewQuestion),
-  ('/ReviewQuestion', ReviewQuestion)
+  ('/ReviewQuestion', ReviewQuestion),
+  ('/ReviewNewQuestions', ReviewNewQuestions)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

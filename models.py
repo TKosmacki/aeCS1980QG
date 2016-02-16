@@ -28,7 +28,10 @@ class question_obj(ndb.Model):
     answer2 = ndb.StringProperty()
     answer3 = ndb.StringProperty()
     answer4 = ndb.StringProperty()
-    answerid = ndb.IntegerProperty()
+    answerid = ndb.StringProperty()
+    create_datetime = ndb.DateTimeProperty(auto_now_add=True)
+    score = ndb.IntegerProperty(default=0)
+    creator = ndb.StringProperty(default="user")
 
 def update_profile(id, name, location, interests):
 	profile = get_user_profile(id)
@@ -71,15 +74,20 @@ def create_global_id():
 
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
     question_number = create_global_id()
-    question = question_obj()
-    question.populate(category=category,
-    question=question,
-    answer1=answer1,
-    answer2=answer2,
-    answer3=answer3,
-    answer4=answer4,
-    answerid=answerid)
+    question = question_obj(category=category,
+        question=question,
+        answer1=answer1,
+        answer2=answer2,
+        answer3=answer3,
+        answer4=answer4,
+        answerid=answerid)
     question.key = ndb.Key(question_obj, question_number)
     question.put()
 
     return question_number
+    
+def get_oldest_questions(num):
+    query= question_obj.query()
+    query.order(question_obj.create_datetime)
+   
+    return query.fetch(num)

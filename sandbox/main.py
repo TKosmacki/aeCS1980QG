@@ -117,23 +117,35 @@ class NewQuestion(webapp2.RequestHandler):
         self.response.write('<form action="ReviewQuestion"><button type="submit" name=yes value=')
         self.response.write(questionID)
         self.response.write('>')
-        self.response.write('Yes</button><button type="submit" name=no>No</button>')
+        self.response.write('Yes</button><button type="submit" name=no><a href=/ReviewQuestions>No</a></button>')
         self.response.write('</form>')
         self.response.write('</body></html>')
 
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
         #just loops and prints every question from query
-        review = models.get_oldest_questions()
+        review = models.get_oldest_questions(1)
         page_params = {
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
           'review': review,
         }
         render_template(self, 'newQuestionReview.html', page_params)
+        
+class ReviewNewQuestions(webapp2.RequestHandler):
+    def get(self):
+        #just loops and prints every question from query
+        review = models.get_oldest_questions(100) #keep at 100, max number of entries shown, per page
+        page_params = {
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'review': review,
+        }
+        render_template(self, 'reviewQuestions.html', page_params)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/NewQuestion', NewQuestion),
-    ('/ReviewQuestion', ReviewQuestion)
+    ('/ReviewQuestion', ReviewQuestion),
+    ('/ReviewQuestions', ReviewNewQuestions)
 ], debug=True)
