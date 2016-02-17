@@ -9,9 +9,9 @@
   <div class = "container">
     <h3>New Question Submission</h3>
     <hr>
-    <form action=/NewQuestion method="post"><font size = 4>
+    <form action=/NewQuestion method="post"><font size = 5>
       Category:
-      <input list="Category" name="category" method=POSTrequired>
+      <input list="Category" name="category" method=POST size ="45"required>
       <datalist id="Category">
         <option value="PHARM 2001">
         <option value="PHARM 3023">
@@ -34,23 +34,24 @@
       <br><br>
       <ol>
         <li class="red-text">
-          <input type="text" method=POST name="answer1" required>
+          <input type="text" method=POST name="answer1" size = "30" required>
         </li>
         <li class="blue-text">
-          <input type="text" method=POST name="answer2" required>
+          <input type="text" method=POST name="answer2" size = "30" required>
         </li>
         <li class="green-text">
-          <input type="text" method=POST name="answer3" required>
+          <input type="text" method=POST name="answer3" size = "30" required>
         </li>
         <li class="yellow-text">
-          <input type="text" method=POST name="answer4" required>
+          <input type="text" method=POST name="answer4" size = "30" required>
         </li>
       </ol>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button type="submit" name="answerid" value=1 class="red-text">1</button>
-        <button type="submit" name="answerid" value=2 class="blue-text">2</button>
-        <button type="submit" name="answerid" value=3 class="green-text">3</button>
-        <button type="submit" name="answerid" value=4 class="yellow-text">4</button>
+      <hr>
+     Select the correct answer:
+        <button type="submit" name="answerid" value=1 class="submit-q-button-1">1</button>
+        <button type="submit" name="answerid" value=2 class="submit-q-button-2">2</button>
+        <button type="submit" name="answerid" value=3 class="submit-q-button-3">3</button>
+        <button type="submit" name="answerid" value=4 class="submit-q-button-4">4</button>
       </form>
     </div>
 </font>
