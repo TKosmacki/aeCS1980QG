@@ -96,15 +96,15 @@ class NewQuestion(webapp2.RequestHandler):
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
         questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
-        self.response.write('<html><body><div class="container">')
-        self.response.write('<p>Would you like to review the question now?</p>')
-        self.response.write('<form action="ReviewQuestion"><button type="submit" name=yes value=')
-        self.response.write(questionID)
-        self.response.write('>')
-        self.response.write('Yes</button><button type="submit" name=no><a href=/ReviewNewQuestions>No</a></button>')
-        self.response.write('</form>')
-        self.response.write('</div></body></html>')
-
+        self.redirect('/NewQuestion?id=' + questionID)
+        
+    def get(self):
+        id = self.request.get('id')
+        page_params = {
+            'questionID' : id
+        }
+        render_template(self, 'confirmationPage.html', page_params)
+        
 #Pulls the most recent added question from the database for reviewal, need to change
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
@@ -138,6 +138,6 @@ mappings = [
   ('/submitNew', SubmitPageHandler),
   ('/NewQuestion', NewQuestion),
   ('/ReviewQuestion', ReviewQuestion),
-  ('/ReviewNewQuestions', ReviewNewQuestions)
+  ('/ReviewNewQuestions', ReviewNewQuestions),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
