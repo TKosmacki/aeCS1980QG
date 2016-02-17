@@ -8,6 +8,9 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 
+#runs on startup
+models.populate_db()
+
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
 def render_template(handler, templatename, templatevalues={}):
@@ -33,6 +36,7 @@ def get_user_id():
 	
 class MainPageHandler(webapp2.RequestHandler):
 	def get(self):
+	#	models.populate_db()
 		id = get_user_id()
 
 		q = models.check_if_user_profile_exists(id)
