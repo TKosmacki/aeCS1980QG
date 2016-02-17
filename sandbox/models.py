@@ -91,3 +91,22 @@ def get_oldest_questions(num):
     query.order(question_obj.create_datetime)
    
     return query.fetch(num)
+
+def populate_db():
+    txt = open('questions.txt')
+    linesep = "\n"
+    print("working")
+    list = []
+
+    for line in txt:
+        list.append(line)
+
+    for x in range(0,len(list), 6):
+        question = list[x]
+        answer1 = list[x+1]
+        answer2 = list[x+2]
+        answer3 = list[x+3]
+        answer4 = list[x+4]
+        answerid = list[x+5]
+        create_question("Test", question, answer1, answer2, answer3,
+            answer4, answerid)
