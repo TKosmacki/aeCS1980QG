@@ -43,7 +43,7 @@ class MainPageHandler(webapp2.RequestHandler):
 		'logout_url': users.create_logout_url('/'),
 		'user_id': id,
 		}
-		render_template(self, 'frontPage.html', page_params)
+		render_template(self, 'index.html', page_params)
 		
 class ProfilePageHandler(webapp2.RequestHandler):
 	def get(self):

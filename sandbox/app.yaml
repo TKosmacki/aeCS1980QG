@@ -1,4 +1,4 @@
-application: aecs1980qg
+application: sandbox
 
 version: v1
 runtime: python27
