@@ -5,7 +5,7 @@ et{
 es{
 	font-size: 20pt;
 	font-style: italic;
-	border-bottom: 1px solid #000; 
+	border-bottom: 1px solid #000;
 }
 eI{
 	font-size:16pt;
@@ -13,7 +13,7 @@ eI{
 he5 {
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 18pt;
-	font-weight: bold;  
+	font-weight: bold;
 }
 
 un{
@@ -68,4 +68,40 @@ p {
 
 .smaller-image {
     width: 250px;
+}
+
+.submit-q-button-1{
+	background-color: #f44336;
+	font-size: 16px;
+	border-radius: 8px;
+	width: 100px;
+	border: none;
+	color: white;
+}
+
+.submit-q-button-2{
+	background-color: #0266C8;
+	font-size: 16px;
+	border-radius: 8px;
+	width: 100px;
+	border: none;
+	color: white;
+}
+
+.submit-q-button-3{
+	background-color: #00933B;
+	font-size: 16px;
+	border-radius: 8px;
+	width: 100px;
+	border: none;
+	color: white;
+}
+
+.submit-q-button-4{
+	background-color: #F2B50F;
+	font-size: 16px;
+	border-radius: 8px;
+	width: 100px;
+	border: none;
+	color: white;
 }
