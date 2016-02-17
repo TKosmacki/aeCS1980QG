@@ -1,97 +1,90 @@
-import cgi
-import webapp2
-import models
-import datetime
 import logging
 import os
-import time
-#import json
+import webapp2
+import models
 
-from google.appengine.ext.webapp import template
+from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import ndb
-#from google.appengine.api import images
-#from google.appengine.ext import blobstore
-#from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.ext.webapp import template
 
-
-MAIN_PAGE_HTML = """\
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Add a Question</title>
-        <link rel="stylesheet" href="stylesheets/style.css">
-  </head>
-  <body>
-<form action=/NewQuestion method="post"><font size = 4>
-  Category:
-  <input list="Category" name="category" method=POSTrequired>
-  <datalist id="Category">
-    <option value="PHARM 2001">
-    <option value="PHARM 3023">
-    <option value="PHARM 3028">
-    <option value="PHARM 3040">
-    <option value="PHARM 5218">
-  </datalist>
-</br>
-  Question:
-  <input type="text" size = "45" name="questiontext"method=POST required>
-  <hr>
-  <ol>
-    <li class="red-text">
-      <input type="text" method=POST name="answer1" required>
-    </li>
-    <li class="blue-text">
-      <input type="text" method=POST name="answer2" required>
-    </li>
-    <li class="green-text">
-      <input type="text" method=POST name="answer3" required>
-    </li>
-    <li class="yellow-text">
-      <input type="text" method=POST name="answer4" required>
-    </li>
-  </ol>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button type="submit" name="answerid" value=1 class="red-text">1</button>
-    <button type="submit" name="answerid" value=2 class="blue-text">2</button>
-    <button type="submit" name="answerid" value=3 class="green-text">3</button>
-    <button type="submit" name="answerid" value=4 class="yellow-text">4</button>
-  </form>
-</font>
-</body>
-</html>
-"""
-
-REVIEW_PAGE_HTML = """\
-<html>
-<link rel="stylesheet" href="stylesheets/style.css">
-<body>
-  <div class = "container">
-    <br><br><br>
-    <p>Here is a new user question:</p>
-    <p>Who is the spiciest chili pepper at Pitt?</p>
-    <ol>
-      <li class="red-text">Bill Laboon</li>
-      <li class="blue-text">Nick Farnan</li>
-      <li class="green-text">Jon Misurda</li>
-      <li class="yellow-text">Taieb Znati</li>
-    </ol>
-    <p>The answer is:</p><p class = "red-text">Bill Laboon</p>
-    <p>Should this question be added?</p>
-    <form action="submit-review">
-      <button type="submit" name=yes>Yes</button>
-      <button type="submit" name=no>No</button>
-    </form>
-"""
-
+###############################################################################
+# We'll just use this convenience function to retrieve and render a template.
 def render_template(handler, templatename, templatevalues={}):
   path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
   html = template.render(path, templatevalues)
   handler.response.out.write(html)
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.write(MAIN_PAGE_HTML)
+
+###############################################################################
+def get_user_email():
+  result = None
+  user = users.get_current_user()
+  if user:
+    result = user.email()
+  return result
+
+def get_user_id():
+	result = None
+	user = users.get_current_user()
+	if user:
+		result = user.user_id()
+	return result
+	
+class MainPageHandler(webapp2.RequestHandler):
+	def get(self):
+		id = get_user_id()
+
+		q = models.check_if_user_profile_exists(id)
+
+		page_params = {
+		'user_email': get_user_email(),
+		'login_url': users.create_login_url(),
+		'logout_url': users.create_logout_url('/'),
+		'user_id': id,
+		}
+		render_template(self, 'index.html', page_params)
+		
+class ProfilePageHandler(webapp2.RequestHandler):
+	def get(self):
+		id = self.request.get("id")
+		logging.warning(id)
+		q = models.check_if_user_profile_exists(id)
+		if q == []:
+			models.create_profile(id)
+
+		page_params = {
+			'user_email': get_user_email(),
+			'login_url': users.create_login_url(),
+			'logout_url': users.create_logout_url('/'),
+			'user_id': get_user_id(),
+			'profile': models.get_user_profile(id),
+		}
+		render_template(self, 'profile.html', page_params)
+
+	def post(self):
+		id = get_user_id()
+		name = self.request.get("name")
+		location = self.request.get("location")
+		interests = self.request.get("interests")
+
+		models.update_profile(id, name, location, interests)
+
+		self.redirect('/profile?id=' + id + "&search=" + get_user_email())		
+
+class SubmitPageHandler(webapp2.RequestHandler):
+	def get(self):
+		id = get_user_id()
+
+		q = models.check_if_user_profile_exists(id)
+
+		page_params = {
+		'user_email': get_user_email(),
+		'login_url': users.create_login_url(),
+		'logout_url': users.create_logout_url('/'),
+		'user_id': id,
+		}
+		render_template(self, 'newQuestionSubmit.html', page_params)
 
 class NewQuestion(webapp2.RequestHandler):
     def post(self):
@@ -103,49 +96,48 @@ class NewQuestion(webapp2.RequestHandler):
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
         questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
-        self.response.write('<html><body>You wrote:<pre>')
-        self.response.write(category)
-        self.response.write(questionID)
-        self.response.write('</br>'+question)
-        self.response.write('</br>'+answer1)
-        self.response.write('</br>'+answer2)
-        self.response.write('</br>'+answer3)
-        self.response.write('</br>'+answer4)
-        self.response.write('</br>The answer is: '+answerid)
-        self.response.write('</pre>')
+        self.response.write('<html><body><div class="container">')
         self.response.write('<p>Would you like to review the question now?</p>')
         self.response.write('<form action="ReviewQuestion"><button type="submit" name=yes value=')
         self.response.write(questionID)
         self.response.write('>')
-        self.response.write('Yes</button><button type="submit" name=no><a href=/ReviewQuestions>No</a></button>')
+        self.response.write('Yes</button><button type="submit" name=no><a href=/ReviewNewQuestions>No</a></button>')
         self.response.write('</form>')
-        self.response.write('</body></html>')
+        self.response.write('</div></body></html>')
 
+#Pulls the most recent added question from the database for reviewal, need to change
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
         #just loops and prints every question from query
         review = models.get_oldest_questions(1)
         page_params = {
+          'user_email': get_user_email(),
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
           'review': review,
         }
         render_template(self, 'newQuestionReview.html', page_params)
-        
+ 
+#Brings up a table that displays information on the most recent 1000 questions
 class ReviewNewQuestions(webapp2.RequestHandler):
     def get(self):
         #just loops and prints every question from query
-        review = models.get_oldest_questions(100) #keep at 100, max number of entries shown, per page
+        review = models.get_oldest_questions(1000)
         page_params = {
+          'user_email': get_user_email(),
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
           'review': review,
         }
-        render_template(self, 'reviewQuestions.html', page_params)
-
-app = webapp2.WSGIApplication([
-    ('/', MainPage),
-    ('/NewQuestion', NewQuestion),
-    ('/ReviewQuestion', ReviewQuestion),
-    ('/ReviewQuestions', ReviewNewQuestions)
-], debug=True)
+        render_template(self, 'reviewQuestions.html', page_params) 
+		
+###############################################################################
+mappings = [
+  ('/', MainPageHandler),
+  ('/profile', ProfilePageHandler),
+  ('/submitNew', SubmitPageHandler),
+  ('/NewQuestion', NewQuestion),
+  ('/ReviewQuestion', ReviewQuestion),
+  ('/ReviewNewQuestions', ReviewNewQuestions)
+]
+app = webapp2.WSGIApplication(mappings, debug=True)
