@@ -8,6 +8,8 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 
+#runs on startup
+models.populate_db()
 
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
@@ -31,7 +33,7 @@ def get_user_id():
 	if user:
 		result = user.user_id()
 	return result
-	
+
 class MainPageHandler(webapp2.RequestHandler):
 	def get(self):
 		id = get_user_id()
@@ -45,7 +47,7 @@ class MainPageHandler(webapp2.RequestHandler):
 		'user_id': id,
 		}
 		render_template(self, 'index.html', page_params)
-		
+
 class ProfilePageHandler(webapp2.RequestHandler):
 	def get(self):
 		id = self.request.get("id")
@@ -71,7 +73,7 @@ class ProfilePageHandler(webapp2.RequestHandler):
 
 		models.update_profile(id, name, location, interests)
 
-		self.redirect('/profile?id=' + id + "&search=" + get_user_email())		
+		self.redirect('/profile?id=' + id + "&search=" + get_user_email())
 
 class SubmitPageHandler(webapp2.RequestHandler):
 	def get(self):
@@ -98,14 +100,14 @@ class NewQuestion(webapp2.RequestHandler):
         answerid = self.request.get('answerid')
         questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
         self.redirect('/NewQuestion?id=' + str(questionID))
-        
+
     def get(self):
         id = self.request.get('id')
         page_params = {
             'questionID' : id
         }
         render_template(self, 'confirmationPage.html', page_params)
-        
+
 #Pulls the most recent added question from the database for reviewal, need to change
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
@@ -118,7 +120,7 @@ class ReviewQuestion(webapp2.RequestHandler):
           'review': review,
         }
         render_template(self, 'newQuestionReview.html', page_params)
- 
+
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewNewQuestions(webapp2.RequestHandler):
     def get(self):
@@ -130,8 +132,8 @@ class ReviewNewQuestions(webapp2.RequestHandler):
           'logout_url': users.create_logout_url('/'),
           'review': review,
         }
-        render_template(self, 'reviewQuestions.html', page_params) 
-		
+        render_template(self, 'reviewQuestions.html', page_params)
+
 class test(webapp2.RequestHandler):
 	def get(self):
 		models.create_global_id()
@@ -142,6 +144,20 @@ class test(webapp2.RequestHandler):
 		'user_id': get_user_id(),
 		}
 		render_template(self, 'blanktest.html', page_params)
+
+class AnswerQuestion(webapp2.RequestHandler):
+    def get(self):
+        #answerid = self.request.get('answerid')
+        #id = self.request.get('id')
+        review = models.get_oldest_questions(1)
+        page_params = {
+          'user_email': get_user_email(),
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'review': review,
+        }
+        render_template(self, 'answerQuestion.html',page_params)
+
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
@@ -151,5 +167,6 @@ mappings = [
   ('/ReviewQuestion', ReviewQuestion),
   ('/meanstackakalamestack', test),
   ('/ReviewNewQuestions', ReviewNewQuestions),
+  ('/AnswerQuestion', AnswerQuestion),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
