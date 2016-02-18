@@ -8,9 +8,6 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 
-#runs on startup
-models.populate_db()
-
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
 def render_template(handler, templatename, templatevalues={}):
@@ -137,6 +134,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
 class test(webapp2.RequestHandler):
 	def get(self):
 		models.create_global_id()
+		models.populate_db()
 		page_params = {
 		'user_email': get_user_email(),
 		'login_url': users.create_login_url(),
