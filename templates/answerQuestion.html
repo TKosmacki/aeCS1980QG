@@ -6,7 +6,8 @@
 	<div class = "container">
 		<br><br><br>
         {% for question_obj in review %}
-		<p>{{question_obj.question}}<br></p>
+		<h3>{{question_obj.question}}</h3>
+
 		<ol>
 			<li class="red-text">{{question_obj.answer1}}</li>
 			<li class="blue-text">{{question_obj.answer2}}</li>
