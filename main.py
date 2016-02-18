@@ -8,6 +8,8 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 
+#runs on startup
+models.populate_db()
 
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
