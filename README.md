@@ -7,12 +7,12 @@
 - [ ] Integrate newQuestionReview.html Functionality </br>
 - [x] Integrate newQuestionSubmit.html Functionality </br>
 - [ ] Integrate profile.html Functionality </br>
-- [ ] review landing page table </br>
+- [x] review landing page table </br>
     - add new entries to question object for display on page</br>
     - adapt table from previous project and reformat</br> 
-- [ ] refactor</br> 
-- [ ] bootsrap html pages</br> 
-- [ ] find a frontpage template</br> 
+- [x] refactor</br> 
+- [x] bootsrap html pages</br> 
+- [x] find a frontpage template</br> 
 - [ ] compile list of categories</br>
 - [ ] track question answers</br>
 - [ ] quiz game running 10 questions</br> 

@@ -11,22 +11,16 @@
     <hr>
     <form action=/NewQuestion method="post"><font size = 5>
       Category:
-      <input list="Category" name="category" method=POST size ="45"required>
-      <datalist id="Category">
-        <option value="PHARM 2001">
-        <option value="PHARM 3023">
-        <option value="PHARM 3028">
-        <option value="PHARM 3040">
-        <option value="PHARM 5218">
-      </datalist>
-      <!--What I want, category is not retrieved with self.request.get("category")
-        <select id="Category" name="category">
+      <select id="Category" name="category" method="POST">
             <option value="PHARM 2001">PHARM 2001</option>
             <option value="PHARM 3023">PHARM 3023</option>
             <option value="PHARM 3028">PHARM 3028</option>
             <option value="PHARM 3040">PHARM 3040</option>
             <option value="PHARM 5218">PHARM 5218</option>
         </select>
+      </input>
+      <!--What I want, category is not retrieved with self.request.get("category")
+        
       -->
     </br><br>
       Question:

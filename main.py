@@ -7,6 +7,8 @@ from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
+
+
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
 def render_template(handler, templatename, templatevalues={}):
@@ -95,7 +97,7 @@ class NewQuestion(webapp2.RequestHandler):
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
         questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
-        self.redirect('/NewQuestion?id=' + questionID)
+        self.redirect('/NewQuestion?id=' + str(questionID))
         
     def get(self):
         id = self.request.get('id')
@@ -130,6 +132,16 @@ class ReviewNewQuestions(webapp2.RequestHandler):
         }
         render_template(self, 'reviewQuestions.html', page_params) 
 		
+class test(webapp2.RequestHandler):
+	def get(self):
+		models.create_global_id()
+		page_params = {
+		'user_email': get_user_email(),
+		'login_url': users.create_login_url(),
+		'logout_url': users.create_logout_url('/'),
+		'user_id': get_user_id(),
+		}
+		render_template(self, 'blanktest.html', page_params)
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
@@ -137,6 +149,7 @@ mappings = [
   ('/submitNew', SubmitPageHandler),
   ('/NewQuestion', NewQuestion),
   ('/ReviewQuestion', ReviewQuestion),
+  ('/meanstackakalamestack', test),
   ('/ReviewNewQuestions', ReviewNewQuestions),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

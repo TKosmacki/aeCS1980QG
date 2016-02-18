@@ -20,6 +20,7 @@
 	<table id="example" class="table table-bordered table-hover" cellspacing="0" width="100%">
 			<thead>
 				<tr>
+                    <th>Question</th>
 					<th>Category</th>
 					<th>Score</th>
 					<th>Create Time</th>
@@ -29,6 +30,7 @@
 			
 			<tfoot>
 				<tr>
+                    <th>Question</th>
 					<th>Category</th>
 					<th>Score</th>
 					<th>Create Time</th>
@@ -40,7 +42,8 @@
 
 			{% for question_obj in review %}
 					<tr.table-hover>
-						<th>{{question_obj.category}}</a></th>
+						<th><a href="/ReviewQuestion?id={{question_obj.id}}">{{question_obj.question}}</a></th>
+                        <th>{{question_obj.category}}</th>
 						<th>{{question_obj.score}}</th>
 						<th>{{question_obj.create_datetime}}</th>
 						<th>{{question_obj.creator}}</th>

@@ -22,6 +22,7 @@ class user_profile(ndb.Model):
 	interests = ndb.StringProperty()
 
 class question_obj(ndb.Model):
+    id = ndb.IntegerProperty()
     category = ndb.StringProperty()
     question = ndb.StringProperty()
     answer1 = ndb.StringProperty()
@@ -62,9 +63,26 @@ def get_user_profile(id):
 		memcache.set(id, result, namespace="profile")
 	return result
 
+class global_id(ndb.Model):
+    next_id = ndb.IntegerProperty()
+
+    def increase_id(self):
+        self.next_id = self.next_id + 1
+        
+def get_global_id():
+    id = memcache.get("number", namespace="global_id")
+    if not id:
+        id = ndb.Key(global_id, "number").get()
+    logging.warning(id)
+    value = id.next_id
+    id.increase_id()
+    id.put()
+    memcache.set("number", id, namespace="global_id")
+    return value
+    
 def create_global_id():
 	id = ndb.Key(global_id, "number").get()
-	#logging.warning(id)
+	logging.warning(id)
 	if id == None:
 		id = global_id()
 		id.next_id = 1
@@ -73,8 +91,9 @@ def create_global_id():
 		memcache.set("number", id, namespace="global_id")
 
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
-    question_number = create_global_id()
-    question = question_obj(category=category,
+    question_number = get_global_id()
+    question = question_obj(id=question_number,
+        category=category,
         question=question,
         answer1=answer1,
         answer2=answer2,
@@ -85,7 +104,10 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
     question.put()
 
     return question_number
-    
+ 
+def getQuestion(id):
+    return question_obj.query(question_obj.id == id)
+ 
 def get_oldest_questions(num):
     query= question_obj.query()
     query.order(question_obj.create_datetime)
