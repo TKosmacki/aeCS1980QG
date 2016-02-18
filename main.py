@@ -88,6 +88,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
 
 class NewQuestion(webapp2.RequestHandler):
     def post(self):
+        email = get_user_email()
         category = self.request.get('category')
         question = self.request.get('questiontext')
         answer1 = self.request.get('answer1')
@@ -95,8 +96,8 @@ class NewQuestion(webapp2.RequestHandler):
         answer3 = self.request.get('answer3')
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
-        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid)
-        self.redirect('/NewQuestion?id=' + str(questionID))
+        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,email)
+        self.redirect('/NewQuestion?id=' + questionID)
 
     def get(self):
         id = self.request.get('id')
@@ -105,11 +106,10 @@ class NewQuestion(webapp2.RequestHandler):
         }
         render_template(self, 'confirmationPage.html', page_params)
 
-#Pulls the most recent added question from the database for reviewal, need to change
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
-        #just loops and prints every question from query
-        review = models.get_oldest_questions(1)
+        id = self.request.get('id')
+        review = models.getQuestion(id)
         page_params = {
           'user_email': get_user_email(),
           'login_url': users.create_login_url(),

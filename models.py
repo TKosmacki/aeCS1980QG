@@ -22,7 +22,7 @@ class user_profile(ndb.Model):
 	interests = ndb.StringProperty()
 
 class question_obj(ndb.Model):
-    id = ndb.IntegerProperty()
+    id = ndb.StringProperty()
     category = ndb.StringProperty()
     question = ndb.StringProperty()
     answer1 = ndb.StringProperty()
@@ -30,6 +30,7 @@ class question_obj(ndb.Model):
     answer3 = ndb.StringProperty()
     answer4 = ndb.StringProperty()
     answerid = ndb.StringProperty()
+    creator = ndb.StringProperty(default="user")
     correctAnswers = ndb.IntegerProperty(default=0)
     incorrectAnswers = ndb.IntegerProperty(default=0)
     answer1Selections = ndb.IntegerProperty(default=0)
@@ -38,7 +39,7 @@ class question_obj(ndb.Model):
     answer4Selections = ndb.IntegerProperty(default=0)
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     score = ndb.IntegerProperty(default=0)
-    creator = ndb.StringProperty(default="user")
+    
 
 def update_profile(id, name, location, interests):
 	profile = get_user_profile(id)
@@ -84,7 +85,7 @@ def get_global_id():
     id.increase_id()
     id.put()
     memcache.set("number", id, namespace="global_id")
-    return value
+    return str(value)
     
 def create_global_id():
 	id = ndb.Key(global_id, "number").get()
@@ -96,7 +97,7 @@ def create_global_id():
 		id.put()
 		memcache.set("number", id, namespace="global_id")
 
-def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
+def create_question(category,question,answer1,answer2,answer3,answer4,answerid,creator):
     question_number = get_global_id()
     question = question_obj(id=question_number,
         category=category,
@@ -105,7 +106,8 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid):
         answer2=answer2,
         answer3=answer3,
         answer4=answer4,
-        answerid=answerid)
+        answerid=answerid,
+        creator=creator)
     question.key = ndb.Key(question_obj, question_number)
     question.put()
 

@@ -11,3 +11,4 @@ Thoughts while coding
 -change datalist to select box, or remove the input ability of the user
 -five hour time difference in datetime field of ndb
 -remove html from the NewQuestion method,
+-stopping going back and answering question again

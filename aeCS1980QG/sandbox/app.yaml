@@ -1,4 +1,4 @@
-application: Sandbox
+application: sandbox
 
 version: v1
 runtime: python27
