@@ -5,7 +5,9 @@
 <body>
 	<div class = "container">
 		<br><br><br>
-        {% for question_obj in review %}
+
+        {% for question_obj in questionList %}
+        <hr>
 		<h3>{{question_obj.question}}</h3>
 
 		<ol>
@@ -14,18 +16,21 @@
 			<li class="green-text">{{question_obj.answer3}}</li>
 			<li class="yellow-text">{{question_obj.answer4}}</li>
 		</ol>
-        <hr>
-        <form action=/answeredQuestion method="post"><font size = 5>
-          <button type="submit" name="answerid" value=1 class="submit-q-button-1">
-          {{question_obj.answer1}}</button>
-          <button type="submit" name="answerid" value=2 class="submit-q-button-2">
-          {{question_obj.answer2}}</button>
-          <button type="submit" name="answerid" value=3 class="submit-q-button-3">
-          {{question_obj.answer3}}</button>
-          <button type="submit" name="answerid" value=4 class="submit-q-button-4">
-          {{question_obj.answer4}}</button>
+        <form action=/checkAnswer method="POST"></br>
+            <input type="radio" name="answer{{question_obj.id}}" value="1" class="red-text">
+            {{question_obj.answer1}}</button>
+        </br><input type="radio" name="answer{{question_obj.id}}" value="2" class="blue-text">
+            {{question_obj.answer2}}</button>
+        </br><input type="radio" name="answer{{question_obj.id}}" value="3" class="green-text">
+            {{question_obj.answer3}}</button>
+        </br><input type="radio" name="answer{{question_obj.id}}" value="4" class="yellow-text">
+            {{question_obj.answer4}}</button>
         </form>
         {% endfor %}
+
+        <form action=/submitQuiz ></br>
+            <input type="submit" name="submitbutton" value="Submit Quiz"></input>
+        </form>
 	</div>
 </body>
 </html>

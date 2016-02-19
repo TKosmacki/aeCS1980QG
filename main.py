@@ -187,15 +187,82 @@ class RunGame(webapp2.RequestHandler):
     def get(self):
         questionList = []
         for x in range(10):
-            questionList.append(models.getQuestion(str(x)))
-        review = questionList.pop()
+            questionList.append(models.getQuestion(str(x+1)))
+
         page_params = {
           'user_email': get_user_email(),
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
-          'review': review,
+          'questionList': questionList,
         }
         render_template(self, 'answerQuestion.html',page_params)
+
+class submitQuiz(webapp2.RequestHandler):
+    def get(self):
+        questionList = []
+        for x in range(10):
+            questionList.append(models.getQuestion(str(x+1)))
+
+        numCorrect = 0;
+        currQ = questionList.pop()
+        userAnswer10 = self.request.get('answer'+currQ.id)
+        logging.warning(userAnswer10)
+        if (userAnswer10 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer9 = self.request.get('answer'+currQ.id)
+        if (userAnswer9 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer8 = self.request.get('answer'+currQ.id)
+        if (userAnswer8 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer7 = self.request.get('answer'+currQ.id)
+        if (userAnswer7 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer6 = self.request.get('answer'+currQ.id)
+        if (userAnswer6 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer5 = self.request.get('answer'+currQ.id)
+        if (userAnswer5 == currQ.answerid):
+            numCorrect == numCorrect+1
+        currQ = questionList.pop()
+        userAnswer4 = self.request.get('answer'+currQ.id)
+        if (userAnswer4 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer3 = self.request.get('answer'+currQ.id)
+        logging.warning(userAnswer3)
+        if (userAnswer3 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer2 = self.request.get('answer'+currQ.id)
+        logging.warning(userAnswer2)
+        if (userAnswer2 == currQ.answerid):
+            numCorrect = numCorrect+1
+        currQ = questionList.pop()
+        userAnswer1 = self.request.get('answer'+currQ.id)
+        logging.warning(userAnswer1)
+        if (userAnswer1 == currQ.answerid):
+            numCorrect = numCorrect+1
+
+
+        page_params = {
+          'user_email': get_user_email(),
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'numCorrect': numCorrect,
+        }
+        render_template(self,'quizResults.html',page_params)
+
+
+#class checkAnswer(webapp2.RequestHandler):
+#    def get(self):
+
+
 
 ###############################################################################
 mappings = [
@@ -208,5 +275,7 @@ mappings = [
   ('/ReviewNewQuestions', ReviewNewQuestions),
   ('/AnswerQuestion', AnswerQuestion),
   ('/RunGame', RunGame),
+  ('/submitQuiz',submitQuiz)
+  #('/checkAnswer',checkAnswer),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
