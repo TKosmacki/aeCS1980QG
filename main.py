@@ -198,70 +198,65 @@ class RunGame(webapp2.RequestHandler):
         render_template(self, 'answerQuestion.html',page_params)
 
 class submitQuiz(webapp2.RequestHandler):
-    def get(self):
-        questionList = []
-        for x in range(10):
-            questionList.append(models.getQuestion(str(x+1)))
-
-        numCorrect = 0;
-        currQ = questionList.pop()
-        userAnswer10 = self.request.get('answer10')
-        logging.warning('answer'+currQ.id)
-        logging.warning(userAnswer10)
-        if (userAnswer10 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer9 = self.request.get('answer9')
-        if (userAnswer9 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer8 = self.request.get('answer8')
-        if (userAnswer8 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer7 = self.request.get('answer7')
-        if (userAnswer7 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer6 = self.request.get('answer6')
-        if (userAnswer6 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer5 = self.request.get('answer5')
-        if (userAnswer5 == currQ.answerid):
-            numCorrect == numCorrect+1
-        currQ = questionList.pop()
-        userAnswer4 = self.request.get('answer4')
-        if (userAnswer4 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer3 = self.request.get('answer3')
-        logging.warning(userAnswer3)
-        if (userAnswer3 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer2 = self.request.get('answer2')
-        logging.warning(userAnswer2)
-        if (userAnswer2 == currQ.answerid):
-            numCorrect = numCorrect+1
-        currQ = questionList.pop()
-        userAnswer1 = self.request.get('answer1')
-        logging.warning(userAnswer1)
-        if (userAnswer1 == currQ.answerid):
-            numCorrect = numCorrect+1
-
-
+    def post(self):
         page_params = {
           'user_email': get_user_email(),
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
-          'numCorrect': numCorrect,
+          'correctCount': numCorrect,
+          'totalCount': numTotal,
+          'question_obj': argQ,
         }
         render_template(self,'quizResults.html',page_params)
 
 
-#class checkAnswer(webapp2.RequestHandler):
-#    def get(self):
+class answerSingle(webapp2.RequestHandler):
+    def get(self):
+        argQ = models.getQuestion(str(2))
+        numCorrect = 0
+        numTotal = 0
+        page_params = {
+          'user_email': get_user_email(),
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'correctCount': numCorrect,
+          'totalCount': numTotal,
+          'question_obj': argQ,
+        }
+        render_template(self,'answerSingle.html',page_params)
+
+class submitAnswer(webapp2.RequestHandler):
+    def post(self):
+        answerid = self.request.get('hidden_answerid')
+        questionid = self.request.get('userAnswer')
+        correctCount = self.request.get('hidden_correctCount')
+        totalCount = self.request.get('hidden_totalCount')
+        answerid = int(answerid)
+        questionid = int(questionid)
+        correctCount = int(correctCount)
+        totalCount = int(totalCount)
+        if (totalCount == 5):
+            page_params = {
+              'user_email': get_user_email(),
+              'login_url': users.create_login_url(),
+              'logout_url': users.create_logout_url('/'),
+              'correctCount': correctCount,
+              'totalCount': totalCount,
+            }
+            render_template(self,'quizResults.html',page_params)
+        if (questionid == answerid):
+            correctCount = correctCount+1
+        totalCount = totalCount+1
+        argQ = models.getQuestion(str(2+totalCount))
+        page_params = {
+          'user_email': get_user_email(),
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'correctCount': correctCount,
+          'totalCount': totalCount,
+          'question_obj': argQ,
+        }
+        render_template(self,'answerSingle.html',page_params)
 
 
 
@@ -276,7 +271,8 @@ mappings = [
   ('/ReviewNewQuestions', ReviewNewQuestions),
   ('/AnswerQuestion', AnswerQuestion),
   ('/RunGame', RunGame),
-  ('/submitQuiz',submitQuiz)
-  #('/checkAnswer',checkAnswer),
+  ('/submitQuiz',submitQuiz),
+  ('/answerSingle',answerSingle),
+  ('/submitAnswer',submitAnswer)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
