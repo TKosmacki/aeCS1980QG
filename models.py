@@ -16,10 +16,11 @@ class global_id(ndb.Model):
 		self.next_id = self.next_id + 1
 
 class user_profile(ndb.Model):
-	user_id = ndb.StringProperty()
-	name = ndb.StringProperty()
-	location = ndb.StringProperty()
-	interests = ndb.StringProperty()
+    user_id = ndb.StringProperty()
+    name = ndb.StringProperty()
+    location = ndb.StringProperty()
+    interests = ndb.StringProperty()
+    image_url = ndb.StringProperty()
 
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
@@ -41,9 +42,9 @@ class question_obj(ndb.Model):
     score = ndb.IntegerProperty(default=0)
 
 
-def update_profile(id, name, location, interests):
+def update_profile(id, name, location, interests, image_url):
 	profile = get_user_profile(id)
-	profile.populate(name = name, location = location, interests = interests)
+	profile.populate(name = name, location = location, interests = interests, image_url = image_url)
 	profile.put()
 	memcache.set(id, profile, namespace="profile")
 
@@ -69,7 +70,10 @@ def get_user_profile(id):
 		result = ndb.Key(user_profile, id).get()
 		memcache.set(id, result, namespace="profile")
 	return result
-
+    
+def get_image(image_id):
+  return ndb.Key(urlsafe=image_id).get()
+  
 class global_id(ndb.Model):
     next_id = ndb.IntegerProperty()
 

@@ -155,6 +155,33 @@ class AnswerQuestion(webapp2.RequestHandler):
           'review': review,
         }
         render_template(self, 'answerQuestion.html',page_params)
+        
+class ProfileHandler(webapp2.RequestHandler):
+	def get(self):
+		id = self.request.get("id")
+		logging.warning(id)
+		q = models.check_if_user_profile_exists(id)
+		if q == []:
+			models.create_profile(id)
+
+		page_params = {
+			'user_email': get_user_email(),
+			'login_url': users.create_login_url(),
+			'logout_url': users.create_logout_url('/'),
+			'user_id': get_user_id(),
+			'profile': models.get_user_profile(id),
+		}
+		render_template(self, 'profile1.html', page_params)
+
+	def post(self):
+		id = get_user_id()
+		name = self.request.get("name")
+		location = self.request.get("location")
+		interests = self.request.get("interests")
+
+		models.update_profile(id, name, location, interests)
+
+		self.redirect('/profile?id=' + id + "&search=" + get_user_email())
 
 class RunGame(webapp2.RequestHandler):
     def get(self):
@@ -173,7 +200,7 @@ class RunGame(webapp2.RequestHandler):
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
-  ('/profile', ProfilePageHandler),
+  ('/profile', ProfileHandler),
   ('/submitNew', SubmitPageHandler),
   ('/NewQuestion', NewQuestion),
   ('/ReviewQuestion', ReviewQuestion),
