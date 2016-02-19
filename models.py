@@ -101,6 +101,9 @@ def create_global_id():
 		id.put()
 		memcache.set("number", id, namespace="global_id")
 
+#param: 8(String) question properties
+#return: (String) question_number of stored question
+#creates and stores question in database
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid,creator):
     question_number = get_global_id()
     question = question_obj(id=question_number,
@@ -117,23 +120,24 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,c
 
     return question_number
 
+#param: (String) id for a query
+#return: (question) object
 def getQuestion(id):
     obj =  question_obj.query(question_obj.id == id)
-    logging.warning(type(obj))
     ac_obj = obj.fetch(1).pop()
-    logging.warning(type(ac_obj))
     return ac_obj
 
+#param: (int) num of requested questions
+#return: (list) of questions, oldest first
 def get_oldest_questions(num):
     query= question_obj.query()
     query.order(question_obj.create_datetime)
 
     return query.fetch(num)
 
+#fills database with question_objs from questions.txt
 def populate_db():
     txt = open('questions.txt')
-    linesep = "\n"
-    print("working")
     list = []
 
     for line in txt:
