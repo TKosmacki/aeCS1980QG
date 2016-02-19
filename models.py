@@ -114,7 +114,11 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,c
     return question_number
 
 def getQuestion(id):
-    return question_obj.query(question_obj.id == id)
+    obj =  question_obj.query(question_obj.id == id)
+    logging.warning(type(obj))
+    ac_obj = obj.fetch(1).pop()
+    logging.warning(type(ac_obj))
+    return ac_obj
 
 def get_oldest_questions(num):
     query= question_obj.query()
