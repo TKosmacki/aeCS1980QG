@@ -156,6 +156,20 @@ class AnswerQuestion(webapp2.RequestHandler):
         }
         render_template(self, 'answerQuestion.html',page_params)
 
+class RunGame(webapp2.RequestHandler):
+    def get(self):
+        questionList = []
+        for x in range(10):
+            questionList.append(models.getQuestion(str(x)))
+        review = questionList.pop()
+        page_params = {
+          'user_email': get_user_email(),
+          'login_url': users.create_login_url(),
+          'logout_url': users.create_logout_url('/'),
+          'review': review,
+        }
+        render_template(self, 'answerQuestion.html',page_params)
+
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
@@ -166,5 +180,6 @@ mappings = [
   ('/meanstackakalamestack', test),
   ('/ReviewNewQuestions', ReviewNewQuestions),
   ('/AnswerQuestion', AnswerQuestion),
+  ('/RunGame', RunGame),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

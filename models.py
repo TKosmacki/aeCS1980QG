@@ -39,7 +39,7 @@ class question_obj(ndb.Model):
     answer4Selections = ndb.IntegerProperty(default=0)
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     score = ndb.IntegerProperty(default=0)
-    
+
 
 def update_profile(id, name, location, interests):
 	profile = get_user_profile(id)
@@ -75,7 +75,7 @@ class global_id(ndb.Model):
 
     def increase_id(self):
         self.next_id = self.next_id + 1
-        
+
 def get_global_id():
     id = memcache.get("number", namespace="global_id")
     if not id:
@@ -86,7 +86,7 @@ def get_global_id():
     id.put()
     memcache.set("number", id, namespace="global_id")
     return str(value)
-    
+
 def create_global_id():
 	id = ndb.Key(global_id, "number").get()
 	logging.warning(id)
@@ -112,14 +112,14 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,c
     question.put()
 
     return question_number
- 
+
 def getQuestion(id):
     return question_obj.query(question_obj.id == id)
- 
+
 def get_oldest_questions(num):
     query= question_obj.query()
     query.order(question_obj.create_datetime)
-   
+
     return query.fetch(num)
 
 def populate_db():
@@ -139,4 +139,4 @@ def populate_db():
         answer4 = list[x+4]
         answerid = list[x+5]
         create_question("Test", question, answer1, answer2, answer3,
-            answer4, answerid)
+            answer4, answerid,"Stephen Curry")
