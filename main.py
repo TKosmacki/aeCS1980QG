@@ -155,7 +155,7 @@ class AnswerQuestion(webapp2.RequestHandler):
           'review': review,
         }
         render_template(self, 'answerQuestion.html',page_params)
-        
+
 class ProfileHandler(webapp2.RequestHandler):
 	def get(self):
 		id = self.request.get("id")
@@ -205,46 +205,47 @@ class submitQuiz(webapp2.RequestHandler):
 
         numCorrect = 0;
         currQ = questionList.pop()
-        userAnswer10 = self.request.get('answer'+currQ.id)
+        userAnswer10 = self.request.get('answer10')
+        logging.warning('answer'+currQ.id)
         logging.warning(userAnswer10)
         if (userAnswer10 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer9 = self.request.get('answer'+currQ.id)
+        userAnswer9 = self.request.get('answer9')
         if (userAnswer9 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer8 = self.request.get('answer'+currQ.id)
+        userAnswer8 = self.request.get('answer8')
         if (userAnswer8 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer7 = self.request.get('answer'+currQ.id)
+        userAnswer7 = self.request.get('answer7')
         if (userAnswer7 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer6 = self.request.get('answer'+currQ.id)
+        userAnswer6 = self.request.get('answer6')
         if (userAnswer6 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer5 = self.request.get('answer'+currQ.id)
+        userAnswer5 = self.request.get('answer5')
         if (userAnswer5 == currQ.answerid):
             numCorrect == numCorrect+1
         currQ = questionList.pop()
-        userAnswer4 = self.request.get('answer'+currQ.id)
+        userAnswer4 = self.request.get('answer4')
         if (userAnswer4 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer3 = self.request.get('answer'+currQ.id)
+        userAnswer3 = self.request.get('answer3')
         logging.warning(userAnswer3)
         if (userAnswer3 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer2 = self.request.get('answer'+currQ.id)
+        userAnswer2 = self.request.get('answer2')
         logging.warning(userAnswer2)
         if (userAnswer2 == currQ.answerid):
             numCorrect = numCorrect+1
         currQ = questionList.pop()
-        userAnswer1 = self.request.get('answer'+currQ.id)
+        userAnswer1 = self.request.get('answer1')
         logging.warning(userAnswer1)
         if (userAnswer1 == currQ.answerid):
             numCorrect = numCorrect+1

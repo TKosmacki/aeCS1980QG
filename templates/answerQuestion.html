@@ -8,7 +8,7 @@
 
         {% for question_obj in questionList %}
         <hr>
-		<h3>{{question_obj.question}}</h3>
+		<h3>{{question_obj.question}} name: answer{{question_obj.id}}</h3>
 
 		<ol>
 			<li class="red-text">{{question_obj.answer1}}</li>
@@ -16,7 +16,7 @@
 			<li class="green-text">{{question_obj.answer3}}</li>
 			<li class="yellow-text">{{question_obj.answer4}}</li>
 		</ol>
-        <form action=/checkAnswer method="POST"></br>
+        <form action=/submitQuiz method="POST"></br>
             <input type="radio" name="answer{{question_obj.id}}" value="1" class="red-text">
             {{question_obj.answer1}}</button>
         </br><input type="radio" name="answer{{question_obj.id}}" value="2" class="blue-text">
