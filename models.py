@@ -42,9 +42,9 @@ class question_obj(ndb.Model):
     score = ndb.IntegerProperty(default=0)
 
 
-def update_profile(id, name, location, interests, image_url):
+def update_profile(id, name, location, interests):
 	profile = get_user_profile(id)
-	profile.populate(name = name, location = location, interests = interests, image_url = image_url)
+	profile.populate(name = name, location = location, interests = interests)
 	profile.put()
 	memcache.set(id, profile, namespace="profile")
 

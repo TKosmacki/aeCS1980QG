@@ -4,14 +4,21 @@
 	<br><br><br>
 	{% if user_email %}
 
-	<div class= "container">
+	<div class= "container col-lg-12s">
 			<div class="text-left"><he5>Profile Information:</he5></div>
                 <hr>
-                <img class="img-responsive smaller-image blue-border" src="https://cs.pitt.edu/img/users/novacky.jpg"></a>
-                <br><br>
-                <label class="control-label">Name:</label> {{profile.name}}<br>
-				<label class="control-label">Location:</label> {{profile.location}}<br>
-				<label class="control-label">Interests:</label> {{profile.interests}}<br>
+                <div class="col-lg-3">
+                    <img class="img-responsive smaller-image blue-border" src="https://cs.pitt.edu/img/users/novacky.jpg"></a>
+                    <br>
+                </div>
+                <div class="col-lg-9">
+                    <label class="control-label">Name:</label> {{profile.name}}<br>
+                    <label class="control-label">Class:</label> {{profile.location}}<br>
+                    <label class="control-label">Interests:</label> {{profile.interests}}<br>
+                    <label class="control-label">Employer:</label> University of Pittsburgh<br>
+                    <label class="control-label">Bio:</label> George A. Novacky was an Assistant Department Chair and Senior Lecturer in Computer Science, and an Assistant Dean of CAS for Undergraduate Studies at the University of Pittsburgh.
+                    <br><br><br><br>
+                </div>
 			<a class="btn btn-default pull-right" href="#editprofile" data-toggle="modal">Edit Profile Information</a>
 			<br><br>
 	</div>
@@ -22,7 +29,7 @@
 	<div class="modal fade" id="editprofile" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form role = "form" method="post" class="form-horizontal" action="/profile"> <!--Need to process the information-->
+				<form role = "form"  method="post" class="form-horizontal" action="/profile"> <!--Need to process the information-->
 					<div class="modal-header">
 						<he5>Edit Profile Information</he5>
 					</div>
@@ -45,13 +52,6 @@
 								<textarea type="text" class="form-control" name="interests" id="Interests" value="" maxlength=140 required>{{profile.interests}}</textarea>
 							</div>
 						</div>
-                        <div class="form-group">
-                            <label for: "File" class="col-lg-2 control-label">File:</label>
-                            <div class="col-lg-10">
-                                <input name="file" type="file"><br><br><br>
-                            </div>
-                        </div>
-                      
 					</div>
 					<div class="modal-footer">
 						<a class="btn btn-default text-right" data-dismiss="modal">Close</a>
