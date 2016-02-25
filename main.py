@@ -80,7 +80,7 @@ class NewQuestion(webapp2.RequestHandler):
         }
         render_template(self, 'confirmationPage.html', page_params)
 
-class ReviewQuestion(webapp2.RequestHandler):
+class ReviewSingleQuestion(webapp2.RequestHandler):
     def get(self):
         id = self.request.get('id')
         uID = get_user_id()
@@ -161,20 +161,6 @@ class ProfileHandler(webapp2.RequestHandler):
 
 		self.redirect('/profile?id=' + id + "&search=" + get_user_email())
 
-class RunGame(webapp2.RequestHandler):
-    def get(self):
-        questionList = []
-        for x in range(10):
-            questionList.append(models.getQuestion(str(x+1)))
-
-        page_params = {
-          'user_email': get_user_email(),
-          'login_url': users.create_login_url(),
-          'logout_url': users.create_logout_url('/'),
-          'questionList': questionList,
-        }
-        render_template(self, 'answerQuestion.html',page_params)
-
 class submitQuiz(webapp2.RequestHandler):
     def post(self):
         page_params = {
@@ -191,6 +177,7 @@ class submitQuiz(webapp2.RequestHandler):
 class answerSingle(webapp2.RequestHandler):
     def get(self):
         argQ = models.getQuestion(str(2))
+        id = get_user_id()
         numCorrect = 0
         numTotal = 0
         page_params = {
@@ -200,6 +187,7 @@ class answerSingle(webapp2.RequestHandler):
           'correctCount': numCorrect,
           'totalCount': numTotal,
           'question_obj': argQ,
+          'user_id':id,
         }
         render_template(self,'answerSingle.html',page_params)
 
@@ -213,6 +201,7 @@ class submitAnswer(webapp2.RequestHandler):
         questionid = int(questionid)
         correctCount = int(correctCount)
         totalCount = int(totalCount)
+        id = get_user_id()
         if (totalCount == 5):
             page_params = {
               'user_email': get_user_email(),
@@ -244,6 +233,7 @@ class submitAnswer(webapp2.RequestHandler):
           'correctCount': correctCount,
           'totalCount': totalCount,
           'question_obj': argQ,
+          'user_id':id,
         }
         render_template(self,'answerSingle.html',page_params)
 
@@ -255,11 +245,10 @@ mappings = [
   ('/profile', ProfileHandler),
   ('/submitNew', SubmitPageHandler),
   ('/NewQuestion', NewQuestion),
-  ('/ReviewQuestion', ReviewQuestion),
+  ('/ReviewQuestion', ReviewSingleQuestion),
   ('/meanstackakalamestack', test),
   ('/ReviewNewQuestions', ReviewNewQuestions),
   ('/AnswerQuestion', AnswerQuestion),
-  ('/RunGame', RunGame),
   ('/submitQuiz',submitQuiz),
   ('/answerSingle',answerSingle),
   ('/submitAnswer',submitAnswer)
