@@ -17,9 +17,9 @@ class global_id(ndb.Model):
 
 class user_profile(ndb.Model):
     user_id = ndb.StringProperty()
-    name = ndb.StringProperty()
-    location = ndb.StringProperty()
-    interests = ndb.StringProperty()
+    name = ndb.StringProperty(default="No Name")
+    location = ndb.StringProperty(default="No Location")
+    interests = ndb.StringProperty(default="No Interests")
     image_url = ndb.StringProperty()
 
 class question_obj(ndb.Model):
