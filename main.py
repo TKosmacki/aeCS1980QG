@@ -34,7 +34,9 @@ def get_user_id():
 class MainPageHandler(webapp2.RequestHandler):
 	def get(self):
 		id = get_user_id()
-
+		is_admin = 0
+		if users.is_current_user_admin():
+			is_admin = 1 
 		q = models.check_if_user_profile_exists(id)
 
 		page_params = {
@@ -42,6 +44,7 @@ class MainPageHandler(webapp2.RequestHandler):
 		'login_url': users.create_login_url(),
 		'logout_url': users.create_logout_url('/'),
 		'user_id': id,
+		'admin' : is_admin
 		}
 		render_template(self, 'index.html', page_params)
 
@@ -75,7 +78,7 @@ class NewQuestion(webapp2.RequestHandler):
         answer3 = self.request.get('answer3')
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
-        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator)
+        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
         self.redirect('/NewQuestion?id=' + questionID)
 
     def get(self):
