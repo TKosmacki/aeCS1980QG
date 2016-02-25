@@ -5,8 +5,7 @@
 <body>
 	<div class = "container">
 		<br><br><br>
-
-		<h3>{{question_obj.question}}</h3>
+        <h3>{{question_obj.question}}</h3>
         <hr>
 		<ol>
 			<li class="red-text">{{question_obj.answer1}}</li>
@@ -14,22 +13,20 @@
 			<li class="green-text">{{question_obj.answer3}}</li>
 			<li class="yellow-text">{{question_obj.answer4}}</li>
 		</ol>
-        <form action=/submitAnswer method="POST"></br>
-            <input type="radio" name="userAnswer" value="1" class="red-text">
-            {{question_obj.answer1}}
-        </br><input type="radio" name="userAnswer" value="2" class="blue-text">
-            {{question_obj.answer2}}
-        </br><input type="radio" name="userAnswer" value="3" class="green-text">
-            {{question_obj.answer3}}
-        </br><input type="radio" name="userAnswer" value="4" class="yellow-text">
-            {{question_obj.answer4}}
+        <hr>
+        <form action=/submitAnswer method="post"><font size = 5>
             <input type="hidden" name="hidden_questionid" value="{{question_obj.id}}">
             <input type="hidden" name="hidden_answerid" value="{{question_obj.answerid}}">
             <input type="hidden" name="hidden_correctCount" value="{{correctCount}}">
             <input type="hidden" name="hidden_totalCount" value="{{totalCount}}">
-        </br>
-        </br>
-            <input type="submit" name="submitbutton" value="Submit Answer"></input>
+          <button type="submit" name="userAnswer" value=1 class="submit-q-button-1">
+          {{question_obj.answer1}}</button>
+          <button type="submit" name="userAnswer" value=2 class="submit-q-button-2">
+          {{question_obj.answer2}}</button>
+          <button type="submit" name="userAnswer" value=3 class="submit-q-button-3">
+          {{question_obj.answer3}}</button>
+          <button type="submit" name="userAnswer" value=4 class="submit-q-button-4">
+          {{question_obj.answer4}}</button>
         </form>
 	</div>
 </body>

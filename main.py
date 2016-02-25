@@ -244,7 +244,7 @@ class submitAnswer(webapp2.RequestHandler):
               'totalCount': totalCount,
             }
             render_template(self,'quizResults.html',page_params)
-            
+
         if (totalCount == 10):
             page_params = {
               'user_email': get_user_email(),
