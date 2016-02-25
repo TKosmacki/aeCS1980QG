@@ -18,55 +18,55 @@ def render_template(handler, templatename, templatevalues={}):
 
 ###############################################################################
 def get_user_email():
-  result = None
-  user = users.get_current_user()
-  if user:
-    result = user.email()
-  return result
+    result = None
+    user = users.get_current_user()
+    if user:
+        result = user.email()
+    return result
 
 def get_user_id():
-	result = None
-	user = users.get_current_user()
-	if user:
-		result = user.user_id()
-	return result
+    result = None
+    user = users.get_current_user()
+    if user:
+        result = user.user_id()
+    return result
 
 class MainPageHandler(webapp2.RequestHandler):
-	def get(self):
-		id = get_user_id()
-		is_admin = 0
-		if users.is_current_user_admin():
-			is_admin = 1 
-		q = models.check_if_user_profile_exists(id)
+    def get(self):
+        id = get_user_id()
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
+        q = models.check_if_user_profile_exists(id)
 
-		page_params = {
-		'user_email': get_user_email(),
-		'login_url': users.create_login_url(),
-		'logout_url': users.create_logout_url('/'),
-		'user_id': id,
-		'admin' : is_admin
-		}
-		render_template(self, 'index.html', page_params)
+        page_params = {
+        'user_email': get_user_email(),
+        'login_url': users.create_login_url(),
+        'logout_url': users.create_logout_url('/'),
+        'user_id': id,
+        'admin' : is_admin
+        }
+        render_template(self, 'index.html', page_params)
 
 
 class SubmitPageHandler(webapp2.RequestHandler):
-	def get(self):
-		id = get_user_id()
+    def get(self):
+        id = get_user_id()
 
-		q = models.check_if_user_profile_exists(id)
+        q = models.check_if_user_profile_exists(id)
 
-		page_params = {
-		'user_email': get_user_email(),
-		'login_url': users.create_login_url(),
-		'logout_url': users.create_logout_url('/'),
-		'user_id': id,
-		}
-		render_template(self, 'newQuestionSubmit.html', page_params)
+        page_params = {
+        'user_email': get_user_email(),
+        'login_url': users.create_login_url(),
+        'logout_url': users.create_logout_url('/'),
+        'user_id': id,
+        }
+        render_template(self, 'newQuestionSubmit.html', page_params)
 
 class NewQuestion(webapp2.RequestHandler):
     def post(self):
         id = get_user_id()
-        q = models.get_user_profile(id)        
+        q = models.get_user_profile(id)
         creator = q.name
         explanation = self.request.get('explanation')
         if not explanation:
@@ -118,16 +118,16 @@ class ReviewNewQuestions(webapp2.RequestHandler):
         render_template(self, 'reviewQuestions.html', page_params)
 
 class test(webapp2.RequestHandler):
-	def get(self):
-		models.create_global_id()
-		models.populate_db()
-		page_params = {
-		'user_email': get_user_email(),
-		'login_url': users.create_login_url(),
-		'logout_url': users.create_logout_url('/'),
-		'user_id': get_user_id(),
-		}
-		render_template(self, 'blanktest.html', page_params)
+    def get(self):
+        models.create_global_id()
+        models.populate_db()
+        page_params = {
+        'user_email': get_user_email(),
+        'login_url': users.create_login_url(),
+        'logout_url': users.create_logout_url('/'),
+        'user_id': get_user_id(),
+        }
+        render_template(self, 'blanktest.html', page_params)
 
 class AnswerQuestion(webapp2.RequestHandler):
     def get(self):
@@ -143,30 +143,30 @@ class AnswerQuestion(webapp2.RequestHandler):
         render_template(self, 'answerQuestion.html',page_params)
 
 class ProfileHandler(webapp2.RequestHandler):
-	def get(self):
-		id = self.request.get("id")
-		q = models.check_if_user_profile_exists(id)
-		if q == []:
-			models.create_profile(id)
+    def get(self):
+        id = self.request.get("id")
+        q = models.check_if_user_profile_exists(id)
+        if q == []:
+            models.create_profile(id)
 
-		page_params = {
-			'user_email': get_user_email(),
-			'login_url': users.create_login_url(),
-			'logout_url': users.create_logout_url('/'),
-			'user_id': get_user_id(),
-			'profile': models.get_user_profile(id),
-		}
-		render_template(self, 'profile1.html', page_params)
+        page_params = {
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'user_id': get_user_id(),
+            'profile': models.get_user_profile(id),
+        }
+        render_template(self, 'profile1.html', page_params)
 
-	def post(self):
-		id = get_user_id()
-		name = self.request.get("name")
-		location = self.request.get("location")
-		interests = self.request.get("interests")
+    def post(self):
+        id = get_user_id()
+        name = self.request.get("name")
+        location = self.request.get("location")
+        interests = self.request.get("interests")
 
-		models.update_profile(id, name, location, interests)
+        models.update_profile(id, name, location, interests)
 
-		self.redirect('/profile?id=' + id + "&search=" + get_user_email())
+        self.redirect('/profile?id=' + id + "&search=" + get_user_email())
 
 class submitQuiz(webapp2.RequestHandler):
     def post(self):

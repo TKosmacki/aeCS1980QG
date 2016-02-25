@@ -10,10 +10,10 @@ from google.appengine.api import memcache
 
 
 class global_id(ndb.Model):
-	next_id = ndb.IntegerProperty()
+    next_id = ndb.IntegerProperty()
 
-	def increase_id(self):
-		self.next_id = self.next_id + 1
+    def increase_id(self):
+        self.next_id = self.next_id + 1
 
 class user_profile(ndb.Model):
     user_id = ndb.StringProperty()
@@ -45,37 +45,37 @@ class question_obj(ndb.Model):
 
 
 def update_profile(id, name, location, interests):
-	profile = get_user_profile(id)
-	profile.populate(name = name, location = location, interests = interests)
-	profile.put()
-	memcache.set(id, profile, namespace="profile")
+    profile = get_user_profile(id)
+    profile.populate(name = name, location = location, interests = interests)
+    profile.put()
+    memcache.set(id, profile, namespace="profile")
 
 def create_profile(id):
-	profile = user_profile()
-	profile.user_id = id
-	profile.key = ndb.Key(user_profile,id)
-	profile.put()
+    profile = user_profile()
+    profile.user_id = id
+    profile.key = ndb.Key(user_profile,id)
+    profile.put()
 
-	memcache.set(id, profile, namespace="profile")
+    memcache.set(id, profile, namespace="profile")
 
 def check_if_user_profile_exists(id):
-	result = list()
-	q = user_profile.query(user_profile.user_id == id)
-	q = q.fetch(1)
+    result = list()
+    q = user_profile.query(user_profile.user_id == id)
+    q = q.fetch(1)
 
-	##if q == []:
-	return q
+    ##if q == []:
+    return q
 
 def get_user_profile(id):
-	result = memcache.get(id, namespace="profile")
-	if not result:
-		result = ndb.Key(user_profile, id).get()
-		memcache.set(id, result, namespace="profile")
-	return result
-    
+    result = memcache.get(id, namespace="profile")
+    if not result:
+        result = ndb.Key(user_profile, id).get()
+        memcache.set(id, result, namespace="profile")
+    return result
+
 def get_image(image_id):
   return ndb.Key(urlsafe=image_id).get()
-  
+
 class global_id(ndb.Model):
     next_id = ndb.IntegerProperty()
 
@@ -94,14 +94,14 @@ def get_global_id():
     return str(value)
 
 def create_global_id():
-	id = ndb.Key(global_id, "number").get()
-	logging.warning(id)
-	if id == None:
-		id = global_id()
-		id.next_id = 1
-		id.key = ndb.Key(global_id, "number")
-		id.put()
-		memcache.set("number", id, namespace="global_id")
+    id = ndb.Key(global_id, "number").get()
+    logging.warning(id)
+    if id == None:
+        id = global_id()
+        id.next_id = 1
+        id.key = ndb.Key(global_id, "number")
+        id.put()
+        memcache.set("number", id, namespace="global_id")
 
 #param: 8(String) question properties
 #return: (String) question_number of stored question
