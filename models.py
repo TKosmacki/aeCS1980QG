@@ -38,6 +38,7 @@ class question_obj(ndb.Model):
     answer2Selections = ndb.IntegerProperty(default=0)
     answer3Selections = ndb.IntegerProperty(default=0)
     answer4Selections = ndb.IntegerProperty(default=0)
+    explanation = ndb.StringProperty()
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     score = ndb.IntegerProperty(default=0)
 

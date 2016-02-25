@@ -45,32 +45,6 @@ class MainPageHandler(webapp2.RequestHandler):
 		}
 		render_template(self, 'index.html', page_params)
 
-class ProfilePageHandler(webapp2.RequestHandler):
-	def get(self):
-		id = self.request.get("id")
-		logging.warning(id)
-		q = models.check_if_user_profile_exists(id)
-		if q == []:
-			models.create_profile(id)
-
-		page_params = {
-			'user_email': get_user_email(),
-			'login_url': users.create_login_url(),
-			'logout_url': users.create_logout_url('/'),
-			'user_id': get_user_id(),
-			'profile': models.get_user_profile(id),
-		}
-		render_template(self, 'profile.html', page_params)
-
-	def post(self):
-		id = get_user_id()
-		name = self.request.get("name")
-		location = self.request.get("location")
-		interests = self.request.get("interests")
-
-		models.update_profile(id, name, location, interests)
-
-		self.redirect('/profile?id=' + id + "&search=" + get_user_email())
 
 class SubmitPageHandler(webapp2.RequestHandler):
 	def get(self):
@@ -109,18 +83,21 @@ class NewQuestion(webapp2.RequestHandler):
 class ReviewQuestion(webapp2.RequestHandler):
     def get(self):
         id = self.request.get('id')
+        uID = get_user_id()
         review = models.getQuestion(id)
         page_params = {
           'user_email': get_user_email(),
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
           'review': review,
+          'user_id' : uID,
         }
         render_template(self, 'newQuestionReview.html', page_params)
 
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewNewQuestions(webapp2.RequestHandler):
     def get(self):
+        uID = get_user_id()
         #just loops and prints every question from query
         review = models.get_oldest_questions(1000)
         page_params = {
@@ -128,6 +105,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
           'review': review,
+          'user_id' : uID,
         }
         render_template(self, 'reviewQuestions.html', page_params)
 
