@@ -62,7 +62,12 @@ class SubmitPageHandler(webapp2.RequestHandler):
 
 class NewQuestion(webapp2.RequestHandler):
     def post(self):
-        email = get_user_email()
+        id = get_user_id()
+        q = models.get_user_profile(id)        
+        creator = q.name
+        explanation = self.request.get('explanation')
+        if not explanation:
+            explanation = "No Explanation Provided"
         category = self.request.get('category')
         question = self.request.get('questiontext')
         answer1 = self.request.get('answer1')
@@ -70,7 +75,7 @@ class NewQuestion(webapp2.RequestHandler):
         answer3 = self.request.get('answer3')
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
-        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,email)
+        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator)
         self.redirect('/NewQuestion?id=' + questionID)
 
     def get(self):
@@ -137,7 +142,6 @@ class AnswerQuestion(webapp2.RequestHandler):
 class ProfileHandler(webapp2.RequestHandler):
 	def get(self):
 		id = self.request.get("id")
-		logging.warning(id)
 		q = models.check_if_user_profile_exists(id)
 		if q == []:
 			models.create_profile(id)

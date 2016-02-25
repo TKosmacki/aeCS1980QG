@@ -6,6 +6,7 @@
 	<div class = "container">
 		<br><br><br>
 		<p>Here is a new user question:</p>
+        <hr>
 		<p>{{review.question}}</p>
 		<ol>
 			<li class="red-text">{{review.answer1}}</li>
@@ -13,8 +14,10 @@
 			<li class="green-text">{{review.answer3}}</li>
 			<li class="yellow-text">{{review.answer4}}</li>
 		</ol>
+        <p>Explanation:</p>
+        <p>{{review.explanation}}</p>
 		<p>The answer is:</p>
-        <p class = "red-text">{{review.answerid}}</p>
+        <h5 class = "red-text">{{review.answerid}}</h5>
 		<p>Should this question be added?</p>
 		<form action="/ReviewNewQuestions">
 			<button type="submit" name=yes>Yes</button>

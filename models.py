@@ -38,7 +38,7 @@ class question_obj(ndb.Model):
     answer2Selections = ndb.IntegerProperty(default=0)
     answer3Selections = ndb.IntegerProperty(default=0)
     answer4Selections = ndb.IntegerProperty(default=0)
-    explanation = ndb.StringProperty()
+    explanation = ndb.StringProperty(default="No Explantion Provided")
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     score = ndb.IntegerProperty(default=0)
 
@@ -105,7 +105,7 @@ def create_global_id():
 #param: 8(String) question properties
 #return: (String) question_number of stored question
 #creates and stores question in database
-def create_question(category,question,answer1,answer2,answer3,answer4,answerid,creator):
+def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator):
     question_number = get_global_id()
     question = question_obj(id=question_number,
         category=category,
@@ -115,6 +115,7 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,c
         answer3=answer3,
         answer4=answer4,
         answerid=answerid,
+        explanation=explanation,
         creator=creator)
     question.key = ndb.Key(question_obj, question_number)
     question.put()
@@ -152,4 +153,4 @@ def populate_db():
         answer4 = list[x+4]
         answerid = list[x+5]
         create_question("Test", question, answer1, answer2, answer3,
-            answer4, answerid,"Stephen Curry")
+            answer4, answerid,"None","Stephen Curry")

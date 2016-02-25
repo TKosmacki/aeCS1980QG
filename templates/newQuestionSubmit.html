@@ -19,9 +19,6 @@
             <option value="PHARM 5218">PHARM 5218</option>
         </select>
       </input>
-      <!--What I want, category is not retrieved with self.request.get("category")
-        
-      -->
     </br><br>
       Question:
       <input type="text" size = "45" name="questiontext"method=POST required>
@@ -40,6 +37,8 @@
           <input type="text" method=POST name="answer4" size = "30" required>
         </li>
       </ol>
+      Explantion:<br>
+      <textarea type="text" name="explanation" class="form-control" rows="5" maxlength="750"></textarea>
       <hr>
      Select the correct answer:
         <button type="submit" name="answerid" value=1 class="submit-q-button-1">1</button>
