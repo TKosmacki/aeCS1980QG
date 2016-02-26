@@ -7,6 +7,7 @@ from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
+from google.appengine.api import mail
 
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
@@ -244,7 +245,14 @@ class submitAnswer(webapp2.RequestHandler):
         }
         render_template(self,'answerSingle.html',page_params)
 
-
+#Does not actually send any email right now, must be deployed first?!
+class reportHandler(webapp2.RequestHandler):
+	def post(self):
+		body = self.request.get("comment")
+		sender_address = get_user_email()
+		subject = "Need to figure out subject categories"
+		mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
+		self.redirect("/ReviewNewQuestions")
 
 ###############################################################################
 mappings = [
@@ -258,6 +266,7 @@ mappings = [
   ('/AnswerQuestion', AnswerQuestion),
   ('/submitQuiz',submitQuiz),
   ('/answerSingle',answerSingle),
-  ('/submitAnswer',submitAnswer)
+  ('/submitAnswer',submitAnswer),
+  ('/report', reportHandler)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

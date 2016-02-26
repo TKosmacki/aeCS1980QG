@@ -1,3 +1,8 @@
+#report:hover{
+	cursor: pointer;
+	color: red;
+}
+
 et{
 	font-size: 24pt;
 	font-weight: bold;

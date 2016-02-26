@@ -18,12 +18,34 @@
         <p>{{review.explanation}}</p>
 		<p>The answer is:</p>
         <h5 class = "red-text">{{review.answerid}}</h5>
+	<a id="report" onclick="reportPopUp()"> Report Question </a>
+	<div style="display:none;" id="hiddenForm2">
+	<form  method="post" action=/report >
+		<p> Describe the problem </p>
+		<textarea rows="3" cols="40" name="comment" maxlength="350" required >
+		</textarea>
+		<br>
+		<input type="submit" value="Submit" >
+	</form>
+	</div>
+		<br>
 		<p>Should this question be added?</p>
 		<form action="/ReviewNewQuestions">
 			<button type="submit" name=yes>Yes</button>
 			<button type="submit" name=no>No</button>
 		</form>
 	</div>
+
+	<script>
+		function reportPopUp() {
+			  if (document.getElementById("hiddenForm2").style.display == "none"){
+  			  	document.getElementById("hiddenForm2").style.display = "block";
+			  }
+			  else if (document.getElementById("hiddenForm2").style.display == "block"){
+				document.getElementById("hiddenForm2").style.display = "none";
+			  }
+		}
+	</script>
 </body>
 </html>
 {% endblock %}
