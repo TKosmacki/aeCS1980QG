@@ -19,3 +19,4 @@
 - [ ] Undergraduate / Graduate / Professional distinction in categories
 - [ ] Question Category Tag - System to dynamicly add
 - [ ] Question Submit - Username beyond just email addr
+- [ ] Point System
