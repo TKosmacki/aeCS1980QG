@@ -18,24 +18,45 @@
         <p>{{review.explanation}}</p>
 		<p>The answer is:</p>
         <h5 class = "red-text">{{review.answerid}}</h5>
-	<a id="report" onclick="reportPopUp()"> Report Question </a>
-	<div style="display:none;" id="hiddenForm2">
-	<form  method="post" action=/report >
-		<p> Describe the problem </p>
-		<textarea rows="3" cols="40" name="comment" maxlength="350" required >
-		</textarea>
-		<br>
-		<input type="submit" value="Submit" >
-	</form>
-	</div>
+		<hr>
+		
+		<div style="display:none;" id="hiddenForm2">
+			<form  method="post" action=/report >
+				<p> Describe the problem </p>
+				<textarea rows="3" cols="40" name="comment" maxlength="350" required >
+				</textarea>
+				<br>
+				<input type="submit" value="Submit" >
+			</form>
+		</div>
 		<br>
 		<p>Should this question be added?</p>
-		<form action="/ReviewNewQuestions">
+		<form class="col-lg-10" action="/ReviewNewQuestions">
 			<button type="submit" name=yes>Yes</button>
 			<button type="submit" name=no>No</button>
 		</form>
+		<a class="col-lg-2" id="report" href="#sendreport" data-toggle="modal"> Report Question </a>
 	</div>
-
+	<div class="modal fade" id="sendreport" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form role = "form"  method="post" class="form-horizontal" action="/report?id={{review.id}}">
+					<div class="modal-header">
+						<he5>Report Question</he5>
+					</div>
+					<div class="modal-body">
+						Describe the problem:<br><br>
+						<textarea class="form-control" rows="3" cols="40" name="comment" maxlength="350" required ></textarea>
+						<br>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-default text-right" data-dismiss="modal">Close</a>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 	<script>
 		function reportPopUp() {
 			  if (document.getElementById("hiddenForm2").style.display == "none"){
