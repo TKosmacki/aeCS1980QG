@@ -53,7 +53,9 @@ class MainPageHandler(webapp2.RequestHandler):
 class SubmitPageHandler(webapp2.RequestHandler):
     def get(self):
         id = get_user_id()
-
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         q = models.check_if_user_profile_exists(id)
 
         page_params = {
@@ -61,6 +63,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
         'login_url': users.create_login_url(),
         'logout_url': users.create_logout_url('/'),
         'user_id': id,
+		'admin' : is_admin
         }
         render_template(self, 'newQuestionSubmit.html', page_params)
 
@@ -94,12 +97,16 @@ class ReviewSingleQuestion(webapp2.RequestHandler):
         id = self.request.get('id')
         uID = get_user_id()
         review = models.getQuestion(id)
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
-          'user_email': get_user_email(),
-          'login_url': users.create_login_url(),
-          'logout_url': users.create_logout_url('/'),
-          'review': review,
-          'user_id' : uID,
+        'user_email': get_user_email(),
+        'login_url': users.create_login_url(),
+        'logout_url': users.create_logout_url('/'),
+        'user_id': uID,
+		'review': review,
+        'admin' : is_admin
         }
         render_template(self, 'newQuestionReview.html', page_params)
 
@@ -109,12 +116,16 @@ class ReviewNewQuestions(webapp2.RequestHandler):
         uID = get_user_id()
         #just loops and prints every question from query
         review = models.get_oldest_questions(1000)
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
-          'user_email': get_user_email(),
-          'login_url': users.create_login_url(),
-          'logout_url': users.create_logout_url('/'),
-          'review': review,
-          'user_id' : uID,
+        'user_email': get_user_email(),
+        'login_url': users.create_login_url(),
+        'logout_url': users.create_logout_url('/'),
+        'user_id': uID,
+		'review': review,
+        'admin' : is_admin
         }
         render_template(self, 'reviewQuestions.html', page_params)
 
@@ -135,11 +146,15 @@ class AnswerQuestion(webapp2.RequestHandler):
         #answerid = self.request.get('answerid')
         #id = self.request.get('id')
         review = models.get_oldest_questions(1)
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
           'user_email': get_user_email(),
           'login_url': users.create_login_url(),
           'logout_url': users.create_logout_url('/'),
           'review': review,
+		  'admin': is_admin,
         }
         render_template(self, 'answerQuestion.html',page_params)
 
@@ -149,13 +164,16 @@ class ProfileHandler(webapp2.RequestHandler):
         q = models.check_if_user_profile_exists(id)
         if q == []:
             models.create_profile(id)
-
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
             'user_id': get_user_id(),
             'profile': models.get_user_profile(id),
+			'admin': is_admin,
         }
         render_template(self, 'profile1.html', page_params)
 
@@ -171,6 +189,9 @@ class ProfileHandler(webapp2.RequestHandler):
 
 class submitQuiz(webapp2.RequestHandler):
     def post(self):
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
           'user_email': get_user_email(),
           'login_url': users.create_login_url(),
@@ -178,6 +199,7 @@ class submitQuiz(webapp2.RequestHandler):
           'correctCount': numCorrect,
           'totalCount': numTotal,
           'question_obj': argQ,
+		  'admin': is_admin,
         }
         render_template(self,'quizResults.html',page_params)
 
@@ -188,6 +210,9 @@ class answerSingle(webapp2.RequestHandler):
         id = get_user_id()
         numCorrect = 0
         numTotal = 0
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
           'user_email': get_user_email(),
           'login_url': users.create_login_url(),
@@ -196,6 +221,7 @@ class answerSingle(webapp2.RequestHandler):
           'totalCount': numTotal,
           'question_obj': argQ,
           'user_id':id,
+		  'admin': is_admin,
         }
         render_template(self,'answerSingle.html',page_params)
 
@@ -210,6 +236,9 @@ class submitAnswer(webapp2.RequestHandler):
         correctCount = int(correctCount)
         totalCount = int(totalCount)
         id = get_user_id()
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         if (totalCount == 5):
             page_params = {
               'user_email': get_user_email(),
@@ -217,6 +246,7 @@ class submitAnswer(webapp2.RequestHandler):
               'logout_url': users.create_logout_url('/'),
               'correctCount': correctCount,
               'totalCount': totalCount,
+			  'admin': admin,
             }
             render_template(self,'quizResults.html',page_params)
 
@@ -227,6 +257,7 @@ class submitAnswer(webapp2.RequestHandler):
               'logout_url': users.create_logout_url('/'),
               'correctCount': correctCount,
               'totalCount': totalCount,
+			  'admin': admin,
             }
             render_template(self,'quizResults.html',page_params)
             return
@@ -242,10 +273,10 @@ class submitAnswer(webapp2.RequestHandler):
           'totalCount': totalCount,
           'question_obj': argQ,
           'user_id':id,
+		  'admin': admin,
         }
         render_template(self,'answerSingle.html',page_params)
 
-#Does not actually send any email right now, must be deployed first?!
 class reportHandler(webapp2.RequestHandler):
 	def post(self):
 		body = self.request.get("comment")

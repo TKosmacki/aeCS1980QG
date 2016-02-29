@@ -35,10 +35,16 @@
                     <div class="col-md-8 col-md-offset-2">
                         <h1 class="brand-heading">Pharma Quiz Game</h1>
                         <p class="intro-text">An easy, fun way to help pharmacy
-                        students learn and study<br>Get started now!</p>
+                        students learn and study.<br>Get started now!</p>
+                        {% if user_email %}
+                        <a href="/answerSingle" class="btn btn-circle page-scroll">
+                            <i class="fa fa-play animated"></i>
+                        </a>
+                        {% else %}
                         <a href="#about" class="btn btn-circle page-scroll">
                             <i class="fa fa-angle-double-down animated"></i>
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
