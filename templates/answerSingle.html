@@ -2,10 +2,33 @@
 {% block bodycontent %}
 <!DOCTYPE html>
 <html>
+<script type="text/javascript">
+    window.onload = function timer(){
+        var timeLeft = 14;
+        var elem = document.getElementById('timer');
+
+        var timerId = setInterval(countdown, 1000);
+
+        function countdown() {
+          if (timeLeft == 0) {
+            clearTimeout(timerId);
+            document.getElementById('submit').click();
+          } else {
+            elem.innerHTML = "<p>" + timeLeft + "</p>";
+            timeLeft--;
+          }
+        }
+    }
+</script>
 <body>
 	<div class = "container">
 		<br><br><br>
-        <h3>{{question_obj.question}}</h3>
+        <div class = "outline" style ="text-align:center">
+            <br>
+            Time Left
+            <div id="timer" style="text-align:center"><p>15</p></div>
+        </div>
+        <h3 style="text-align:center">{{question_obj.question}}</h3>
         <hr>
 		<ol>
 			<li class="red-text">{{question_obj.answer1}}</li>
@@ -14,11 +37,11 @@
 			<li class="yellow-text">{{question_obj.answer4}}</li>
 		</ol>
         <hr>
-        <form action=/submitAnswer method="post"><font size = 5>
-            <input type="hidden" name="hidden_questionid" value="{{question_obj.id}}">
-            <input type="hidden" name="hidden_answerid" value="{{question_obj.answerid}}">
-            <input type="hidden" name="hidden_correctCount" value="{{correctCount}}">
-            <input type="hidden" name="hidden_totalCount" value="{{totalCount}}">
+        <form id="answer" action=/submitAnswer method="post"><font size = 5>
+          <input type="hidden" name="hidden_questionid" value="{{question_obj.id}}">
+          <input type="hidden" name="hidden_answerid" value="{{question_obj.answerid}}">
+          <input type="hidden" name="hidden_correctCount" value="{{correctCount}}">
+          <input type="hidden" name="hidden_totalCount" value="{{totalCount}}">
           <button type="submit" name="userAnswer" value=1 class="submit-a-button-1">
           {{question_obj.answer1}}</button>
           <button type="submit" name="userAnswer" value=2 class="submit-a-button-2">
@@ -27,7 +50,9 @@
           {{question_obj.answer3}}</button>
           <button type="submit" name="userAnswer" value=4 class="submit-a-button-4">
           {{question_obj.answer4}}</button>
+          <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
         </form>
+          
 	</div>
 </body>
 </html>

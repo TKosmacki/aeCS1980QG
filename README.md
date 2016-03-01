@@ -7,7 +7,7 @@
 - [ ] Track question answers</br>
 - [ ] Reporting questions, duplicates </br>
 - [ ] Multiple categories in key </br>
-- [ ] Timer in game
+- [x] Timer in game
 - [ ] Scoring System 
 - [ ] Leaderboard Statistics - in question object?
 - [ ] Leaderboard Page - show statistics

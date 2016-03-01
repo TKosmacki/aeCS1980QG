@@ -2,6 +2,7 @@ import logging
 import os
 import webapp2
 import models
+import time
 
 from google.appengine.api import mail
 from google.appengine.api import users
@@ -246,7 +247,7 @@ class submitAnswer(webapp2.RequestHandler):
               'logout_url': users.create_logout_url('/'),
               'correctCount': correctCount,
               'totalCount': totalCount,
-			  'admin': admin,
+			  'admin': is_admin,
             }
             render_template(self,'quizResults.html',page_params)
 
@@ -257,7 +258,7 @@ class submitAnswer(webapp2.RequestHandler):
               'logout_url': users.create_logout_url('/'),
               'correctCount': correctCount,
               'totalCount': totalCount,
-			  'admin': admin,
+			  'admin': is_admin,
             }
             render_template(self,'quizResults.html',page_params)
             return
@@ -273,7 +274,7 @@ class submitAnswer(webapp2.RequestHandler):
           'totalCount': totalCount,
           'question_obj': argQ,
           'user_id':id,
-		  'admin': admin,
+		  'admin': is_admin,
         }
         render_template(self,'answerSingle.html',page_params)
 
