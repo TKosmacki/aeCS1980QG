@@ -116,7 +116,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
     def get(self):
         uID = get_user_id()
         #just loops and prints every question from query
-        review = models.get_oldest_questions(1000)
+        review = models.get_oldest_questions(1000,False) #searches 1000 oldest invalid questions
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
@@ -129,6 +129,25 @@ class ReviewNewQuestions(webapp2.RequestHandler):
         'admin' : is_admin
         }
         render_template(self, 'reviewQuestions.html', page_params)
+
+#Brings up a table that displays information on the most recent 1000 questions
+class ReviewOldQuestions(webapp2.RequestHandler):
+    def get(self):
+        uID = get_user_id()
+        #just loops and prints every question from query
+        review = models.get_oldest_questions(1000,True) #searches 1000 oldest valid questions
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
+        page_params = {
+        'user_email': get_user_email(),
+        'login_url': users.create_login_url(),
+        'logout_url': users.create_logout_url('/'),
+        'user_id': uID,
+		'review': review,
+        'admin' : is_admin
+        }
+        render_template(self, 'reviewQuestionsValid.html', page_params)
 
 class test(webapp2.RequestHandler):
     def get(self):
@@ -228,6 +247,10 @@ class answerSingle(webapp2.RequestHandler):
 
 class submitAnswer(webapp2.RequestHandler):
     def post(self):
+        #instead of hiding the answerid can we hide the full data entry for the question
+        #this will allow for tracking the answers as well as removing the answer to the question
+        #from the page source, or we could store the questionid and query the db, eventhough
+        #we want to make queries as infrequent as possible
         answerid = self.request.get('hidden_answerid')
         questionid = self.request.get('userAnswer')
         correctCount = self.request.get('hidden_correctCount')
@@ -296,6 +319,7 @@ mappings = [
   ('/ReviewQuestion', ReviewSingleQuestion),
   ('/meanstackakalamestack', test),
   ('/ReviewNewQuestions', ReviewNewQuestions),
+  ('/ReviewOldQuestions', ReviewOldQuestions),
   ('/AnswerQuestion', AnswerQuestion),
   ('/submitQuiz',submitQuiz),
   ('/answerSingle',answerSingle),

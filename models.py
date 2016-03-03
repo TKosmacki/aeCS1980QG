@@ -21,6 +21,7 @@ class user_profile(ndb.Model):
     location = ndb.StringProperty(default="No Class")
     interests = ndb.StringProperty(default="No Interests")
     image_url = ndb.StringProperty()
+    score = ndb.IntegerProperty(default=0)
 
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
@@ -133,9 +134,13 @@ def getQuestion(id):
 
 #param: (int) num of requested questions
 #return: (list) of questions, oldest first
-def get_oldest_questions(num):
-    query= question_obj.query()
-    query.order(question_obj.create_datetime)
+def get_oldest_questions(num,val):
+    if val: #searches for valid questions for reviewal
+        query= question_obj.query(question_obj.accepted == True)
+        query.order(question_obj.create_datetime)
+    else: #search for invalid questions
+        query= question_obj.query(question_obj.accepted == False)
+        query.order(question_obj.create_datetime)
 
     return query.fetch(num)
 
