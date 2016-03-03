@@ -7,22 +7,20 @@
 		<br><br><br>
 		<p>Here is a new user question:</p>
         <hr>
-		<p>{{review.question}}</p>
-		<ol>
-			<li class="red-text">{{review.answer1}}</li>
-			<li class="blue-text">{{review.answer2}}</li>
-			<li class="green-text">{{review.answer3}}</li>
-			<li class="yellow-text">{{review.answer4}}</li>
-		</ol>
-        <p>Explanation:</p>
+		<h4>{{review.question}}</h4>
+        <span class="red-text">{{review.answer1}}</span><br>
+        <span class="blue-text">{{review.answer2}}</span><br>
+        <span class="green-text">{{review.answer3}}</span><br>
+        <span class="yellow-text">{{review.answer4}}</span><br><br>
+        <h4>Explanation:</h4>
         <p>{{review.explanation}}</p>
-		<p>The answer is:</p>
-        <h5 class = "red-text">{{review.answerid}}</h5>
+		<h4>The answer is:</h4>
+        <span class = "red-text">{{review.answerid}}</span>
 		<hr>
 		
 		<div style="display:none;" id="hiddenForm2">
 			<form  method="post" action=/report >
-				<p> Describe the problem </p>
+				<span> Describe the problem </span>
 				<textarea rows="3" cols="40" name="comment" maxlength="350" required >
 				</textarea>
 				<br>
@@ -31,10 +29,10 @@
 		</div>
 		<br>
         {% if review.accepted %}
-        <form class="col-lg-10" action="/ReviewNewQuestions"></form>
+        <div class="col-lg-10"></div>
         <!--put the edit box functionality here -->
         {% else %}
-        <p>Should this question be added?</p>
+        <span>Should this question be added?</p>
 		<form class="col-lg-10" action="/ReviewNewQuestions">
 			<button type="submit" name=yes>Yes</button>
 			<button type="submit" name=no>No</button>

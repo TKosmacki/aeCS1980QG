@@ -13,8 +13,6 @@
     <link href="/static/css/grayscale.css" rel="stylesheet">
     <title>Pharma Quiz Game</title>
     
-    
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -37,8 +35,8 @@
                         <p class="intro-text">An easy, fun way to help pharmacy
                         students learn and study.<br>Get started now!</p>
                         {% if user_email %}
-                        <a href="/answerSingle" class="btn btn-circle page-scroll">
-                            <i class="fa fa-play animated"></i>
+                        <a href="/answerSingle">
+                            <i style="color:white" class="fa fa-play animated fa-3x"></i>
                         </a>
                         {% else %}
                         <a href="#about" class="btn btn-circle page-scroll">
@@ -62,14 +60,20 @@
             </div>
         </div>
     </section>
-
+    <div class = "container text-center">
+        <a style="color:white" href="https://www.facebook.com"><i class="fa fa-facebook-square fa-3x"></i></a>&nbsp;&nbsp;   
+        <a style="color:white" href="https://www.twitter.com"><i class="fa fa-twitter-square fa-3x"></i></a>&nbsp;&nbsp;  
+        <a style="color:white" href="https://www.plus.google.com"><i class="fa fa-google-plus-square fa-3x"></i></a>&nbsp;&nbsp;   
+        <a style="color:white" href="https://www.github.com"><i class="fa fa-github-square fa-3x"></i></a>&nbsp;&nbsp;
+        <a style="color:white" href="https://www.reddit.com"><i class="fa fa-reddit-square fa-3x"></i></a>
+    </div>
     <!-- Footer -->
     <footer>
         <div class="container text-center">
             <p>Copyright &copy; PharmaQuizGame 2016</p>
         </div>
     </footer>
-
+    
     <!-- jQuery -->
     <script src="static/js/jquery.min.js"></script> 
 

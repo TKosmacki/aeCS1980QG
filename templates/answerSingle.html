@@ -21,18 +21,18 @@
     }
 </script>
 <body>
-	<div class = "container">
+	<div class = "container" style="text-align:center">
 		<br><br><br>
-        <div style="text-align:center">Time Left</div>
+        <div>Time Left</div>
         <div id="timer" style="text-align:center"><p>15</p></div>
         <h3 style="text-align:center">{{question_obj.question}}</h3>
         <hr>
-		<ol>
+		<ul>
 			<li class="red-text">{{question_obj.answer1}}</li>
 			<li class="blue-text">{{question_obj.answer2}}</li>
 			<li class="green-text">{{question_obj.answer3}}</li>
 			<li class="yellow-text">{{question_obj.answer4}}</li>
-		</ol>
+		</ul>
         <hr>
         <form id="answer" action=/submitAnswer method="post"><font size = 5>
           <input type="hidden" name="hidden_questionid" value="{{question_obj.id}}">

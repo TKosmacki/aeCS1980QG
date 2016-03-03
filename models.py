@@ -25,7 +25,7 @@ class user_profile(ndb.Model):
 
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
-    category = ndb.StringProperty()
+    class_ = ndb.StringProperty()
     question = ndb.StringProperty()
     answer1 = ndb.StringProperty()
     answer2 = ndb.StringProperty()
@@ -110,7 +110,7 @@ def create_global_id():
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid):
     question_number = get_global_id()
     question = question_obj(id=question_number,
-        category=category,
+        class_=category,
         question=question,
         answer1=answer1,
         answer2=answer2,
