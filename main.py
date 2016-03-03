@@ -153,13 +153,19 @@ class test(webapp2.RequestHandler):
     def get(self):
         models.create_global_id()
         models.populate_db()
+        id = get_user_id()
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
+        q = models.check_if_user_profile_exists(id)
         page_params = {
         'user_email': get_user_email(),
         'login_url': users.create_login_url(),
         'logout_url': users.create_logout_url('/'),
-        'user_id': get_user_id(),
+        'user_id': id,
+        'admin' : is_admin
         }
-        render_template(self, 'blanktest.html', page_params)
+        render_template(self, 'index.html', page_params)
 
 class AnswerQuestion(webapp2.RequestHandler):
     def get(self):
