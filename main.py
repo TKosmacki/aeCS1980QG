@@ -269,16 +269,6 @@ class submitAnswer(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        if (totalCount == 5):
-            page_params = {
-              'user_email': get_user_email(),
-              'login_url': users.create_login_url(),
-              'logout_url': users.create_logout_url('/'),
-              'correctCount': correctCount,
-              'totalCount': totalCount,
-			  'admin': is_admin,
-            }
-            render_template(self,'quizResults.html',page_params)
 
         if (totalCount == 10):
             page_params = {

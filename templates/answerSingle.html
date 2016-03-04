@@ -21,12 +21,14 @@
     }
 </script>
 <body>
-	<div class = "container" style="text-align:center">
+	<div class = "container" style="text-align:center height:1000px display: inline">
 		<br><br><br>
-        <div>Time Left</div>
+        <div style="text-align:center">Time Left</div>
         <div id="timer" style="text-align:center"><p>15</p></div>
         <h3 style="text-align:center">{{question_obj.question}}</h3>
         <hr>
+    </div>
+    <div class = "container" style="display: inline">
 		<ul>
 			<li class="red-text">{{question_obj.answer1}}</li>
 			<li class="blue-text">{{question_obj.answer2}}</li>
@@ -34,6 +36,8 @@
 			<li class="yellow-text">{{question_obj.answer4}}</li>
 		</ul>
         <hr>
+    </div>
+    <div class = "container" style="display: inline">
         <form id="answer" action=/submitAnswer method="post"><font size = 5>
           <input type="hidden" name="hidden_questionid" value="{{question_obj.id}}">
           <input type="hidden" name="hidden_answerid" value="{{question_obj.answerid}}">
@@ -49,7 +53,7 @@
           {{question_obj.answer4}}</button>
           <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
         </form>
-          
+
 	</div>
 </body>
 </html>

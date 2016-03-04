@@ -100,6 +100,7 @@ p {
 	border: none;
 	color: white;
 	width:100px;
+
 }
 
 .submit-q-button-4{
@@ -116,6 +117,8 @@ p {
 	border-radius: 8px;
 	border: none;
 	color: white;
+	width:240px;
+	height:100px;
 }
 
 .submit-a-button-2{
@@ -124,6 +127,8 @@ p {
 	border-radius: 8px;
 	border: none;
 	color: white;
+	width:240px;
+	height:100px;
 }
 
 .submit-a-button-3{
@@ -132,6 +137,8 @@ p {
 	border-radius: 8px;
 	border: none;
 	color: white;
+	width:240px;
+	height:100px;
 }
 
 .submit-a-button-4{
@@ -140,4 +147,6 @@ p {
 	border-radius: 8px;
 	border: none;
 	color: white;
+	width:240px;
+	height:100px;
 }
