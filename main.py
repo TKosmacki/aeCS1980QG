@@ -229,7 +229,6 @@ class submitQuiz(webapp2.RequestHandler):
         }
         render_template(self,'quizResults.html',page_params)
 
-
 class answerSingle(webapp2.RequestHandler):
     def get(self):
         argQ = models.getQuestion(str(2))
@@ -269,7 +268,6 @@ class submitAnswer(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-
         if (totalCount == 10):
             page_params = {
               'user_email': get_user_email(),
@@ -298,14 +296,31 @@ class submitAnswer(webapp2.RequestHandler):
         render_template(self,'answerSingle.html',page_params)
 
 class reportHandler(webapp2.RequestHandler):
-	def post(self):
-		body = self.request.get("comment")
-		sender_address = get_user_email() #not sure if we want to do this
-		question = self.request.get("id")
-		subject = "Question " + question + " has been reported"
-		mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
-		self.redirect("/ReviewNewQuestions")
+    def post(self):
+        body = "Comment:\n" + self.request.get("comment")
+        sender_address = get_user_email() #not sure if we want to do this
+        question = self.request.get("id")
+        body = body + "\nVisit the question here: aecs1980qg.appspot.com/ReviewQuestion?id=" + question  
+        subject = "Question " + question + " has been reported"
+        mail.send_mail(sender_address , "tfk7@pitt.edu" , subject, body)
+        self.redirect("/ReviewNewQuestions")
 
+class addVote(webapp2.RequestHandler):
+    def post(self):
+        id = self.request.get("id")
+        email = get_user_email()
+        models.addVote(id,email)
+        time.sleep(1)
+        self.redirect("/ReviewNewQuestions") #maybe want a confirmation page
+        
+class decVote(webapp2.RequestHandler):
+    def post(self):
+        id = self.request.get("id")
+        email = get_user_email()
+        models.decVote(id,email)
+        time.sleep(1)
+        self.redirect("/ReviewNewQuestions")
+        
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
@@ -320,6 +335,8 @@ mappings = [
   ('/submitQuiz',submitQuiz),
   ('/answerSingle',answerSingle),
   ('/submitAnswer',submitAnswer),
-  ('/report', reportHandler)
+  ('/report', reportHandler),
+  ('/incrementVote' , addVote),
+  ('/decrementVote', decVote),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

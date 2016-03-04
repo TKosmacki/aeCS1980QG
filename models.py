@@ -42,6 +42,8 @@ class question_obj(ndb.Model):
     explanation = ndb.StringProperty(default="No Explantion Provided")
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     accepted = ndb.BooleanProperty(default=False)
+    up_voters = ndb.StringProperty(repeated=True)
+    down_voters = ndb.StringProperty(repeated=True)
     score = ndb.IntegerProperty(default=0)
 
 
@@ -132,6 +134,43 @@ def getQuestion(id):
     ac_obj = obj.fetch(1).pop()
     return ac_obj
 
+#increments the vote counter
+def addVote(id,email):
+    question = ndb.Key(question_obj,id).get()
+
+    if not check_if_up_voted(question.up_voters, email):
+        question.up_voters.append(email)
+        if check_if_down_voted(question.down_voters, email):
+            question.down_voters.remove(email)
+
+        question.score = len(question.up_voters) - len(question.down_voters)
+        if question.score < 0:
+            question.score = 0
+        question.put()
+        
+def check_if_up_voted(has_up_voted,email):
+	if email in has_up_voted:
+		return True
+	return False
+
+def decVote(id,email):    
+    question = ndb.Key(question_obj,id).get()
+    
+    if not check_if_down_voted(question.down_voters, email):
+        question.down_voters.append(email)
+        if check_if_up_voted(question.up_voters, email):
+            question.up_voters.remove(email)
+
+        question.score = len(question.up_voters) - len(question.down_voters)
+        if question.score < 0:
+            question.score = 0
+        question.put()
+        
+def check_if_down_voted(has_down_voted, email):
+	if email in has_down_voted:
+		return True
+	return False
+    
 #param: (int) num of requested questions
 #return: (list) of questions, oldest first
 def get_oldest_questions(num,val):

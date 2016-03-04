@@ -3,9 +3,14 @@
 <!DOCTYPE html>
 <html>
 <body>
-	<div class = "container">
+	<div class = "container " style="text-align:center">
     </br></br></br><h3>You got {{correctCount}} out of {{totalCount}}!</h3>
 	</div>
+    {% if correctCount < 1 %}
+    <div class="container">
+        <img src="https://i.ytimg.com/vi/5Q_2nrp9OTg/maxresdefault.jpg" no-repeat></img>
+    </div>
+    {% endif %}
 </body>
 </html>
 {% endblock %}
