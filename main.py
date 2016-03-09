@@ -256,7 +256,6 @@ class submitAnswer(webapp2.RequestHandler):
         #this will allow for tracking the answers as well as removing the answer to the question
         #from the page source, or we could store the questionid and query the db, eventhough
         #we want to make queries as infrequent as possible
-        #answerid = self.request.get('hidden_answerid')
         id = self.request.get('hidden_questionid')
         question = models.getQuestion(id)
         if not question: #checks to make sure a question was actually fetched
