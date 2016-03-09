@@ -21,7 +21,7 @@ class user_profile(ndb.Model):
     location = ndb.StringProperty(default="No Class")
     interests = ndb.StringProperty(default="No Interests")
     image_url = ndb.StringProperty()
-    score = ndb.IntegerProperty(default=0)
+    score = ndb.IntegerProperty(default=0) #maybe have a score variable for each category
 
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
@@ -65,8 +65,6 @@ def check_if_user_profile_exists(id):
     result = list()
     q = user_profile.query(user_profile.user_id == id)
     q = q.fetch(1)
-
-    ##if q == []:
     return q
 
 def get_user_profile(id):
@@ -130,8 +128,7 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
 #param: (String) id for a query
 #return: (question) object
 def getQuestion(id):
-    obj =  question_obj.query(question_obj.id == id)
-    ac_obj = obj.fetch(1).pop()
+    ac_obj = ndb.Key(question_obj,id).get()
     return ac_obj
 
 #increments the vote counter

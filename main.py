@@ -256,7 +256,14 @@ class submitAnswer(webapp2.RequestHandler):
         #this will allow for tracking the answers as well as removing the answer to the question
         #from the page source, or we could store the questionid and query the db, eventhough
         #we want to make queries as infrequent as possible
-        answerid = self.request.get('hidden_answerid')
+        #answerid = self.request.get('hidden_answerid')
+        id = self.request.get('hidden_questionid')
+        question = models.getQuestion(id)
+        if not question: #checks to make sure a question was actually fetched
+            #maybe redirect here instead of showing an empty question page, error page possibly
+            self.redirect('home')
+            logging.warning("no question found with that id")
+        answerid = question.answerid
         questionid = self.request.get('userAnswer')
         correctCount = self.request.get('hidden_correctCount')
         totalCount = self.request.get('hidden_totalCount')
@@ -268,6 +275,9 @@ class submitAnswer(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+        if (questionid == answerid):
+            correctCount = correctCount+1
+        totalCount = totalCount+1
         if (totalCount == 10):
             page_params = {
               'user_email': get_user_email(),
@@ -279,9 +289,6 @@ class submitAnswer(webapp2.RequestHandler):
             }
             render_template(self,'quizResults.html',page_params)
             return
-        if (questionid == answerid):
-            correctCount = correctCount+1
-        totalCount = totalCount+1
         argQ = models.getQuestion(str(2+totalCount))
         page_params = {
           'user_email': get_user_email(),
@@ -302,7 +309,7 @@ class reportHandler(webapp2.RequestHandler):
         question = self.request.get("id")
         body = body + "\nVisit the question here: aecs1980qg.appspot.com/ReviewQuestion?id=" + question  
         subject = "Question " + question + " has been reported"
-        mail.send_mail(sender_address , "tfk7@pitt.edu" , subject, body)
+        mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
         self.redirect("/ReviewNewQuestions")
 
 class addVote(webapp2.RequestHandler):
