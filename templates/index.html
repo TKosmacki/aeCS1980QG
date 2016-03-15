@@ -21,12 +21,16 @@
     <![endif]-->
 
 </head>
-
+<script>
+    $('#on-play').on('click', function(){
+        
+    });
+</script>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
     <homebody>
     <!-- Navigation -->
     <!-- Intro Header -->
-    <header class="intro">
+    <header id="top" class="intro">
         <div class="intro-body">
             <div class="container">
                 <div class="row">
@@ -39,9 +43,11 @@
                             <i style="color:white" class="fa fa-play animated fa-3x"></i>
                         </a>
                         {% else %}
-                        <a href="#about" class="btn btn-circle page-scroll">
-                            <i class="fa fa-angle-double-down animated"></i>
-                        </a>
+                        <div id = "play">
+                            <a href="#about" class="btn btn-circle page-scroll">
+                                <i class="fa fa-angle-double-down animated"></i>
+                            </a>
+                        </div>
                         {% endif %}
                     </div>
                 </div>
