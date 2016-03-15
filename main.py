@@ -211,7 +211,7 @@ class ProfileHandler(webapp2.RequestHandler):
 
         models.update_profile(id, name, location, interests)
 
-        self.redirect('/profile?id=' + id + "&search=" + get_user_email())
+        self.redirect('/profile?id=' + id)
 
 class submitQuiz(webapp2.RequestHandler):
     def post(self):
