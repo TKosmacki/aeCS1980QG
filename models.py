@@ -23,6 +23,19 @@ class user_profile(ndb.Model):
     image_url = ndb.StringProperty()
     score = ndb.IntegerProperty(default=0) #maybe have a score variable for each category
 
+class answer(ndb.Model):
+    questionid = ndb.StringProperty()
+    chosenAnswer = ndb.StringProperty()
+    category = ndb.StringProperty()
+
+def createAnswer(userid, questionid, chosenAnswer, category):
+    questionid = questionid
+    chosenAnswer = chosenAnswer
+    category = category
+    ndb.Key(parent=ndb.Key(user_profile, userid))  
+    answer.put()
+    
+
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
     class_ = ndb.StringProperty()
@@ -39,7 +52,7 @@ class question_obj(ndb.Model):
     answer2Selections = ndb.IntegerProperty(default=0)
     answer3Selections = ndb.IntegerProperty(default=0)
     answer4Selections = ndb.IntegerProperty(default=0)
-    explanation = ndb.StringProperty(default="No Explantion Provided")
+    explanation = ndb.StringProperty(default="No Explanation Provided")
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     accepted = ndb.BooleanProperty(default=False)
     up_voters = ndb.StringProperty(repeated=True)

@@ -153,6 +153,7 @@ class test(webapp2.RequestHandler):
     def get(self):
         models.create_global_id()
         models.populate_db()
+        models.createAnswer(get_user_id(),69, 6, "TrackTest")
         id = get_user_id()
         is_admin = 0
         if users.is_current_user_admin():
