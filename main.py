@@ -187,7 +187,7 @@ class AnswerQuestion(webapp2.RequestHandler):
         }
         render_template(self, 'answerQuestion.html',page_params)
 
-class ProfileHandler(webapp2.RequestHandler):
+class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
         id = self.request.get("id")
         q = models.check_if_user_profile_exists(id)
