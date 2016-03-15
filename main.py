@@ -225,7 +225,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
 	 else:
 	  models.update_profile2(id, name, location, interests)
 
-         self.redirect('/profile?id=' + id + "&search=" + get_user_email())
+         self.redirect('/profile?id=' + id)
 	# no image to upload
 	except IndexError:
 	 id = get_user_id()
@@ -233,7 +233,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
          location = self.request.get("location")
          interests = self.request.get("interests")
 	 models.update_profile2(id, name, location, interests)
-         self.redirect('/profile?id=' + id + "&search=" + get_user_email())
+        self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self):
