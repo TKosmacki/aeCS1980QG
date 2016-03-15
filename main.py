@@ -4,11 +4,14 @@ import webapp2
 import models
 import time
 
+from google.appengine.api import images
 from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import ndb
+from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import template
 from google.appengine.api import mail
+from google.appengine.ext.webapp import blobstore_handlers
 
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
@@ -194,6 +197,7 @@ class ProfileHandler(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
+	    'upload_url': blobstore.create_upload_url('/profile'),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
@@ -204,14 +208,42 @@ class ProfileHandler(webapp2.RequestHandler):
         render_template(self, 'profile1.html', page_params)
 
     def post(self):
-        id = get_user_id()
-        name = self.request.get("name")
-        location = self.request.get("location")
-        interests = self.request.get("interests")
+	#try to upload an image
+	try:
+     	 upload_files = self.get_uploads()
+	 blob_info = upload_files[0]
+	 type = blob_info.content_type
+	 id = get_user_id()
+         name = self.request.get("name")
+         location = self.request.get("location")
+         interests = self.request.get("interests")
+	 # if the uploaded file is an image
+	 if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
+	  image = blob_info.key()
+	  models.update_profile(id, name, location, interests, image)
+	 # if the uploaded file is not an image
+	 else:
+	  models.update_profile2(id, name, location, interests)
 
-        models.update_profile(id, name, location, interests)
+         self.redirect('/profile?id=' + id + "&search=" + get_user_email())
+	# no image to upload
+	except IndexError:
+	 id = get_user_id()
+         name = self.request.get("name")
+         location = self.request.get("location")
+         interests = self.request.get("interests")
+	 models.update_profile2(id, name, location, interests)
+         self.redirect('/profile?id=' + id + "&search=" + get_user_email())
 
-        self.redirect('/profile?id=' + id + "&search=" + get_user_email())
+class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
+  def get(self):
+    id = self.request.get("id")
+    profile = models.get_user_profile(id) 
+    try:
+     image = images.Image(blob_key=profile.image_url)
+     self.send_blob(profile.image_url)
+    except Exception:
+     pass
 
 class submitQuiz(webapp2.RequestHandler):
     def post(self):
@@ -343,6 +375,7 @@ mappings = [
   ('/submitAnswer',submitAnswer),
   ('/report', reportHandler),
   ('/incrementVote' , addVote),
-  ('/decrementVote', decVote),
+  ('/image', ImageHandler),
+  ('/decrementVote', decVote)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

@@ -20,7 +20,7 @@ class user_profile(ndb.Model):
     name = ndb.StringProperty(default="No Name")
     location = ndb.StringProperty(default="No Class")
     interests = ndb.StringProperty(default="No Interests")
-    image_url = ndb.StringProperty()
+    image_url = ndb.BlobKeyProperty()
     score = ndb.IntegerProperty(default=0) #maybe have a score variable for each category
 
 class question_obj(ndb.Model):
@@ -47,9 +47,15 @@ class question_obj(ndb.Model):
     score = ndb.IntegerProperty(default=0)
 
 
-def update_profile(id, name, location, interests):
+def update_profile2(id, name, location, interests):
     profile = get_user_profile(id)
     profile.populate(name = name, location = location, interests = interests)
+    profile.put()
+    memcache.set(id, profile, namespace="profile")
+
+def update_profile(id, name, location, interests, image_url):
+    profile = get_user_profile(id)
+    profile.populate(name = name, location = location, interests = interests, image_url = image_url)
     profile.put()
     memcache.set(id, profile, namespace="profile")
 
