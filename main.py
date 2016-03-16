@@ -63,6 +63,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
         q = models.check_if_user_profile_exists(id)
 
         page_params = {
+	'upload_urlQ': blobstore.create_upload_url('/NewQuestion'),
         'user_email': get_user_email(),
         'login_url': users.create_login_url(),
         'logout_url': users.create_logout_url('/'),
@@ -71,9 +72,9 @@ class SubmitPageHandler(webapp2.RequestHandler):
         }
         render_template(self, 'newQuestionSubmit.html', page_params)
 
-class NewQuestion(webapp2.RequestHandler):
+class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
-        id = get_user_id()
+	id = get_user_id()
         q = models.get_user_profile(id)
         creator = q.name
         explanation = self.request.get('explanation')
@@ -86,7 +87,22 @@ class NewQuestion(webapp2.RequestHandler):
         answer3 = self.request.get('answer3')
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
-        questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
+	try:
+     	 upload_files = self.get_uploads()
+	 blob_info = upload_files[0]
+	 type = blob_info.content_type
+	 # if the uploaded file is an image
+	 if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
+	  image = blob_info.key()
+	  questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False,image)
+	 # if the uploaded file is not an image
+	 else:
+	  questionID = models.create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
+
+         self.redirect('/NewQuestion?id=' + questionID)
+	# no image to upload
+	except IndexError:
+	 questionID = models.create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
         self.redirect('/NewQuestion?id=' + questionID)
 
     def get(self):
@@ -245,6 +261,16 @@ class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
     except Exception:
      pass
 
+class ImageHandlerQuestion(blobstore_handlers.BlobstoreDownloadHandler):
+  def get(self):
+    id = self.request.get('id')
+    review = models.getQuestion(id)
+    try:
+     image = images.Image(blob_key=review.image_urlQ)
+     self.send_blob(review.image_urlQ)
+    except Exception:
+     pass
+
 class submitQuiz(webapp2.RequestHandler):
     def post(self):
         is_admin = 0
@@ -376,6 +402,7 @@ mappings = [
   ('/report', reportHandler),
   ('/incrementVote' , addVote),
   ('/image', ImageHandler),
+  ('/imageQ', ImageHandlerQuestion),
   ('/decrementVote', decVote)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

@@ -9,9 +9,9 @@
     <div class = "container">
         <h3>New Question Submission</h3>
         <hr>
-        <form action=/NewQuestion method="post"><font size = 5>
+        <form action="{{upload_urlQ}}" enctype="multipart/form-data" method="post"><font size = 5>
             Category:
-            <select id="Category" name="category" method="POST">
+            <select id="Category" name="category" method="POST" >
                 <option value="PHARM 2001">PHARM 2001</option>
                 <option value="PHARM 3023">PHARM 3023</option>
                 <option value="PHARM 3028">PHARM 3028</option>
@@ -37,6 +37,8 @@
                 <input type="text" method=POST name="answer4" size = "30" maxlength="30" required>
                 </li>
             </ol>
+	    Import Image:
+	    <input type="file" class="form-control" name="file" id="Location">
             Explantion:<br>
             <textarea type="text" name="explanation" class="form-control" rows="5" maxlength="750"></textarea>
             <hr>

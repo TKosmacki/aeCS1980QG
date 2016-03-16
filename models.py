@@ -45,6 +45,7 @@ class question_obj(ndb.Model):
     up_voters = ndb.StringProperty(repeated=True)
     down_voters = ndb.StringProperty(repeated=True)
     score = ndb.IntegerProperty(default=0)
+    image_urlQ = ndb.BlobKeyProperty()
 
 
 def update_profile2(id, name, location, interests):
@@ -113,7 +114,26 @@ def create_global_id():
 #param: 8(String) question properties
 #return: (String) question_number of stored question
 #creates and stores question in database
-def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid):
+def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ):
+    question_number = get_global_id()
+    question = question_obj(id=question_number,
+        class_=category,
+        question=question,
+        answer1=answer1,
+        answer2=answer2,
+        answer3=answer3,
+        answer4=answer4,
+        answerid=answerid,
+        explanation=explanation,
+        creator=creator,
+        accepted=valid,
+	image_urlQ=image_urlQ)
+    question.key = ndb.Key(question_obj, question_number)
+    question.put()
+
+    return question_number
+
+def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid):
     question_number = get_global_id()
     question = question_obj(id=question_number,
         class_=category,
