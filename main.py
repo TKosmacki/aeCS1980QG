@@ -310,10 +310,6 @@ class answerSingle(webapp2.RequestHandler):
 
 class submitAnswer(webapp2.RequestHandler):
     def post(self):
-        #instead of hiding the answerid can we hide the full data entry for the question
-        #this will allow for tracking the answers as well as removing the answer to the question
-        #from the page source, or we could store the questionid and query the db, eventhough
-        #we want to make queries as infrequent as possible
         id = self.request.get('hidden_questionid')
         question = models.getQuestion(id)
         if not question: #checks to make sure a question was actually fetched
@@ -359,6 +355,25 @@ class submitAnswer(webapp2.RequestHandler):
         }
         render_template(self,'answerSingle.html',page_params)
 
+class categoryQuiz(webapp2.RequestHandler):
+    def get(self):
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
+        #category = self.request.get('cat')
+        #number = self.request.get('num')
+        category = "Test"
+        number = 7
+        questions = models.getQuestionsCat(category,number)
+        page_params = {
+              'question_list' : questions,
+              'user_email': get_user_email(),
+              'login_url': users.create_login_url(),
+              'logout_url': users.create_logout_url('/'),
+			  'admin': is_admin,
+            }
+        render_template(self, 'answerQuestionsCat.html', page_params)
+
 class reportHandler(webapp2.RequestHandler):
     def post(self):
         body = "Comment:\n" + self.request.get("comment")
@@ -403,6 +418,7 @@ mappings = [
   ('/incrementVote' , addVote),
   ('/image', ImageHandler),
   ('/imageQ', ImageHandlerQuestion),
-  ('/decrementVote', decVote)
+  ('/decrementVote', decVote),
+  ('/takeQuiz', categoryQuiz),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

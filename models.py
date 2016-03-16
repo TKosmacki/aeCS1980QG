@@ -2,6 +2,7 @@
 import logging
 import os
 import webapp2
+from random import shuffle
 #import json
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
@@ -25,7 +26,7 @@ class user_profile(ndb.Model):
 
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
-    class_ = ndb.StringProperty()
+    category = ndb.StringProperty()
     question = ndb.StringProperty()
     answer1 = ndb.StringProperty()
     answer2 = ndb.StringProperty()
@@ -117,7 +118,7 @@ def create_global_id():
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ):
     question_number = get_global_id()
     question = question_obj(id=question_number,
-        class_=category,
+        category=category,
         question=question,
         answer1=answer1,
         answer2=answer2,
@@ -136,7 +137,7 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
 def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid):
     question_number = get_global_id()
     question = question_obj(id=question_number,
-        class_=category,
+        category=category,
         question=question,
         answer1=answer1,
         answer2=answer2,
@@ -156,6 +157,16 @@ def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,
 def getQuestion(id):
     ac_obj = ndb.Key(question_obj,id).get()
     return ac_obj
+
+#param: (String) category, (int) number of results
+#returns: (list) questions for quiz
+def getQuestionsCat(category,number):
+    q = question_obj.query(question_obj.category == category)
+    #still need to random
+    questions = list()
+    for i in q.fetch(number):
+        questions.append(i)
+    return questions
 
 #increments the vote counter
 def addVote(id,email):
