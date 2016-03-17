@@ -373,8 +373,8 @@ class categoryQuiz(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        #category = self.request.get('cat')
-        #number = self.request.get('num')
+        #category = self.request.get('category')
+        #number = self.request.get('number')
         category = "Test"
         number = 7
         questions = models.getQuestionsCat(category,number)
