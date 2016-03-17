@@ -40,14 +40,12 @@ def createAnswer(userid, questionid, chosenAnswer, category):
 #returns an iterable query object that has all answers of userid
 def get_user_answers(userid):
     answers = Answer.query(ancestor=ndb.Key(user_profile, userid)).fetch()
-    for answer in answers:
-        logging.warning("chosenAnswer: "+str(answer.chosenAnswer))
+    return answers
 
 #returns an iterable query object that has all answers of category
 def get_category_answers(inCategory):
     answers = Answer.query(Answer.category == inCategory)
-    for answer in answers:
-            logging.warning("catAnswer: "+str(answer.chosenAnswer))
+    return answers
 
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
