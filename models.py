@@ -30,13 +30,37 @@ class Answer(ndb.Model):
     category = ndb.StringProperty()
 
 #adds an Answer object to the Datastore, as a child of user_Profile 'userid'
-def createAnswer(userid, questionid, chosenAnswer, category):
+#updates Question with statistics
+def createAnswer(userid, questionid, chosenAnswer):
     answer = Answer(parent=ndb.Key(user_profile, userid), )
+    question = getQuestion(questionid)
+
     answer.questionid = questionid
     answer.chosenAnswer = chosenAnswer
-    answer.category = category
-    answer.put()
+    answer.category = question.category
 
+    rightAnswer = question.answerid
+    logging.warning(str(rightAnswer))
+    logging.warning(str(chosenAnswer))
+    if int(chosenAnswer) == int(rightAnswer):
+        question.correctAnswers += 1
+    else:
+        question.incorrectAnswers += 1
+
+    if chosenAnswer == '1':
+        question.answer1Selections += 1
+    elif chosenAnswer == '2':
+        question.answer2Selections += 1
+    elif chosenAnswer == '3':
+        question.answer3Selections += 1
+    elif chosenAnswer == '4':
+        question.answer4Selections += 1
+    else:
+        logging.critical("Answer isn't 1, 2, 3, or 4")
+
+
+    question.put()
+    answer.put()
 #returns an iterable query object that has all answers of userid
 def get_user_answers(userid):
     answers = Answer.query(ancestor=ndb.Key(user_profile, userid)).fetch()
@@ -63,6 +87,7 @@ class question_obj(ndb.Model):
     answer2Selections = ndb.IntegerProperty(default=0)
     answer3Selections = ndb.IntegerProperty(default=0)
     answer4Selections = ndb.IntegerProperty(default=0)
+    totalAnswers = ndb.IntegerProperty(default=0)
     explanation = ndb.StringProperty(default="No Explanation Provided")
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     accepted = ndb.BooleanProperty(default=False)

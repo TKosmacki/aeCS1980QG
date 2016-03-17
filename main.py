@@ -173,17 +173,17 @@ class ReviewOldQuestions(webapp2.RequestHandler):
 
 class test(webapp2.RequestHandler):
     def get(self):
-        if not users.is_current_user_admin(): #stops from running this if user is not admin
-            self.redirect("/")
-            return
-        global run
-        if run==True: #stops from running more than once
-            self.redirect("/")
-            return
-        run=True
+        #if not users.is_current_user_admin(): #stops from running this if user is not admin
+        #    self.redirect("/")
+        #    return
+        #global run
+        #if run==True: #stops from running more than once
+        #    self.redirect("/")
+        #    return
+        #run=True
         models.create_global_id()
-        models.populate_db()
-        models.createAnswer(get_user_id(),'69','6', "TrackTest")
+       # models.populate_db()
+        models.createAnswer(get_user_id(),'1','2')
         id = get_user_id()
         is_admin = 0
         if users.is_current_user_admin():
