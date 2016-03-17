@@ -5,6 +5,7 @@
     title>Add a Question</title>
 </head>
 <body>
+{% if user_email %}
     <br><br><br>
     <div class = "container">
         <h3>New Question Submission</h3>
@@ -49,6 +50,12 @@
             <button type="submit" name="answerid" value=4 class="submit-q-button-4">4</button>
         </form>
     </div>
+    {% else %}
+<div class = "intro container">
+    <br><br><br>
+    <h1>You Must Be An Logged In to View This Page!</h1>
+</div>
+{% endif %}
 </body>
 </html>
 {% endblock %}

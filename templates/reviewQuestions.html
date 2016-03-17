@@ -1,6 +1,6 @@
 {% extends "_base.html" %}
 {% block bodycontent %}
-<br><br><br>
+
 <link rel="stylesheet" type="text/css" href="../static/css/datatable.min.css">
 <script type="text/javascript" src="../static/js/datatable.min.js"></script>
 <script>
@@ -12,6 +12,8 @@
 	table.search(url).draw()
 } );
 </script>
+{% if user_email %}
+<br><br><br>
 <div class="container">
     <h2>Questions Under Review</h2>
     <hr>
@@ -52,4 +54,11 @@
 			</tbody>
 	</table>
 </div>
+{% else %}
+<div class = "intro container">
+    <br><br><br>
+    <h1>You Must Be An Logged In to View This Page!</h1>
+</div>
+{% endif %}
+
 {% endblock %}

@@ -159,17 +159,26 @@ class ReviewOldQuestions(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-        'user_email': get_user_email(),
-        'login_url': users.create_login_url(),
-        'logout_url': users.create_logout_url('/'),
-        'user_id': uID,
-		'review': review,
-        'admin' : is_admin
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'user_id': uID,
+            'review': review,
+            'admin' : is_admin
         }
         render_template(self, 'reviewQuestionsValid.html', page_params)
 
 class test(webapp2.RequestHandler):
     def get(self):
+        if not users.is_current_user_admin(): #stops from running this if user is not admin
+            self.redirect("/")
+            return
+        
+        globalID = int(models.get_global_id()) 
+        if globalID > 1: #stops from running more than once
+            self.redirect("/")
+            return
+            
         models.create_global_id()
         models.populate_db()
         id = get_user_id()
@@ -205,6 +214,9 @@ class AnswerQuestion(webapp2.RequestHandler):
 
 class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
+        if not get_user_email(): #stops from creating a profile if not logged in
+            self.redirect("/")
+            return
         id = self.request.get("id")
         q = models.check_if_user_profile_exists(id)
         if q == []:
@@ -213,7 +225,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-	    'upload_url': blobstore.create_upload_url('/profile'),
+            'upload_url': blobstore.create_upload_url('/profile'),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
@@ -221,7 +233,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             'profile': models.get_user_profile(id),
 			'admin': is_admin,
         }
-        render_template(self, 'profile1.html', page_params)
+        render_template(self, 'profile.html', page_params)
 
     def post(self):
 	#try to upload an image
