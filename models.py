@@ -43,7 +43,7 @@ def get_user_answers(userid):
     for answer in answers:
         logging.warning("chosenAnswer: "+str(answer.chosenAnswer))
 
-#returns an iterable query object that has all answers of userid
+#returns an iterable query object that has all answers of category
 def get_category_answers(inCategory):
     answers = Answer.query(Answer.category == inCategory)
     for answer in answers:
