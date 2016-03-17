@@ -19,7 +19,6 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
 <script>
     $(document).ready(function() {
@@ -28,6 +27,12 @@
                 left:"-150%"} , "slow");
             $('#dropdown').animate({left:"0%"} , "slow");
             document.getElementById("dropdown").style.display = "block";
+        });
+        $('#on-back').click(function(){
+            $('#description').animate({ 
+                left:"0%"} , "slow");
+            $('#dropdown').animate({left:"15%"} , "slow");
+            document.getElementById("dropdown").style.display = "none";
         });
     });
 </script>
@@ -43,7 +48,7 @@
                 students learn and study.<br>Get started now!</p>
                 {% if user_email %}
                 <a id ="on-play">
-                    <i style="color:white" class="fa fa-play animated fa-3x"></i>
+                    <i style="cursor:pointer; color:white" class="fa fa-play animated fa-3x"></i>
                 </a>
                 {% else %}
                 <div id = "play">
@@ -55,24 +60,34 @@
             </div>
             <div id="dropdown" style="position:absolute; top:50%; left:15%; display:none" class="col-md-8 col-md-offset-2">
                 <form action="/takeQuiz">
-                    Select a Category:
-                    <select style="color:black" id="category" name="category" method="POST"><!--maybe pull in all categories from python-->
-                        <option value="PHARM 2001">PHARM 2001</option>
-                        <option value="PHARM 3023">PHARM 3023</option>
-                        <option value="PHARM 3028">PHARM 3028</option>
-                        <option value="PHARM 3040">PHARM 3040</option>
-                        <option value="PHARM 5218">PHARM 5218</option>
-                    </select>
-                    <br><br>
-                    Select the Number of Questions:
-                    <select style="color:black" id="number" name="number" method="POST">
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                    </select>
-                    <br><br>
-                    <button style="color:black" type='submit'>Start Quiz</button>
+                    <div class="container col-lg-3">
+                    </div>
+                    <div class="container col-lg-1">
+                        <a id ="on-back">
+                            <i style="color:white; cursor:pointer" class="fa fa-arrow-left animated fa-3x"></i>
+                        </a>
+                        <br>
+                    </div>
+                    <div class ="container col-lg-8">
+                        Select a Category:
+                        <select style="color:black" id="category" name="category" method="POST"><!--maybe pull in all categories from python-->
+                            <option value="PHARM 2001">PHARM 2001</option>
+                            <option value="PHARM 3023">PHARM 3023</option>
+                            <option value="PHARM 3028">PHARM 3028</option>
+                            <option value="PHARM 3040">PHARM 3040</option>
+                            <option value="PHARM 5218">PHARM 5218</option>
+                        </select>
+                        <br><br>
+                        Select the Number of Questions:
+                        <select style="color:black" id="number" name="number" method="POST">
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                        <br><br>
+                        <button style="color:black" type='submit'>Start Quiz</button>
+                    </div>
                 </form>
             </div>
         </div>
