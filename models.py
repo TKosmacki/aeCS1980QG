@@ -23,18 +23,30 @@ class user_profile(ndb.Model):
     image_url = ndb.StringProperty()
     score = ndb.IntegerProperty(default=0) #maybe have a score variable for each category
 
-class answer(ndb.Model):
+class Answer(ndb.Model):
     questionid = ndb.StringProperty()
     chosenAnswer = ndb.StringProperty()
     category = ndb.StringProperty()
 
+#adds an Answer object to the Datastore, as a child of user_Profile 'userid'
 def createAnswer(userid, questionid, chosenAnswer, category):
-    questionid = questionid
-    chosenAnswer = chosenAnswer
-    category = category
-    ndb.Key(parent=ndb.Key(user_profile, userid))  
+    answer = Answer(parent=ndb.Key(user_profile, userid), )
+    answer.questionid = questionid
+    answer.chosenAnswer = chosenAnswer
+    answer.category = category
     answer.put()
     
+#returns an iterable query object that has all answers of userid
+def get_user_answers(userid):
+    answers = Answer.query(ancestor=ndb.Key(user_profile, userid)).fetch()
+    for answer in answers:
+        logging.warning("chosenAnswer: "+str(answer.chosenAnswer))
+
+#returns an iterable query object that has all answers of userid
+def get_category_answers(inCategory):
+    answers = Answer.query(Answer.category == inCategory)
+    for answer in answers:
+            logging.warning("catAnswer: "+str(answer.chosenAnswer))
 
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
