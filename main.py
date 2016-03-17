@@ -182,7 +182,7 @@ class test(webapp2.RequestHandler):
         #    return
         #run=True
         models.create_global_id()
-       # models.populate_db()
+        models.populate_db()
         models.createAnswer(get_user_id(),'1','2')
         id = get_user_id()
         is_admin = 0

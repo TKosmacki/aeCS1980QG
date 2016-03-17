@@ -42,8 +42,6 @@ def createAnswer(userid, questionid, chosenAnswer):
     answer.category = question.category
 
     rightAnswer = question.answerid
-    logging.warning(str(rightAnswer))
-    logging.warning(str(chosenAnswer))
     if int(chosenAnswer) == int(rightAnswer):
         question.correctAnswers += 1
     else:
@@ -73,7 +71,7 @@ def get_category_answers(inCategory):
     answers = Answer.query(Answer.category == inCategory)
     return answers
 
-class question_obj(ndb.Model):
+class Question(ndb.Model):
     id = ndb.StringProperty()
     category = ndb.StringProperty()
     question = ndb.StringProperty()
@@ -167,7 +165,7 @@ def create_global_id():
 #creates and stores question in database
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ):
     question_number = get_global_id()
-    question = question_obj(id=question_number,
+    question = Question(id=question_number,
         category=category,
         question=question,
         answer1=answer1,
@@ -179,14 +177,14 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
         creator=creator,
         accepted=valid,
 	image_urlQ=image_urlQ)
-    question.key = ndb.Key(question_obj, question_number)
+    question.key = ndb.Key(Question, question_number)
     question.put()
 
     return question_number
 
 def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid):
     question_number = get_global_id()
-    question = question_obj(id=question_number,
+    question = Question(id=question_number,
         category=category,
         question=question,
         answer1=answer1,
@@ -197,7 +195,7 @@ def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,
         explanation=explanation,
         creator=creator,
         accepted=valid)
-    question.key = ndb.Key(question_obj, question_number)
+    question.key = ndb.Key(Question, question_number)
     question.put()
 
     return question_number
@@ -205,13 +203,13 @@ def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,
 #param: (String) id for a query
 #return: (question) object
 def getQuestion(id):
-    ac_obj = ndb.Key(question_obj,id).get()
+    ac_obj = ndb.Key(Question,id).get()
     return ac_obj
 
 #param: (String) category, (int) number of results
 #returns: (list) questions for quiz
 def getQuestionsCat(category,number):
-    q = question_obj.query(question_obj.category == category)
+    q = Question.query(Question.category == category)
     #still need to random
     questions = list()
     for i in q.fetch(number):
@@ -220,7 +218,7 @@ def getQuestionsCat(category,number):
 
 #increments the vote counter
 def addVote(id,email):
-    question = ndb.Key(question_obj,id).get()
+    question = ndb.Key(Question,id).get()
 
     if not check_if_up_voted(question.up_voters, email):
         question.up_voters.append(email)
@@ -238,7 +236,7 @@ def check_if_up_voted(has_up_voted,email):
 	return False
 
 def decVote(id,email):
-    question = ndb.Key(question_obj,id).get()
+    question = ndb.Key(Question,id).get()
 
     if not check_if_down_voted(question.down_voters, email):
         question.down_voters.append(email)
@@ -259,15 +257,15 @@ def check_if_down_voted(has_down_voted, email):
 #return: (list) of questions, oldest first
 def get_oldest_questions(num,val):
     if val: #searches for valid questions for reviewal
-        query= question_obj.query(question_obj.accepted == True)
-        query.order(question_obj.create_datetime)
+        query= Question.query(Question.accepted == True)
+        query.order(Question.create_datetime)
     else: #search for invalid questions
-        query= question_obj.query(question_obj.accepted == False)
-        query.order(question_obj.create_datetime)
+        query= Question.query(Question.accepted == False)
+        query.order(Question.create_datetime)
 
     return query.fetch(num)
 
-#fills database with question_objs from questions.txt
+#fills database with Questions from questions.txt
 def populate_db():
     txt = open('questions.txt')
     list = []
