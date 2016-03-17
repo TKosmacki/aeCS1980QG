@@ -24,6 +24,31 @@ class user_profile(ndb.Model):
     image_url = ndb.BlobKeyProperty()
     score = ndb.IntegerProperty(default=0) #maybe have a score variable for each category
 
+class Answer(ndb.Model):
+    questionid = ndb.StringProperty()
+    chosenAnswer = ndb.StringProperty()
+    category = ndb.StringProperty()
+
+#adds an Answer object to the Datastore, as a child of user_Profile 'userid'
+def createAnswer(userid, questionid, chosenAnswer, category):
+    answer = Answer(parent=ndb.Key(user_profile, userid), )
+    answer.questionid = questionid
+    answer.chosenAnswer = chosenAnswer
+    answer.category = category
+    answer.put()
+    
+#returns an iterable query object that has all answers of userid
+def get_user_answers(userid):
+    answers = Answer.query(ancestor=ndb.Key(user_profile, userid)).fetch()
+    for answer in answers:
+        logging.warning("chosenAnswer: "+str(answer.chosenAnswer))
+
+#returns an iterable query object that has all answers of userid
+def get_category_answers(inCategory):
+    answers = Answer.query(Answer.category == inCategory)
+    for answer in answers:
+            logging.warning("catAnswer: "+str(answer.chosenAnswer))
+
 class question_obj(ndb.Model):
     id = ndb.StringProperty()
     category = ndb.StringProperty()
@@ -40,7 +65,7 @@ class question_obj(ndb.Model):
     answer2Selections = ndb.IntegerProperty(default=0)
     answer3Selections = ndb.IntegerProperty(default=0)
     answer4Selections = ndb.IntegerProperty(default=0)
-    explanation = ndb.StringProperty(default="No Explantion Provided")
+    explanation = ndb.StringProperty(default="No Explanation Provided")
     create_datetime = ndb.DateTimeProperty(auto_now_add=True)
     accepted = ndb.BooleanProperty(default=False)
     up_voters = ndb.StringProperty(repeated=True)
