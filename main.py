@@ -380,7 +380,10 @@ class categoryQuiz(webapp2.RequestHandler):
         category = "Test"
         number = 7
         questions = models.getQuestionsCat(category,number)
-        self.response.out.write(len(questions))
+
+        for i in questions:
+            self.response.out.write(json.dumps(i.to_dict(exclude=['category','creator','accepted','up_voted','down_voted','create_datetime']))+"</br></br>")
+
         page_params = {
               'question_list' : questions,
               'user_email': get_user_email(),
