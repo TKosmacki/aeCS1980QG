@@ -3,6 +3,7 @@ import os
 import webapp2
 import models
 import time
+import json
 
 from google.appengine.api import images
 from google.appengine.api import mail
@@ -12,6 +13,8 @@ from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import template
 from google.appengine.api import mail
 from google.appengine.ext.webapp import blobstore_handlers
+
+run=False
 
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
@@ -173,15 +176,14 @@ class test(webapp2.RequestHandler):
         if not users.is_current_user_admin(): #stops from running this if user is not admin
             self.redirect("/")
             return
-        
-        globalID = int(models.get_global_id()) 
-        if globalID > 1: #stops from running more than once
+        global run
+        if run==True: #stops from running more than once
             self.redirect("/")
             return
-            
+        run=True
         models.create_global_id()
         models.populate_db()
-        models.createAnswer(get_user_id(),69, 6, "TrackTest")
+        models.createAnswer(get_user_id(),'69','6', "TrackTest")
         id = get_user_id()
         is_admin = 0
         if users.is_current_user_admin():
@@ -267,7 +269,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self):
     id = self.request.get("id")
-    profile = models.get_user_profile(id) 
+    profile = models.get_user_profile(id)
     try:
      image = images.Image(blob_key=profile.image_url)
      self.send_blob(profile.image_url)
@@ -378,6 +380,7 @@ class categoryQuiz(webapp2.RequestHandler):
         category = "Test"
         number = 7
         questions = models.getQuestionsCat(category,number)
+        self.response.out.write(len(questions))
         page_params = {
               'question_list' : questions,
               'user_email': get_user_email(),
@@ -385,14 +388,14 @@ class categoryQuiz(webapp2.RequestHandler):
               'logout_url': users.create_logout_url('/'),
 			  'admin': is_admin,
             }
-        render_template(self, 'answerQuestionsCat.html', page_params)
+        #render_template(self, 'answerQuestionsCat.html', page_params)
 
 class reportHandler(webapp2.RequestHandler):
     def post(self):
         body = "Comment:\n" + self.request.get("comment")
         sender_address = get_user_email() #not sure if we want to do this
         question = self.request.get("id")
-        body = body + "\nVisit the question here: aecs1980qg.appspot.com/ReviewQuestion?id=" + question  
+        body = body + "\nVisit the question here: aecs1980qg.appspot.com/ReviewQuestion?id=" + question
         subject = "Question " + question + " has been reported"
         mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
         self.redirect("/ReviewNewQuestions")
@@ -404,7 +407,7 @@ class addVote(webapp2.RequestHandler):
         models.addVote(id,email)
         time.sleep(1)
         self.redirect("/ReviewNewQuestions") #maybe want a confirmation page
-        
+
 class decVote(webapp2.RequestHandler):
     def post(self):
         id = self.request.get("id")
@@ -412,7 +415,7 @@ class decVote(webapp2.RequestHandler):
         models.decVote(id,email)
         time.sleep(1)
         self.redirect("/ReviewNewQuestions")
-        
+
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),

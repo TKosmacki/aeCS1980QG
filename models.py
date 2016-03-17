@@ -36,7 +36,7 @@ def createAnswer(userid, questionid, chosenAnswer, category):
     answer.chosenAnswer = chosenAnswer
     answer.category = category
     answer.put()
-    
+
 #returns an iterable query object that has all answers of userid
 def get_user_answers(userid):
     answers = Answer.query(ancestor=ndb.Key(user_profile, userid)).fetch()
@@ -204,15 +204,15 @@ def addVote(id,email):
         if question.score < 0:
             question.score = 0
         question.put()
-        
+
 def check_if_up_voted(has_up_voted,email):
 	if email in has_up_voted:
 		return True
 	return False
 
-def decVote(id,email):    
+def decVote(id,email):
     question = ndb.Key(question_obj,id).get()
-    
+
     if not check_if_down_voted(question.down_voters, email):
         question.down_voters.append(email)
         if check_if_up_voted(question.up_voters, email):
@@ -222,12 +222,12 @@ def decVote(id,email):
         if question.score < 0:
             question.score = 0
         question.put()
-        
+
 def check_if_down_voted(has_down_voted, email):
 	if email in has_down_voted:
 		return True
 	return False
-    
+
 #param: (int) num of requested questions
 #return: (list) of questions, oldest first
 def get_oldest_questions(num,val):
@@ -255,5 +255,5 @@ def populate_db():
         answer3 = list[x+3]
         answer4 = list[x+4]
         answerid = list[x+5]
-        create_question("Test", question, answer1, answer2, answer3,
+        create_question2("Test", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
