@@ -12,39 +12,20 @@
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
-        //window.alert({{question_list}});
         var curr = "{{question_list}}";
         curr = curr.replace(/&quot;/g,'"');
         curr = curr.replace(/[\u0000-\u0019]+/g,"");
-        //window.alert(curr);
-        try {
-             curr = JSON.parse(curr);
-        }
-        catch(err) {
-            window.alert(err.message);
-        }
-       
-        window.alert(typeof(curr[0].question));
-        //window.alert(curr[0].answer1);
-        //window.alert(curr[0].answer2);
-        //window.alert(curr[0].answer3);
-        //window.alert(curr[0].answer4);
-        //window.alert(typeof(curr));
-        var q = curr[0].question;
-        var a1 = curr[0].answer1;
-        var a2 = curr[0].answer2;
-        var a3 = curr[0].answer3;
-        var a4 = curr[0].answer4;
-        try {
-            quest.innerHTML = q;
-            ans1.innerHTML = a1;
-            ans2.innerHTML = a2;
-            ans3.innerHTML = a3;
-            ans4.innerHTML = a4;
-        }
-        catch(err) {
-            window.alert(err.message);
-        }
+        curr = JSON.parse(curr);
+        var q = curr[counter].question;
+        var a1 = curr[counter].answer1;
+        var a2 = curr[counter].answer2;
+        var a3 = curr[counter].answer3;
+        var a4 = curr[counter].answer4;
+        quest.innerHTML = q;
+        ans1.innerHTML = a1;
+        ans2.innerHTML = a2;
+        ans3.innerHTML = a3;
+        ans4.innerHTML = a4;
     }
 
     function timer(){
