@@ -5,14 +5,14 @@
 <script type="text/javascript">
     var timeLeft;
     var counter = 0;
-
+    var curr;
     function runQuestion(){
         var quest = document.getElementById("question");
         var ans1 = document.getElementById("answer1");
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
-        var curr = "{{question_list}}";
+        curr = "{{question_list}}";
         curr = curr.replace(/&quot;/g,'"');
         curr = curr.replace(/[\u0000-\u0019]+/g,"");
         curr = JSON.parse(curr);
@@ -27,7 +27,11 @@
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
     }
-
+    function counter(){
+        var count = document.getElementById('counter');
+        counter+=1;
+        count.innerHTML = counter + ".";
+    }
     function timer(){
         timeLeft = 14;
         var elem = document.getElementById('timer');
@@ -37,27 +41,24 @@
         function countdown() {
           if (timeLeft == 0) {
             clearTimeout(timerId);
-            document.getElementById('submit').click();
+            submit(5);
           } else {
             elem.innerHTML = "<p>" + timeLeft + "</p>";
             timeLeft--;
           }
         }
-        var count = document.getElementById('counter');
-        counter+=1;
-        count.innerHTML = counter+".";
-    }
-
+        
+    }  
     function score(){
         //this is where we can do the calculations for the score by grabbing
         //the time variable and using that as part of it, as well as using
         //information from the question_obj, or we can probably use jquery or
         //something, attach onsubmit="score()" into the form
     }
-
     function start(){
         runQuestion();
         timer();
+        counter();
     }
 </script>
 <body>
@@ -70,17 +71,17 @@
         <h3 id = "question" class="col-lg-11" style="text-align:center"></h3>
     </div>
     <div class = "container text-align-center">
-        <form id="answer" action=/submitAnswer method="post"><font size = 5>
+        <font size = 5>
           <input type="hidden" name="hidden_score" value="{{score}}">
 
           <div class ="container">
               <div class = "col-lg-3"></div>
               <div class="col-lg-3">
-                  <button id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1">
+                  <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1">
                   </button>
               </div>
               <div class="col-lg-3">
-                  <button id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2">
+                  <button onclick="submit(2)" id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2">
                   </button>
               </div>
               <div class="col-lg-3"></div>
@@ -88,21 +89,36 @@
           <div class ="container">
               <div class="col-lg-3"></div>
               <div class="col-lg-3">
-                  <button id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3">
+                  <button onclick="submit(3)" id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3">
                   </button>
                   </div>
               <div class="col-lg-3">
-                  <button id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4">
+                  <button onclick="submit(4)" id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4">
                   </button>
                   </div>
               <div class="col-lg-3"></div>
           </div>
           <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
-        </form>
+        </font>
 	</div>
 </body>
 <script>
     window.onload = start();
+    function submit(selection){
+        //window.alert(selection);
+        if(selection == curr[counter].answerid){
+            //window.alert('yey');
+            //logic for score in here
+            
+        }
+        else{
+            //window.alert('neigh');
+        }
+        timeLeft=15;
+        counter+=1;
+        runQuestion();
+        //advance to next questions
+    }
 </script>
 </html>
 {% endblock %}
