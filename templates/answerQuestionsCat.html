@@ -6,6 +6,8 @@
     var timeLeft;
     var counter = 0;
     var curr;
+    var timerId;
+    
     function runQuestion(){
         var quest = document.getElementById("question");
         var ans1 = document.getElementById("answer1");
@@ -28,15 +30,25 @@
         ans4.innerHTML = a4;
     }
     function counter(){
-        var count = document.getElementById('counter');
-        counter+=1;
-        count.innerHTML = counter + ".";
+        
     }
     function timer(){
-        timeLeft = 14;
+        try{
+            clearTimeout(timerId);
+        }
+        catch(err){    
+        }
+        
+        if (counter == 0){
+            timeLeft = 14;
+        }
+        else{ 
+            timeLeft = 15;
+        }
+        
         var elem = document.getElementById('timer');
 
-        var timerId = setInterval(countdown, 1000);
+        timerId = setInterval(countdown, 1000);
 
         function countdown() {
           if (timeLeft == 0) {
@@ -48,7 +60,10 @@
           }
         }
         
-    }  
+        var count = document.getElementById('counter');
+        counter+=1;
+        count.innerHTML = counter + ".";
+    }
     function score(){
         //this is where we can do the calculations for the score by grabbing
         //the time variable and using that as part of it, as well as using
@@ -58,7 +73,6 @@
     function start(){
         runQuestion();
         timer();
-        counter();
     }
 </script>
 <body>
@@ -108,14 +122,12 @@
         //window.alert(selection);
         if(selection == curr[counter].answerid){
             //window.alert('yey');
-            //logic for score in here
-            
+            //logic for score in here   
         }
         else{
             //window.alert('neigh');
         }
-        timeLeft=15;
-        counter+=1;
+        timer();
         runQuestion();
         //advance to next questions
     }
