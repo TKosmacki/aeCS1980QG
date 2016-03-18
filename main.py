@@ -102,11 +102,11 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
 	 else:
 	  questionID = models.create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
 
-         self.redirect('/NewQuestion?id=' + questionID)
+         self.redirect('/NewQuestion?id=' + questionID.urlsafe())
 	# no image to upload
 	except IndexError:
 	 questionID = models.create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
-        self.redirect('/NewQuestion?id=' + questionID)
+        self.redirect('/NewQuestion?id=' + questionID.urlsafe())
 
     def get(self):
         id = self.request.get('id')
