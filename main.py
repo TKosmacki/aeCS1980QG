@@ -119,7 +119,8 @@ class ReviewSingleQuestion(webapp2.RequestHandler):
     def get(self):
         id = self.request.get('id')
         uID = get_user_id()
-        review = models.getQuestion(id)
+        logging.warning(id)
+        review = models.getQuestionFromURL(id)
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1

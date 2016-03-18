@@ -87,6 +87,7 @@ class Question(ndb.Model):
     down_voters = ndb.StringProperty(repeated=True)
     score = ndb.IntegerProperty(default=0)
     image_urlQ = ndb.BlobKeyProperty()
+    urlkey = ndb.StringProperty()
 
 
 def update_profile2(id, name, location, interests):
@@ -139,10 +140,14 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
         explanation=explanation,
         creator=creator,
         accepted=valid,
-        image_urlQ=image_urlQ)
+        image_urlQ=image_urlQ,)
+    logging.warning(question.key)
     question.put()
 
-    return question_number
+    logging.warning(question.key.urlsafe())
+    question.urlkey = question.key.urlsafe()
+    question.put()
+    return question.key
 
 def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid):
     question = Question(category=category,
@@ -156,7 +161,8 @@ def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,
         creator=creator,
         accepted=valid)
     question.put()
-    logging.warning(str(question.key))
+    question.urlkey = question.key.urlsafe()
+    question.put()
 
     return question.key
 
@@ -165,6 +171,11 @@ def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,
 def getQuestion(key):
     ac_obj = key.get()
     return ac_obj
+
+def getQuestionFromURL(key):
+    logging.warning(key)
+    key = ndb.Key(urlsafe=key)
+    return key.get()
 
 #param: (String) category, (int) number of results
 #returns: (list) questions for quiz
