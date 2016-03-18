@@ -9,9 +9,25 @@
     var ans2 = document.getElementById("ans2");
     var ans3 = document.getElementById("ans3");
     var ans4 = document.getElementById("ans4");
-    
+
     var counter = 0;
-    window.onload = function timer(){
+
+    function runQuestion(){
+        window.alert('first');
+        //window.alert({{question_list}});
+        var curr = "{{question_list}}";
+        //var js = JSON.parse(curr);
+
+        window.alert(curr);
+
+        //quest.innerHTML = curr.question;
+        //ans1.innerHTML = curr.answer1;
+        //ans2.innerHTML = curr.answer2;
+        //ans3.innerHTML = curr.answer3;
+        //ans4.innerHTML = curr.answer4;
+    }
+
+    function timer(){
         timeLeft = 14;
         var elem = document.getElementById('timer');
 
@@ -26,24 +42,25 @@
             timeLeft--;
           }
         }
-       
         var count = document.getElementById('counter');
         counter+=1;
         count.innerHTML = counter+".";
-        
-        quest.innerHTML =  {{(question_list[0]).question}};
-        ans1.innerHTML = {{(question_list[0]).answer1}};
-        ans2.innerHTML = {{(question_list[0]).answer2}};
-        ans3.innerHTML = {{(question_list[0]).answer3}};
-        ans4.innerHTML = {{(question_list[0]).answer4}};
     }
-    
+
     function score(){
         //this is where we can do the calculations for the score by grabbing
         //the time variable and using that as part of it, as well as using
         //information from the question_obj, or we can probably use jquery or
         //something, attach onsubmit="score()" into the form
     }
+
+    function start(){
+        runQuestion();
+        timer();
+    }
+
+
+    window.onload = start();
 </script>
 <body>
 	<div class = "container" style=" height: 240px; text-align:center; position:relative;">
@@ -56,7 +73,7 @@
     <div class = "container text-align-center">
         <form id="answer" action=/submitAnswer method="post"><font size = 5>
           <input type="hidden" name="hidden_score" value="{{score}}">
-         
+
           <div class ="container">
               <div class = "col-lg-3"></div>
               <div class="col-lg-3">

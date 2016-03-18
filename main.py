@@ -370,6 +370,11 @@ class submitAnswer(webapp2.RequestHandler):
         }
         render_template(self,'answerSingle.html',page_params)
 
+
+def obj_dict(obj):
+    return obj.__dict__
+
+
 class categoryQuiz(webapp2.RequestHandler):
     def get(self):
         is_admin = 0
@@ -381,17 +386,27 @@ class categoryQuiz(webapp2.RequestHandler):
         number = 7
         questions = models.getQuestionsCat(category,number)
 
-        for i in questions:
-            self.response.out.write(json.dumps(i.to_dict(exclude=['category','creator','accepted','up_voted','down_voted','create_datetime']))+"</br></br>")
+        #for i in questions:
+        #    self.response.out.write(json.dumps(i.to_dict(exclude=['category','creator','accepted','up_voted','down_voted','create_datetime']))+"</br></br>")
 
+
+        qList = []
+        for q in questions:
+            temp = q.to_dict(exclude=['category','creator','accepted','up_voted','down_voted','create_datetime'])
+            qList.append(temp)
+
+        jList = json.dumps(qList, default=obj_dict)
+        #jList = json.dumps([temp.__dict__ for temp in qList])
+        #self.response.out.write("</br></br></br>")
+        #self.response.out.write(qList)
         page_params = {
-              'question_list' : questions,
+              'question_list' : jList,
               'user_email': get_user_email(),
               'login_url': users.create_login_url(),
               'logout_url': users.create_logout_url('/'),
 			  'admin': is_admin,
             }
-        #render_template(self, 'answerQuestionsCat.html', page_params)
+        render_template(self, 'answerQuestionsCat.html', page_params)
 
 class reportHandler(webapp2.RequestHandler):
     def post(self):
