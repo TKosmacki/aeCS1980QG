@@ -4,27 +4,47 @@
 <html>
 <script type="text/javascript">
     var timeLeft;
-    var quest = document.getElementById("question");
-    var ans1 = document.getElementById("ans1");
-    var ans2 = document.getElementById("ans2");
-    var ans3 = document.getElementById("ans3");
-    var ans4 = document.getElementById("ans4");
-
     var counter = 0;
 
     function runQuestion(){
-        window.alert('first');
+        var quest = document.getElementById("question");
+        var ans1 = document.getElementById("answer1");
+        var ans2 = document.getElementById("answer2");
+        var ans3 = document.getElementById("answer3");
+        var ans4 = document.getElementById("answer4");
         //window.alert({{question_list}});
         var curr = "{{question_list}}";
-        //var js = JSON.parse(curr);
-
-        window.alert(curr);
-
-        //quest.innerHTML = curr.question;
-        //ans1.innerHTML = curr.answer1;
-        //ans2.innerHTML = curr.answer2;
-        //ans3.innerHTML = curr.answer3;
-        //ans4.innerHTML = curr.answer4;
+        curr = curr.replace(/&quot;/g,'"');
+        curr = curr.replace(/[\u0000-\u0019]+/g,"");
+        //window.alert(curr);
+        try {
+             curr = JSON.parse(curr);
+        }
+        catch(err) {
+            window.alert(err.message);
+        }
+       
+        window.alert(typeof(curr[0].question));
+        //window.alert(curr[0].answer1);
+        //window.alert(curr[0].answer2);
+        //window.alert(curr[0].answer3);
+        //window.alert(curr[0].answer4);
+        //window.alert(typeof(curr));
+        var q = curr[0].question;
+        var a1 = curr[0].answer1;
+        var a2 = curr[0].answer2;
+        var a3 = curr[0].answer3;
+        var a4 = curr[0].answer4;
+        try {
+            quest.innerHTML = q;
+            ans1.innerHTML = a1;
+            ans2.innerHTML = a2;
+            ans3.innerHTML = a3;
+            ans4.innerHTML = a4;
+        }
+        catch(err) {
+            window.alert(err.message);
+        }
     }
 
     function timer(){
@@ -58,13 +78,11 @@
         runQuestion();
         timer();
     }
-
-
-    window.onload = start();
 </script>
 <body>
 	<div class = "container" style=" height: 240px; text-align:center; position:relative;">
 		<br><br><br>
+        <div id="demo"></div>
         <div style="text-align:center">Time Left</div>
         <div id="timer" style="text-align:center"><p>15</p></div>
         <h3 class= "col-lg-1" style="text-align:right" id="counter"></h3>
@@ -102,5 +120,8 @@
         </form>
 	</div>
 </body>
+<script>
+    window.onload = start();
+</script>
 </html>
 {% endblock %}
