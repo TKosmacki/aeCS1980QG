@@ -181,9 +181,8 @@ class test(webapp2.RequestHandler):
         #    self.redirect("/")
         #    return
         #run=True
-        models.create_global_id()
         models.populate_db()
-        models.createAnswer(get_user_id(),'1','2')
+       # models.createAnswer(get_user_id(),'1','2')
         id = get_user_id()
         is_admin = 0
         if users.is_current_user_admin():

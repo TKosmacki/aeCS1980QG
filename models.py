@@ -11,13 +11,6 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 
-
-class global_id(ndb.Model):
-    next_id = ndb.IntegerProperty()
-
-    def increase_id(self):
-        self.next_id = self.next_id + 1
-
 class user_profile(ndb.Model):
     user_id = ndb.StringProperty()
     name = ndb.StringProperty(default="No Name")
@@ -33,9 +26,9 @@ class Answer(ndb.Model):
 
 #adds an Answer object to the Datastore, as a child of user_Profile 'userid'
 #updates Question with statistics
-def createAnswer(userid, questionid, chosenAnswer):
+def createAnswer(userid, questionKey, chosenAnswer):
     answer = Answer(parent=ndb.Key(user_profile, userid), )
-    question = getQuestion(questionid)
+    question = getQuestion(questionKey)
 
     answer.questionid = questionid
     answer.chosenAnswer = chosenAnswer
@@ -72,7 +65,6 @@ def get_category_answers(inCategory):
     return answers
 
 class Question(ndb.Model):
-    id = ndb.StringProperty()
     category = ndb.StringProperty()
     question = ndb.StringProperty()
     answer1 = ndb.StringProperty()
@@ -133,40 +125,11 @@ def get_user_profile(id):
 def get_image(image_id):
   return ndb.Key(urlsafe=image_id).get()
 
-class global_id(ndb.Model):
-    next_id = ndb.IntegerProperty()
-
-    def increase_id(self):
-        self.next_id = self.next_id + 1
-
-def get_global_id():
-    id = memcache.get("number", namespace="global_id")
-    if not id:
-        id = ndb.Key(global_id, "number").get()
-    logging.warning(id)
-    value = id.next_id
-    id.increase_id()
-    id.put()
-    memcache.set("number", id, namespace="global_id")
-    return str(value)
-
-def create_global_id():
-    id = ndb.Key(global_id, "number").get()
-    logging.warning(id)
-    if id == None:
-        id = global_id()
-        id.next_id = 1
-        id.key = ndb.Key(global_id, "number")
-        id.put()
-        memcache.set("number", id, namespace="global_id")
-
 #param: 8(String) question properties
 #return: (String) question_number of stored question
 #creates and stores question in database
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ):
-    question_number = get_global_id()
-    question = Question(id=question_number,
-        category=category,
+    question = Question(category=category,
         question=question,
         answer1=answer1,
         answer2=answer2,
@@ -176,16 +139,13 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
         explanation=explanation,
         creator=creator,
         accepted=valid,
-	image_urlQ=image_urlQ)
-    question.key = ndb.Key(Question, question_number)
+        image_urlQ=image_urlQ)
     question.put()
 
     return question_number
 
 def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid):
-    question_number = get_global_id()
-    question = Question(id=question_number,
-        category=category,
+    question = Question(category=category,
         question=question,
         answer1=answer1,
         answer2=answer2,
@@ -195,15 +155,15 @@ def create_question2(category,question,answer1,answer2,answer3,answer4,answerid,
         explanation=explanation,
         creator=creator,
         accepted=valid)
-    question.key = ndb.Key(Question, question_number)
     question.put()
+    logging.warning(str(question.key))
 
-    return question_number
+    return question.key
 
 #param: (String) id for a query
 #return: (question) object
-def getQuestion(id):
-    ac_obj = ndb.Key(Question,id).get()
+def getQuestion(key):
+    ac_obj = key.get()
     return ac_obj
 
 #param: (String) category, (int) number of results
