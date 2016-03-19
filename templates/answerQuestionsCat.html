@@ -4,84 +4,98 @@
 <html>
 <script type="text/javascript">
     var timeLeft;
-    var quest = document.getElementById("question");
-    var ans1 = document.getElementById("ans1");
-    var ans2 = document.getElementById("ans2");
-    var ans3 = document.getElementById("ans3");
-    var ans4 = document.getElementById("ans4");
-
     var counter = 0;
-
+    var curr;
+    var timerId;
+    
     function runQuestion(){
-        window.alert('first');
-        //window.alert({{question_list}});
-        var curr = "{{question_list}}";
-        //var js = JSON.parse(curr);
-
-        window.alert(curr);
-
-        //quest.innerHTML = curr.question;
-        //ans1.innerHTML = curr.answer1;
-        //ans2.innerHTML = curr.answer2;
-        //ans3.innerHTML = curr.answer3;
-        //ans4.innerHTML = curr.answer4;
+        var quest = document.getElementById("question");
+        var ans1 = document.getElementById("answer1");
+        var ans2 = document.getElementById("answer2");
+        var ans3 = document.getElementById("answer3");
+        var ans4 = document.getElementById("answer4");
+        curr = "{{question_list}}";
+        curr = curr.replace(/&quot;/g,'"');
+        curr = curr.replace(/[\u0000-\u0019]+/g,"");
+        curr = JSON.parse(curr);
+        var q = curr[counter].question;
+        var a1 = curr[counter].answer1;
+        var a2 = curr[counter].answer2;
+        var a3 = curr[counter].answer3;
+        var a4 = curr[counter].answer4;
+        quest.innerHTML = q;
+        ans1.innerHTML = a1;
+        ans2.innerHTML = a2;
+        ans3.innerHTML = a3;
+        ans4.innerHTML = a4;
     }
-
+    function counter(){
+        
+    }
     function timer(){
-        timeLeft = 14;
+        try{
+            clearTimeout(timerId);
+        }
+        catch(err){    
+        }
+        
+        if (counter == 0){
+            timeLeft = 14;
+        }
+        else{ 
+            timeLeft = 15;
+        }
+        
         var elem = document.getElementById('timer');
 
-        var timerId = setInterval(countdown, 1000);
+        timerId = setInterval(countdown, 1000);
 
         function countdown() {
           if (timeLeft == 0) {
             clearTimeout(timerId);
-            document.getElementById('submit').click();
+            submit(5);
           } else {
             elem.innerHTML = "<p>" + timeLeft + "</p>";
             timeLeft--;
           }
         }
+        
         var count = document.getElementById('counter');
         counter+=1;
-        count.innerHTML = counter+".";
+        count.innerHTML = counter + ".";
     }
-
     function score(){
         //this is where we can do the calculations for the score by grabbing
         //the time variable and using that as part of it, as well as using
         //information from the question_obj, or we can probably use jquery or
         //something, attach onsubmit="score()" into the form
     }
-
     function start(){
         runQuestion();
         timer();
     }
-
-
-    window.onload = start();
 </script>
 <body>
 	<div class = "container" style=" height: 240px; text-align:center; position:relative;">
 		<br><br><br>
+        <div id="demo"></div>
         <div style="text-align:center">Time Left</div>
         <div id="timer" style="text-align:center"><p>15</p></div>
         <h3 class= "col-lg-1" style="text-align:right" id="counter"></h3>
         <h3 id = "question" class="col-lg-11" style="text-align:center"></h3>
     </div>
     <div class = "container text-align-center">
-        <form id="answer" action=/submitAnswer method="post"><font size = 5>
+        <font size = 5>
           <input type="hidden" name="hidden_score" value="{{score}}">
 
           <div class ="container">
               <div class = "col-lg-3"></div>
               <div class="col-lg-3">
-                  <button id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1">
+                  <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1">
                   </button>
               </div>
               <div class="col-lg-3">
-                  <button id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2">
+                  <button onclick="submit(2)" id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2">
                   </button>
               </div>
               <div class="col-lg-3"></div>
@@ -89,18 +103,34 @@
           <div class ="container">
               <div class="col-lg-3"></div>
               <div class="col-lg-3">
-                  <button id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3">
+                  <button onclick="submit(3)" id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3">
                   </button>
                   </div>
               <div class="col-lg-3">
-                  <button id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4">
+                  <button onclick="submit(4)" id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4">
                   </button>
                   </div>
               <div class="col-lg-3"></div>
           </div>
           <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
-        </form>
+        </font>
 	</div>
 </body>
+<script>
+    window.onload = start();
+    function submit(selection){
+        //window.alert(selection);
+        if(selection == curr[counter].answerid){
+            //window.alert('yey');
+            //logic for score in here   
+        }
+        else{
+            //window.alert('neigh');
+        }
+        timer();
+        runQuestion();
+        //advance to next questions
+    }
+</script>
 </html>
 {% endblock %}
