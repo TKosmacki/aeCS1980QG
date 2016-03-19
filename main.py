@@ -45,7 +45,7 @@ class MainPageHandler(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        q = models.check_if_user_profile_exists(id)
+        q = models.check_if_user_exists(id)
 
         page_params = {
         'user_email': get_user_email(),
@@ -63,22 +63,22 @@ class SubmitPageHandler(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        q = models.check_if_user_profile_exists(id)
+        q = models.check_if_user_exists(id)
 
         page_params = {
-	'upload_urlQ': blobstore.create_upload_url('/NewQuestion'),
-        'user_email': get_user_email(),
-        'login_url': users.create_login_url(),
-        'logout_url': users.create_logout_url('/'),
-        'user_id': id,
-		'admin' : is_admin
+            'upload_urlQ': blobstore.create_upload_url('/NewQuestion'),
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'user_id': id,
+            'admin' : is_admin
         }
         render_template(self, 'newQuestionSubmit.html', page_params)
 
 class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
-	id = get_user_id()
-        q = models.get_user_profile(id)
+        id = get_user_id()
+        q = models.get_User(id)
         creator = q.name
         explanation = self.request.get('explanation')
         if not explanation:
@@ -90,22 +90,32 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
         answer3 = self.request.get('answer3')
         answer4 = self.request.get('answer4')
         answerid = self.request.get('answerid')
-	try:
-     	 upload_files = self.get_uploads()
-	 blob_info = upload_files[0]
-	 type = blob_info.content_type
-	 # if the uploaded file is an image
-	 if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
-	  image = blob_info.key()
-	  questionID = models.create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False,image)
-	 # if the uploaded file is not an image
-	 else:
-	  questionID = models.create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
+        try:
+            upload_files = self.get_uploads()
+            blob_info = upload_files[0]
+            type = blob_info.content_type
 
-         self.redirect('/NewQuestion?id=' + questionID.urlsafe())
-	# no image to upload
-	except IndexError:
-	 questionID = models.create_question2(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,False)
+            # if the uploaded file is an image
+            if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
+                image = blob_info.key()
+                questionID = models.create_question(category,
+                        question,answer1,answer2,answer3,answer4,answerid,
+                        explanation,creator,False,image)
+
+            # if the uploaded file is not an image
+            else:
+                questionID = models.create_question(category,
+                        question,answer1,answer2,answer3,answer4,answerid,
+                        explanation,creator,False)
+
+            self.redirect('/NewQuestion?id=' + questionID.urlsafe())
+
+        # no image to upload
+        except IndexError:
+            questionID = models.create_question(category,
+                    question,answer1,answer2,answer3,answer4,answerid,
+                    explanation,creator,False)
+
         self.redirect('/NewQuestion?id=' + questionID.urlsafe())
 
     def get(self):
@@ -129,7 +139,7 @@ class ReviewSingleQuestion(webapp2.RequestHandler):
         'login_url': users.create_login_url(),
         'logout_url': users.create_logout_url('/'),
         'user_id': uID,
-		'review': review,
+        'review': review,
         'admin' : is_admin
         }
         render_template(self, 'newQuestionReview.html', page_params)
@@ -148,7 +158,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
         'login_url': users.create_login_url(),
         'logout_url': users.create_logout_url('/'),
         'user_id': uID,
-		'review': review,
+        'review': review,
         'admin' : is_admin
         }
         render_template(self, 'reviewQuestions.html', page_params)
@@ -182,13 +192,14 @@ class test(webapp2.RequestHandler):
         #    self.redirect("/")
         #    return
         #run=True
-        models.populate_db()
+        models.populateQuestions()
+        models.populateAnswers()
        # models.createAnswer(get_user_id(),'1','2')
         id = get_user_id()
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        q = models.check_if_user_profile_exists(id)
+        q = models.check_if_user_exists(id)
         page_params = {
         'user_email': get_user_email(),
         'login_url': users.create_login_url(),
@@ -207,11 +218,11 @@ class AnswerQuestion(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-          'user_email': get_user_email(),
-          'login_url': users.create_login_url(),
-          'logout_url': users.create_logout_url('/'),
-          'review': review,
-		  'admin': is_admin,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'review': review,
+            'admin': is_admin,
         }
         render_template(self, 'answerQuestion.html',page_params)
 
@@ -221,9 +232,9 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             self.redirect("/")
             return
         id = self.request.get("id")
-        q = models.check_if_user_profile_exists(id)
+        q = models.check_if_user_exists(id)
         if q == []:
-            models.create_profile(id)
+            models.createUser(id)
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
@@ -233,43 +244,45 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
             'user_id': get_user_id(),
-            'profile': models.get_user_profile(id),
-			'admin': is_admin,
+            'profile': models.get_User(id),
+            'admin': is_admin,
         }
         render_template(self, 'profile.html', page_params)
 
     def post(self):
-	#try to upload an image
-	try:
-     	 upload_files = self.get_uploads()
-	 blob_info = upload_files[0]
-	 type = blob_info.content_type
-	 id = get_user_id()
-         name = self.request.get("name")
-         location = self.request.get("location")
-         interests = self.request.get("interests")
-	 # if the uploaded file is an image
-	 if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
-	  image = blob_info.key()
-	  models.update_profile(id, name, location, interests, image)
-	 # if the uploaded file is not an image
-	 else:
-	  models.update_profile2(id, name, location, interests)
+        #try to upload an image
+        try:
+            upload_files = self.get_uploads()
+            blob_info = upload_files[0]
+            type = blob_info.content_type
+            id = get_user_id()
+            name = self.request.get("name")
+            location = self.request.get("location")
+            interests = self.request.get("interests")
 
-         self.redirect('/profile?id=' + id)
-	# no image to upload
-	except IndexError:
-	 id = get_user_id()
-         name = self.request.get("name")
-         location = self.request.get("location")
-         interests = self.request.get("interests")
-	 models.update_profile2(id, name, location, interests)
+            # if the uploaded file is an image
+            if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
+                image = blob_info.key()
+                models.update_profile(id, name, location, interests, image)
+
+            # if the uploaded file is not an image
+            else:
+                models.update_profile(id, name, location, interests)
+
+            self.redirect('/profile?id=' + id)
+        # no image to upload
+        except IndexError:
+            id = get_user_id()
+            name = self.request.get("name")
+            location = self.request.get("location")
+            interests = self.request.get("interests")
+            models.update_profile(id, name, location, interests)
         self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self):
     id = self.request.get("id")
-    profile = models.get_user_profile(id)
+    profile = models.get_User(id)
     try:
      image = images.Image(blob_key=profile.image_url)
      self.send_blob(profile.image_url)
@@ -292,13 +305,13 @@ class submitQuiz(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-          'user_email': get_user_email(),
-          'login_url': users.create_login_url(),
-          'logout_url': users.create_logout_url('/'),
-          'correctCount': numCorrect,
-          'totalCount': numTotal,
-          'question_obj': argQ,
-		  'admin': is_admin,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'correctCount': numCorrect,
+            'totalCount': numTotal,
+            'question_obj': argQ,
+            'admin': is_admin,
         }
         render_template(self,'quizResults.html',page_params)
 
@@ -312,14 +325,14 @@ class answerSingle(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-          'user_email': get_user_email(),
-          'login_url': users.create_login_url(),
-          'logout_url': users.create_logout_url('/'),
-          'correctCount': numCorrect,
-          'totalCount': numTotal,
-          'question_obj': argQ,
-          'user_id':id,
-		  'admin': is_admin,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'correctCount': numCorrect,
+            'totalCount': numTotal,
+            'question_obj': argQ,
+            'user_id':id,
+            'admin': is_admin,
         }
         render_template(self,'answerSingle.html',page_params)
 
@@ -348,25 +361,25 @@ class submitAnswer(webapp2.RequestHandler):
         totalCount = totalCount+1
         if (totalCount == 10):
             page_params = {
-              'user_email': get_user_email(),
-              'login_url': users.create_login_url(),
-              'logout_url': users.create_logout_url('/'),
-              'correctCount': correctCount,
-              'totalCount': totalCount,
-			  'admin': is_admin,
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'correctCount': correctCount,
+                'totalCount': totalCount,
+                'admin': is_admin,
             }
             render_template(self,'quizResults.html',page_params)
             return
         argQ = models.getQuestion(str(2+totalCount))
         page_params = {
-          'user_email': get_user_email(),
-          'login_url': users.create_login_url(),
-          'logout_url': users.create_logout_url('/'),
-          'correctCount': correctCount,
-          'totalCount': totalCount,
-          'question_obj': argQ,
-          'user_id':id,
-		  'admin': is_admin,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'correctCount': correctCount,
+            'totalCount': totalCount,
+            'question_obj': argQ,
+            'user_id':id,
+            'admin': is_admin,
         }
         render_template(self,'answerSingle.html',page_params)
 
@@ -400,11 +413,11 @@ class categoryQuiz(webapp2.RequestHandler):
         #self.response.out.write("</br></br></br>")
         #self.response.out.write(qList)
         page_params = {
-              'question_list' : jList,
-              'user_email': get_user_email(),
-              'login_url': users.create_login_url(),
-              'logout_url': users.create_logout_url('/'),
-			  'admin': is_admin,
+            'question_list' : jList,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
             }
         render_template(self, 'answerQuestionsCat.html', page_params)
 
