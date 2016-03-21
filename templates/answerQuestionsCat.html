@@ -2,15 +2,16 @@
 {% block bodycontent %}
 <!DOCTYPE html>
 <html>
+<script src="/static/js/w2ui-1.4.3.min.js"></script>
 <script type="text/javascript">
     var timeLeft;
     var counter = 0;
     var curr;
     var timerId;
-    
+
     function runQuestion(){
         timeLeft = 14;
-        
+
         var elem = document.getElementById('timer');
 
         timerId = setInterval(function() {
@@ -23,19 +24,23 @@
               }
             }, 1000);
 
-        
+
         var count = document.getElementById('counter'); //question number
-        
+
         counter+=1; //increments at each question
-        
+
         count.innerHTML = counter + "."; //prints out the question number
-        elem.innerHTML = "<p>" + 15 + "</p>"; 
+        elem.innerHTML = "<p>" + 15 + "</p>";
         //code for retrieving and printing the question
         var quest = document.getElementById("question");
         var ans1 = document.getElementById("answer1");
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
+        var popAns1 = document.getElementById('popupAns1');
+        var popAns2 = document.getElementById('popupAns2');
+        var popAns3 = document.getElementById('popupAns3');
+        var popAns4 = document.getElementById('popupAns4');
         curr = "{{question_list}}";
         curr = curr.replace(/&quot;/g,'"');
         curr = curr.replace(/[\u0000-\u0019]+/g,"");
@@ -50,6 +55,49 @@
         ans2.innerHTML = a2;
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
+        popAns1.innerHTML = a1;
+        popAns1.innerHTML += " (1/4)";
+        popAns2.innerHTML = a2;
+        popAns2.innerHTML += " (2/4)";
+        popAns3.innerHTML = a3;
+        popAns3.innerHTML += " (3/4)";
+        popAns4.innerHTML = a4;
+        popAns4.innerHTML += " (4/4)";
+    }
+    function counter(){
+
+    }
+    function timer(){
+        try{
+            clearTimeout(timerId);
+        }
+        catch(err){
+        }
+
+        if (counter == 0){
+            timeLeft = 14;
+        }
+        else{
+            timeLeft = 15;
+        }
+
+        var elem = document.getElementById('timer');
+
+        timerId = setInterval(countdown, 1000);
+
+        function countdown() {
+          if (timeLeft == 0) {
+            clearTimeout(timerId);
+            submit(5);
+          } else {
+            elem.innerHTML = "<p>" + timeLeft + "</p>";
+            timeLeft--;
+          }
+        }
+
+        var count = document.getElementById('counter');
+        counter+=1;
+        count.innerHTML = counter + ".";
     }
     function score(){
         //this is where we can do the calculations for the score by grabbing
@@ -61,6 +109,7 @@
         runQuestion();
     }
 </script>
+<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
 <body>
 	<div class = "container" style=" height: 240px; text-align:center; position:relative;">
 		<br><br><br>
@@ -101,17 +150,43 @@
           <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
         </font>
 	</div>
+    <div id="popup" style="display: none; width: 650px; height: 400px; overflow: auto">
+    <div rel="title">
+        <span id="popupHead"></span>
+    </div>
+    <div rel="body">
+        <div style="padding: 10; font-size: 11px; line-height: 150%; text-align:center; vertical-align:middle;">
+        </br></br>
+            <p style="color: #f44336;" id='popupAns1'></p>
+            <p style="color: #0266C8;" id='popupAns2'></p>
+            <p style="color: #00933B;" id='popupAns3'></p>
+            <p style="color: #F2B50F;" id='popupAns4'></p>
+        </div>
+    </div>
+    <div rel="buttons">
+        <button class="btn" onclick="">Next Question</button>
+    </div>
+</div>
 </body>
 <script>
     window.onload = start();
     function submit(selection){
         //window.alert(selection);
         clearTimeout(timerId); //stops timer
+        $('#popup').w2popup();
         if(selection == curr[counter].answerid){
+            var header = document.getElementById('popupHead');
+            header.innerHTML = "Correct";
+            header.style.color = green;
+            $('#popup').w2popup();
             //window.alert('yey');
-            //logic for score in here   
+            //logic for score in here
         }
         else{
+            var header = document.getElementById('popupHead');
+            header.innerHTML = "Incorrect";
+            header.style.color = red;
+            $('#popup').w2popup();
             //window.alert('neigh');
         }
         if( counter == "{{num}}"){
