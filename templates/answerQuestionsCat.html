@@ -135,33 +135,33 @@
             </div>
         </div>
         <div rel="buttons">
-            <button class="btn" onclick="runQuestion()">Next Question</button>
+            <button class="btn" onclick="runNextQuestion()">Next Question</button>
         </div>
     </div>
 </body>
 <script>
     window.onload = start();
     function submit(selection){
-        //window.alert(selection);
         clearTimeout(timerId); //stops timer
-        $('#popup').w2popup();
         var header = document.getElementById('title');
         if(selection == curr[counter].answerid){
             header.innerHTML = "<span style='color:green'>Correct</span>";
-            header.style.color = green;
-            $('#popup').w2popup();
-            //window.alert('yey');
+             $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
             //logic for score in here
         }
         else{
             header.innerHTML = "<span style='color:red'>Incorrect</span>";
-            $('#popup').w2popup();
-            //window.alert('neigh');
+            $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
         }
         if( counter == "{{num}}"){
             //redirect to another page here
             //end quiz, hidden form action?
         }
+    }
+    
+    function runNextQuestion(){
+        w2popup.close();
+        runQuestion();
     }
 </script>
 </html>
