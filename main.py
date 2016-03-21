@@ -381,7 +381,7 @@ class categoryQuiz(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         #category = self.request.get('category')
-        #number = self.request.get('number')
+        number = self.request.get('number')
         category = "Test"
         number = 7
         questions = models.getQuestionsCat(category,number)
@@ -400,6 +400,7 @@ class categoryQuiz(webapp2.RequestHandler):
         #self.response.out.write("</br></br></br>")
         #self.response.out.write(qList)
         page_params = {
+              'num':number,
               'question_list' : jList,
               'user_email': get_user_email(),
               'login_url': users.create_login_url(),
