@@ -10,6 +10,11 @@
     var timerId;
 
     function runQuestion(){
+        try{
+            clearTimeout(timerId);
+        }
+        catch(err){
+        }
         timeLeft = 14;
 
         var elem = document.getElementById('timer');
@@ -64,41 +69,7 @@
         popAns4.innerHTML = a4;
         popAns4.innerHTML += " (4/4)";
     }
-    function counter(){
 
-    }
-    function timer(){
-        try{
-            clearTimeout(timerId);
-        }
-        catch(err){
-        }
-
-        if (counter == 0){
-            timeLeft = 14;
-        }
-        else{
-            timeLeft = 15;
-        }
-
-        var elem = document.getElementById('timer');
-
-        timerId = setInterval(countdown, 1000);
-
-        function countdown() {
-          if (timeLeft == 0) {
-            clearTimeout(timerId);
-            submit(5);
-          } else {
-            elem.innerHTML = "<p>" + timeLeft + "</p>";
-            timeLeft--;
-          }
-        }
-
-        var count = document.getElementById('counter');
-        counter+=1;
-        count.innerHTML = counter + ".";
-    }
     function score(){
         //this is where we can do the calculations for the score by grabbing
         //the time variable and using that as part of it, as well as using
@@ -151,22 +122,22 @@
         </font>
 	</div>
     <div id="popup" style="display: none; width: 650px; height: 400px; overflow: auto">
-    <div rel="title">
-        <span id="popupHead"></span>
-    </div>
-    <div rel="body">
-        <div style="padding: 10; font-size: 11px; line-height: 150%; text-align:center; vertical-align:middle;">
-        </br></br>
-            <p style="color: #f44336;" id='popupAns1'></p>
-            <p style="color: #0266C8;" id='popupAns2'></p>
-            <p style="color: #00933B;" id='popupAns3'></p>
-            <p style="color: #F2B50F;" id='popupAns4'></p>
+        <div id="title" rel="title">
+            <span style="color:red" id="popupHead"></span>
+        </div>
+        <div rel="body">
+            <div style="padding: 10; font-size: 11px; line-height: 150%; text-align:center; vertical-align:middle;">
+            </br></br>
+                <p style="color: #f44336;" id='popupAns1'></p>
+                <p style="color: #0266C8;" id='popupAns2'></p>
+                <p style="color: #00933B;" id='popupAns3'></p>
+                <p style="color: #F2B50F;" id='popupAns4'></p>
+            </div>
+        </div>
+        <div rel="buttons">
+            <button class="btn" onclick="runQuestion()">Next Question</button>
         </div>
     </div>
-    <div rel="buttons">
-        <button class="btn" onclick="">Next Question</button>
-    </div>
-</div>
 </body>
 <script>
     window.onload = start();
@@ -174,18 +145,16 @@
         //window.alert(selection);
         clearTimeout(timerId); //stops timer
         $('#popup').w2popup();
+        var header = document.getElementById('title');
         if(selection == curr[counter].answerid){
-            var header = document.getElementById('popupHead');
-            header.innerHTML = "Correct";
+            header.innerHTML = "<span style='color:green'>Correct</span>";
             header.style.color = green;
             $('#popup').w2popup();
             //window.alert('yey');
             //logic for score in here
         }
         else{
-            var header = document.getElementById('popupHead');
-            header.innerHTML = "Incorrect";
-            header.style.color = red;
+            header.innerHTML = "<span style='color:red'>Incorrect</span>";
             $('#popup').w2popup();
             //window.alert('neigh');
         }
@@ -193,8 +162,6 @@
             //redirect to another page here
             //end quiz, hidden form action?
         }
-        runQuestion();
-        //advance to next questions
     }
 </script>
 </html>
