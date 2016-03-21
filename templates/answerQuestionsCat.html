@@ -9,6 +9,28 @@
     var timerId;
     
     function runQuestion(){
+        timeLeft = 14;
+        
+        var elem = document.getElementById('timer');
+
+        timerId = setInterval(function() {
+              if (timeLeft < 0) {
+                clearTimeout(timerId);
+                submit(5);
+              } else {
+                elem.innerHTML = "<p>" + timeLeft + "</p>";
+                timeLeft--;
+              }
+            }, 1000);
+
+        
+        var count = document.getElementById('counter'); //question number
+        
+        counter+=1; //increments at each question
+        
+        count.innerHTML = counter + "."; //prints out the question number
+        elem.innerHTML = "<p>" + 15 + "</p>"; 
+        //code for retrieving and printing the question
         var quest = document.getElementById("question");
         var ans1 = document.getElementById("answer1");
         var ans2 = document.getElementById("answer2");
@@ -29,41 +51,6 @@
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
     }
-    function counter(){
-        
-    }
-    function timer(){
-        try{
-            clearTimeout(timerId);
-        }
-        catch(err){    
-        }
-        
-        if (counter == 0){
-            timeLeft = 14;
-        }
-        else{ 
-            timeLeft = 15;
-        }
-        
-        var elem = document.getElementById('timer');
-
-        timerId = setInterval(countdown, 1000);
-
-        function countdown() {
-          if (timeLeft == 0) {
-            clearTimeout(timerId);
-            submit(5);
-          } else {
-            elem.innerHTML = "<p>" + timeLeft + "</p>";
-            timeLeft--;
-          }
-        }
-        
-        var count = document.getElementById('counter');
-        counter+=1;
-        count.innerHTML = counter + ".";
-    }
     function score(){
         //this is where we can do the calculations for the score by grabbing
         //the time variable and using that as part of it, as well as using
@@ -72,7 +59,6 @@
     }
     function start(){
         runQuestion();
-        timer();
     }
 </script>
 <body>
@@ -120,6 +106,7 @@
     window.onload = start();
     function submit(selection){
         //window.alert(selection);
+        clearTimeout(timerId); //stops timer
         if(selection == curr[counter].answerid){
             //window.alert('yey');
             //logic for score in here   
@@ -129,9 +116,8 @@
         }
         if( counter == "{{num}}"){
             //redirect to another page here
-            //end quiz
+            //end quiz, hidden form action?
         }
-        timer();
         runQuestion();
         //advance to next questions
     }
