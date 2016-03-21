@@ -173,20 +173,20 @@
     function submit(selection){
         //window.alert(selection);
         clearTimeout(timerId); //stops timer
-        $('#popup').w2popup();
+        //$('#popup').w2popup({modal: true, showClose: false, keyboard: false});
         if(selection == curr[counter].answerid){
-            var header = document.getElementById('popupHead');
-            header.innerHTML = "Correct";
-            header.style.color = green;
-            $('#popup').w2popup();
+            //var header = document.getElementById('popupHead');
+            //header.innerHTML = "Correct";
+            //header.style.color = green;
+            $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
             //window.alert('yey');
             //logic for score in here
         }
         else{
-            var header = document.getElementById('popupHead');
-            header.innerHTML = "Incorrect";
-            header.style.color = red;
-            $('#popup').w2popup();
+            //var header = document.getElementById('popupHead');
+            //header.innerHTML = "Incorrect";
+            //header.style.color = red;
+            $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
             //window.alert('neigh');
         }
         if( counter == "{{num}}"){
