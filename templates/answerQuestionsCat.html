@@ -5,11 +5,14 @@
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="/static/js/w2ui-1.4.3.min.js"></script>
+<script src="/ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script type="text/javascript">
     var timeLeft;
     var counter = 0;
     var curr;
     var timerId;
+    var questkey;
+    var userid = "{{userid}}";
 
     function runQuestion(){
         try{
@@ -24,7 +27,7 @@
         timerId = setInterval(function() {
               if (timeLeft < 0) {
                 clearTimeout(timerId);
-                submit(5);
+                (5);
               } else {
                 elem.innerHTML = "<p>" + timeLeft + "</p>";
                 timeLeft--;
@@ -57,11 +60,13 @@
         var a2 = curr[counter].answer2;
         var a3 = curr[counter].answer3;
         var a4 = curr[counter].answer4;
+        questkey = curr[counter].urlkey;
         quest.innerHTML = q;
         ans1.innerHTML = a1;
         ans2.innerHTML = a2;
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
+
         var q = curr[counter].question;
         var s1 = parseInt(curr[counter].answer1Selections);
         var s2 = parseInt(curr[counter].answer2Selections);
@@ -76,6 +81,17 @@
         popAns2.innerHTML = a2 + " " + s2p + "%";
         popAns3.innerHTML = a3 + " " + s3p + "%";
         popAns4.innerHTML = a4 + " " + s4p + "%";
+
+
+        popAns1.innerHTML = a1;
+        popAns1.innerHTML += " (1/4)";
+        popAns2.innerHTML = a2;
+        popAns2.innerHTML += " (2/4)";
+        popAns3.innerHTML = a3;
+        popAns3.innerHTML += " (3/4)";
+        popAns4.innerHTML = a4;
+        popAns4.innerHTML += " (4/4)";
+
     }
 
     function score(){
@@ -136,6 +152,8 @@
         <div id='body' rel="body">
             <div style="padding: 10; font-size: 11px; line-height: 150%; text-align:center; vertical-align:middle;">
             </br></br>
+				<!--Div that will hold the pie chart-->
+				<div id="chart_div"></div>
                 <p style="color: #f44336;" id='popupAns1'></p>
                 <p style="color: #0266C8;" id='popupAns2'></p>
                 <p style="color: #00933B;" id='popupAns3'></p>
@@ -159,14 +177,16 @@
         if(selection == curr[counter].answerid){
             header.innerHTML = "<span style='color:green'>Correct</span>";
             $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
+            sendAnswer(userid,questkey,selection);
             //logic for score in here
         }
         else{
             header.innerHTML = "<span style='color:red'>Incorrect</span>";
             $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
+            sendAnswer(userid,questkey,selection);
         }
     }
-    
+
     function runNextQuestion(){
         w2popup.close();
         if( counter == "{{num}}"){
@@ -174,6 +194,23 @@
             //end quiz, hidden form action?
         }
         runQuestion();
+    }
+
+    function sendAnswer(userID, questKey, userAnswer){
+        try{
+                $.ajax({
+                  type: "POST",
+                  url: "/answerSingle",
+                  dataType: 'json',
+                  data: JSON.stringify({"userID": userID, "qKey": questKey, "userSelection": userAnswer})
+              });
+                // .done(function( data ) {
+                //     alert("cool");
+                // });
+          }
+          catch(err){
+              window.alert(err.message);
+          }
     }
 </script>
 </html>
