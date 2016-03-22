@@ -432,8 +432,8 @@ class reportHandler(webapp2.RequestHandler):
         body = "Comment:\n" + self.request.get("comment")
         sender_address = get_user_email() #not sure if we want to do this
         question = self.request.get("id")
-        body = body + "\nVisit the question here: aecs1980qg.appspot.com/ReviewQuestion?id=" + question
-        subject = "Question " + question + " has been reported"
+        body = body + "\n\nVisit the question here: aecs1980qg.appspot.com/ReviewQuestion?id=" + question
+        subject = "A question has been reported"
         mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
         self.redirect("/ReviewNewQuestions")
 
