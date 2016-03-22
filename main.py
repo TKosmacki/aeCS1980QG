@@ -115,7 +115,7 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
             questionID = models.create_question(category,
                     question,answer1,answer2,answer3,answer4,answerid,
                     explanation,creator,False)
-
+	
         self.redirect('/NewQuestion?id=' + questionID.urlsafe())
 
     def get(self):
@@ -296,8 +296,8 @@ class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 class ImageHandlerQuestion(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self):
-    id = self.request.get('id')
-    review = models.getQuestion(id)
+    urlkey = self.request.get('urlkey')
+    review = models.getQuestionFromURL(urlkey)
     try:
      image = images.Image(blob_key=review.image_urlQ)
      self.send_blob(review.image_urlQ)

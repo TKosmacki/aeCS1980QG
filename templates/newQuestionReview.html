@@ -18,7 +18,7 @@
         <span class="green-text">{{review.answer3}}</span><br>
         <span class="yellow-text">{{review.answer4}}</span><br><br>
         {% if review.image_urlQ %}
-			<img src="/imageQ?id={{review.id}}" style="float: right;" class="img-responsive smaller-image blue-border" >
+			<img src="/imageQ?urlkey={{review.urlkey}}" style="float: right;" class="img-responsive smaller-image blue-border" >
         {% endif %}
         <h4>Explanation:</h4>
         <p>{{review.explanation}}</p>
