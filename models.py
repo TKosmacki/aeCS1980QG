@@ -13,9 +13,11 @@ from google.appengine.api import memcache
 ###############################################################################
 class User(ndb.Model):
     user_id = ndb.StringProperty()
-    name = ndb.StringProperty(default="No Name")
-    location = ndb.StringProperty(default="No Class")
-    interests = ndb.StringProperty(default="No Interests")
+    name = ndb.StringProperty()
+    year = ndb.StringProperty()
+    interests = ndb.StringProperty()
+    employer = ndb.StringProperty(default="University of Pittsburgh")
+    bio = ndb.StringProperty()
     image_url = ndb.BlobKeyProperty()
     score = ndb.IntegerProperty(default=0) #maybe have a score variable for each category
 
@@ -119,9 +121,9 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
 
 #MODIFIERS
 ###############################################################################
-def update_profile(id, name, location, interests, image_url = None):
+def update_profile(id, name, year, interests, bio, employer, image_url = None):
     profile = get_User(id)
-    profile.populate(name = name, location = location, interests = interests, image_url = image_url)
+    profile.populate(name = name, year = year, interests = interests, bio = bio, employer = employer, image_url = image_url)
     profile.put()
     memcache.set(id, profile, namespace="profile")
 

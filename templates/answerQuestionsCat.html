@@ -62,6 +62,7 @@
         ans2.innerHTML = a2;
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
+        
         popAns1.innerHTML = a1;
         popAns1.innerHTML += " (1/4)";
         popAns2.innerHTML = a2;
@@ -189,7 +190,7 @@
         //send selection back to python
         if(selection == curr[counter].answerid){
             header.innerHTML = "<span style='color:green'>Correct</span>";
-             $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
+            $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
             //logic for score in here
         }
         else{
