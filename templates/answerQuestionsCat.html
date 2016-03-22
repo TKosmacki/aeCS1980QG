@@ -62,15 +62,20 @@
         ans2.innerHTML = a2;
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
-        
-        popAns1.innerHTML = a1;
-        popAns1.innerHTML += " (1/4)";
-        popAns2.innerHTML = a2;
-        popAns2.innerHTML += " (2/4)";
-        popAns3.innerHTML = a3;
-        popAns3.innerHTML += " (3/4)";
-        popAns4.innerHTML = a4;
-        popAns4.innerHTML += " (4/4)";
+        var q = curr[counter].question;
+        var s1 = parseInt(curr[counter].answer1Selections);
+        var s2 = parseInt(curr[counter].answer2Selections);
+        var s3 = parseInt(curr[counter].answer3Selections);
+        var s4 = parseInt(curr[counter].answer4Selections);
+        var total = s1+s2+s3+s4;
+        var s1p = Math.floor((s1 / total) * 100);
+        var s2p = Math.floor((s2 / total) * 100);
+        var s3p = Math.floor((s3 / total) * 100);
+        var s4p = 100-(s1p+s2p+s3p);
+        popAns1.innerHTML = a1 + " " + s1p + "%";
+        popAns2.innerHTML = a2 + " " + s2p + "%";
+        popAns3.innerHTML = a3 + " " + s3p + "%";
+        popAns4.innerHTML = a4 + " " + s4p + "%";
     }
 
     function score(){
@@ -131,15 +136,12 @@
         <div id='body' rel="body">
             <div style="padding: 10; font-size: 11px; line-height: 150%; text-align:center; vertical-align:middle;">
             </br></br>
-
-
-				<!--Div that will hold the pie chart-->
-				<div id="chart_div"></div>
-		
                 <p style="color: #f44336;" id='popupAns1'></p>
                 <p style="color: #0266C8;" id='popupAns2'></p>
                 <p style="color: #00933B;" id='popupAns3'></p>
                 <p style="color: #F2B50F;" id='popupAns4'></p>
+                <!--Div that will hold the pie chart-->
+				<div id="chart_div"></div>
             </div>
         </div>
         <div rel="buttons">
@@ -148,40 +150,6 @@
     </div>
 </body>
 <script>
-				  // Load the Visualization API and the corechart package.
-				  google.charts.load('current', {'packages':['corechart']});
-
-				  // Set a callback to run when the Google Visualization API is loaded.
-				  google.charts.setOnLoadCallback(drawChart);
-
-				  // Callback that creates and populates a data table,
-				  // instantiates the pie chart, passes in the data and
-				  // draws it.
-				  function drawChart() {
-
-					// Create the data table.
-					var data = new google.visualization.DataTable();
-					data.addColumn('string', 'Topping');
-					data.addColumn('number', 'Slices');
-					data.addRows([
-					  ['Mushrooms', 3],
-					  ['Onions', 1],
-					  ['Olives', 1],
-					  ['Zucchini', 1],
-					  ['Pepperoni', 2]
-					]);
-
-					// Set chart options
-					var options = {'title':'How Much Pizza I Ate Last Night',
-								   'width':400,
-								   'height':300};
-
-					// Instantiate and draw our chart, passing in some options.
-					var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-					chart.draw(data, options);
-				  }
-
-
     window.onload = start();
     function submit(selection){
         clearTimeout(timerId); //stops timer
@@ -197,7 +165,6 @@
             header.innerHTML = "<span style='color:red'>Incorrect</span>";
             $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
         }
-        
     }
     
     function runNextQuestion(){
