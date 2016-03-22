@@ -6,17 +6,20 @@
 <br><br><br>
 <body>
 	<div class = "container">
-		<br><br><br>
-		<p>Here is a new user question:</p>
+        {% if review.accepted %}
+        <h3>Question:</h3>
+        {% else %}
+		<h3>New Question:</h3>
+        {% endif %}
         <hr>
 		<h4>{{review.question}}</h4>
         <span class="red-text">{{review.answer1}}</span><br>
         <span class="blue-text">{{review.answer2}}</span><br>
         <span class="green-text">{{review.answer3}}</span><br>
         <span class="yellow-text">{{review.answer4}}</span><br><br>
-	{% if review.image_urlQ %}
+        {% if review.image_urlQ %}
 			<img src="/imageQ?id={{review.id}}" style="float: right;" class="img-responsive smaller-image blue-border" >
-	{% endif %}
+        {% endif %}
         <h4>Explanation:</h4>
         <p>{{review.explanation}}</p>
 		<h4>The answer is:</h4>
@@ -54,7 +57,7 @@
 	<div class="modal fade" id="sendreport" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form role = "form"  method="post" class="form-horizontal" action="/report?id={{review.id}}">
+				<form role = "form"  method="post" class="form-horizontal" action="/report?id={{review.urlkey}}">
 					<div class="modal-header">
 						<he5>Report Question</he5>
 					</div>

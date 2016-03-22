@@ -9,19 +9,19 @@
                 <hr>
                 <div class="col-lg-3">
                 {% if profile.image_url %}
-                    <img src="/image?id={{profile.user_id}}" class="img-responsive smaller-image blue-border" >
+                    <img src="/image?id={{profile.user_id}}" class="img-responsive smaller-image" >
                 {% else %}
-                    <img class="img-responsive smaller-image blue-border" src="https://cs.pitt.edu/img/users/novacky.jpg">
+                    <img style="height: 100%; width: auto;" class="img-responsive smaller-image" src="/static/img/DrMarioadv.png">
 	            {% endif %}
                 <br>
                 </div>
                 <div class="col-lg-9">
                     <label class="control-label">Name:</label> {{profile.name}}<br>
-                    <label class="control-label">Class:</label> {{profile.location}}<br>
+                    <label class="control-label">Year:</label> {{profile.year}}<br>
                     <label class="control-label">Interests:</label> {{profile.interests}}<br>
-                    <label class="control-label">Employer:</label> University of Pittsburgh<br>
-                    <label class="control-label">Bio:</label> George A. Novacky was an Assistant Department Chair and Senior Lecturer in Computer Science, and an Assistant Dean of CAS for Undergraduate Studies at the University of Pittsburgh.
-                    <br><br><br><br>
+                    <label class="control-label">Employer:</label> {{profile.employer}}<br>
+                    <label class="control-label">Bio:</label> {{profile.bio}}<br>
+                    <br><br><br>
                 </div>
 			<a class="btn btn-default pull-right" href="#editprofile" data-toggle="modal">Edit Profile Information</a>
 			<br><br>
@@ -45,13 +45,13 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for: "Location" class="col-lg-2 control-label">Class: </label>
+							<label for: "Location" class="col-lg-2 control-label">Year: </label>
 							<div class="col-lg-10">
-								<input type="text" class="form-control" name="location" id="Location" value="{{profile.location}}" maxlength=35 required>
+								<input type="text" class="form-control" name="location" id="year" value="{{profile.year}}" maxlength=35 required>
 							</div>
 						</div>
 					        <div class="form-group">
-							<label for: "Location" class="col-lg-2 control-label">Image: </label>
+							<label for: "img" class="col-lg-2 control-label">Image: </label>
 							<div class="col-lg-10">
 								<input type="file" class="form-control" name="file" id="Location">
 							</div>
@@ -59,7 +59,19 @@
 						<div class="form-group">
 							<label for: "Interests" class="col-lg-2 control-label">Interests: </label>
 							<div class="col-lg-10">
-								<textarea type="text" class="form-control" name="interests" id="Interests" value="" maxlength=140 required>{{profile.interests}}</textarea>
+								<textarea type="text" class="form-control" name="interests" id="interests" value="" maxlength=140 required>{{profile.interests}}</textarea>
+							</div>
+						</div>
+                        <div class="form-group">
+							<label for: "Interests" class="col-lg-2 control-label">Employer: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="interests" id="employer" value="{{profile.employer}}" maxlength=140>
+							</div>
+						</div>
+                        <div class="form-group">
+							<label for: "Interests" class="col-lg-2 control-label">Bio: </label>
+							<div class="col-lg-10">
+								<textarea type="text" class="form-control" name="interests" id="bio" value="" maxlength=140 required>{{profile.bio}}</textarea>
 							</div>
 						</div>
 					</div>

@@ -257,26 +257,31 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             type = blob_info.content_type
             id = get_user_id()
             name = self.request.get("name")
-            location = self.request.get("location")
+            year = self.request.get("year")
             interests = self.request.get("interests")
+            employer = self.request.get("employer")
+            bio = self.request.get("bio")
 
             # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
-                models.update_profile(id, name, location, interests, image)
+                models.update_profile(id, name, year, interests, bio, employer, image)
 
             # if the uploaded file is not an image
             else:
-                models.update_profile(id, name, location, interests)
+                models.update_profile(id, name, year, interests, bio, employer)
 
             self.redirect('/profile?id=' + id)
         # no image to upload
         except IndexError:
             id = get_user_id()
             name = self.request.get("name")
-            location = self.request.get("location")
+            year = self.request.get("year")
             interests = self.request.get("interests")
-            models.update_profile(id, name, location, interests)
+            employer = self.request.get("employer")
+            bio = self.request.get("bio")
+            models.update_profile(id, name, year, interests, bio, employer)
+            
         self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
