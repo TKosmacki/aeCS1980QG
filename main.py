@@ -49,7 +49,7 @@ class MainPageHandler(webapp2.RequestHandler):
 
         page_params = {
         'user_email': get_user_email(),
-        'login_url': users.create_login_url(),
+        'login_url': users.create_login_url('/profile'),
         'logout_url': users.create_logout_url('/'),
         'user_id': id,
         'admin' : is_admin
