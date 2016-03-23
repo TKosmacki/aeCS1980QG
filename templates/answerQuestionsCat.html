@@ -10,7 +10,7 @@
     var counter = 0;
     var curr;
     var timerId;
-
+    
     function runQuestion(){
         try{
             clearTimeout(timerId);
@@ -44,6 +44,7 @@
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
+        var exp = document.getElementById("explanation");
         var popAns1 = document.getElementById('popupAns1');
         var popAns2 = document.getElementById('popupAns2');
         var popAns3 = document.getElementById('popupAns3');
@@ -62,6 +63,7 @@
         ans2.innerHTML = a2;
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
+        exp.innerHTML = curr[counter].explanation;
         var q = curr[counter].question;
         var s1 = parseInt(curr[counter].answer1Selections);
         var s2 = parseInt(curr[counter].answer2Selections);
@@ -72,10 +74,22 @@
         var s2p = Math.floor((s2 / total) * 100);
         var s3p = Math.floor((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
-        popAns1.innerHTML = a1 + " " + s1p + "%";
-        popAns2.innerHTML = a2 + " " + s2p + "%";
-        popAns3.innerHTML = a3 + " " + s3p + "%";
-        popAns4.innerHTML = a4 + " " + s4p + "%";
+        popAns1.innerHTML = a1 + " (" + s1p + "%)";
+        popAns2.innerHTML = a2 + " (" + s2p + "%)";
+        popAns3.innerHTML = a3 + " (" + s3p + "%)";
+        popAns4.innerHTML = a4 + " (" + s4p + "%)";
+        if( "1" == curr[counter].answerid){
+            popAns1.style.color = "#00933B";
+        }
+        if( "2" == curr[counter].answerid){
+            popAns2.style.color = "#00933B";
+        }
+        if( "3" == curr[counter].answerid){
+            popAns3.style.color = "#00933B";
+        }
+        if( "4" == curr[counter].answerid){
+            popAns4.style.color = "#00933B";
+        }
     }
 
     function score(){
@@ -133,15 +147,16 @@
         <div id="title" rel="title">
             <span style="color:red" id="popupHead"></span>
         </div>
-        <div id='body' rel="body">
-            <div style="padding: 10; font-size: 11px; line-height: 150%; text-align:center; vertical-align:middle;">
-            </br></br>
-                <p style="color: #f44336;" id='popupAns1'></p>
-                <p style="color: #0266C8;" id='popupAns2'></p>
-                <p style="color: #00933B;" id='popupAns3'></p>
-                <p style="color: #F2B50F;" id='popupAns4'></p>
-                <!--Div that will hold the pie chart-->
-				<div id="chart_div"></div>
+        <div id='body' rel="body" >
+            <div style=" font-size: 24px; line-height: 110%; text-align:left;">
+            <ol id="list">
+                <li style="color: #f44336;" id='popupAns1'></li>
+                <li style="color: #f44336;" id='popupAns2'></li>
+                <li style="color: #f44336;" id='popupAns3'></li>
+                <li style="color: #f44336;" id='popupAns4'></li>
+            </ol>
+            <h3>Explanation: </h3>
+            <p id='explanation'></p>
             </div>
         </div>
         <div rel="buttons">
@@ -169,6 +184,22 @@
     
     function runNextQuestion(){
         w2popup.close();
+        var popAns1 = document.getElementById('popupAns1');
+        var popAns2 = document.getElementById('popupAns2');
+        var popAns3 = document.getElementById('popupAns3');
+        var popAns4 = document.getElementById('popupAns4');
+        if( "1" == curr[counter].answerid){
+            popAns1.style.color = "#f44336";
+        }
+        if( "2" == curr[counter].answerid){
+            popAns2.style.color = "#f44336";
+        }
+        if( "3" == curr[counter].answerid){
+            popAns3.style.color = "#f44336";
+        }
+        if( "4" == curr[counter].answerid){
+            popAns4.style.color = "#f44336";
+        }
         if( counter == "{{num}}"){
             //redirect to another page here
             //end quiz, hidden form action?
