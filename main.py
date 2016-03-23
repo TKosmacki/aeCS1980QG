@@ -49,7 +49,7 @@ class MainPageHandler(webapp2.RequestHandler):
 
         page_params = {
         'user_email': get_user_email(),
-        'login_url': users.create_login_url(),
+        'login_url': users.create_login_url('/profile'),
         'logout_url': users.create_logout_url('/'),
         'user_id': id,
         'admin' : is_admin
@@ -115,7 +115,7 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
             questionID = models.create_question(category,
                     question,answer1,answer2,answer3,answer4,answerid,
                     explanation,creator,False)
-
+	
         self.redirect('/NewQuestion?id=' + questionID.urlsafe())
 
     def get(self):
@@ -281,7 +281,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             employer = self.request.get("employer")
             bio = self.request.get("bio")
             models.update_profile(id, name, year, interests, bio, employer)
-            
+
         self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
@@ -296,8 +296,8 @@ class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
 
 class ImageHandlerQuestion(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self):
-    id = self.request.get('id')
-    review = models.getQuestion(id)
+    urlkey = self.request.get('urlkey')
+    review = models.getQuestionFromURL(urlkey)
     try:
      image = images.Image(blob_key=review.image_urlQ)
      self.send_blob(review.image_urlQ)
@@ -321,25 +321,13 @@ class submitQuiz(webapp2.RequestHandler):
         render_template(self,'quizResults.html',page_params)
 
 class answerSingle(webapp2.RequestHandler):
-    def get(self):
-        argQ = models.getQuestion(str(2))
-        id = get_user_id()
-        numCorrect = 0
-        numTotal = 0
-        is_admin = 0
-        if users.is_current_user_admin():
-            is_admin = 1
-        page_params = {
-            'user_email': get_user_email(),
-            'login_url': users.create_login_url(),
-            'logout_url': users.create_logout_url('/'),
-            'correctCount': numCorrect,
-            'totalCount': numTotal,
-            'question_obj': argQ,
-            'user_id':id,
-            'admin': is_admin,
-        }
-        render_template(self,'answerSingle.html',page_params)
+    def post(self):
+        logging.warning("WHAT UP")
+        data = self.request.get('data')
+        logging.warning(data)
+        obj = json.loads(data)
+        logging.warning(obj[userSelection])
+        createAnswer(obj['userID'],obj['qKey'],obj[userSelection])
 
 class submitAnswer(webapp2.RequestHandler):
     def post(self):
@@ -418,6 +406,7 @@ class categoryQuiz(webapp2.RequestHandler):
         #self.response.out.write("</br></br></br>")
         #self.response.out.write(qList)
         page_params = {
+              'userid': get_user_id(),
               'num':number,
               'question_list' : jList,
               'user_email': get_user_email(),
