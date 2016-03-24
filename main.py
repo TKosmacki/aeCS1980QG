@@ -122,7 +122,7 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
             questionID = models.create_question(category,
                     question,answer1,answer2,answer3,answer4,answerid,
                     explanation,creator,False)
-	
+
         self.redirect('/NewQuestion?id=' + questionID.urlsafe())
 
     def get(self):
@@ -329,12 +329,17 @@ class submitQuiz(webapp2.RequestHandler):
 
 class answerSingle(webapp2.RequestHandler):
     def post(self):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
         logging.warning("WHAT UP")
+        logging.warning(self.request.get('userID'))
+        logging.warning(self.request.get('qKey'))
+        logging.warning(self.request.get('userSelection'))
         data = self.request.get('data')
         logging.warning(data)
-        obj = json.loads(data)
-        logging.warning(obj[userSelection])
-        createAnswer(obj['userID'],obj['qKey'],obj[userSelection])
+        #obj = json.loads(data)
+        #logging.warning(obj[userSelection])
+        #createAnswer(obj['userID'],obj['qKey'],obj[userSelection])
 
 class submitAnswer(webapp2.RequestHandler):
     def post(self):
@@ -434,7 +439,7 @@ class reportHandler(webapp2.RequestHandler):
         mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
         self.redirect("/ReviewNewQuestions")
 
-#used for reporting a question in the quiz        
+#used for reporting a question in the quiz
 class reportQuizHandler(webapp2.RequestHandler):
     def post(self):
         body = "Comment:\n" + self.request.get("comment")

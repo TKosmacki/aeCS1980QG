@@ -5,7 +5,6 @@
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="/static/js/w2ui-1.4.3.min.js"></script>
-<script src="/ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script type="text/javascript">
     var timeLeft;
     var counter = 0;
@@ -81,10 +80,10 @@
         var s2p = Math.floor((s2 / total) * 100);
         var s3p = Math.floor((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
-        
+
         //used for reporting
         document.getElementById("reportForm").action = "/reportQuiz?id=" + curr[counter].urlkey;
-        
+
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
         popAns3.innerHTML = a3 + " (" + s3p + "%)";
@@ -153,7 +152,7 @@
           <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
         </font>
 	</div>
-    
+
      <div class="modal fade" data-keyboard="false" id ="results" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -178,9 +177,9 @@
                     <button class="btn btn-primary text-right" onclick="runNextQuestion()">Next Question</button>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
-    
+
     <div style="z-index:2147483646;" class="modal fade" id="sendreport" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -205,13 +204,13 @@
 
 <script>
     window.onload = start();
-    
+
     function submit(selection){
         clearTimeout(timerId); //stops timer
         var header = document.getElementById('title');
         $('#results').modal({ backdrop: 'static',keyboard: false })
         //send selection back to python
-        
+
         if(selection == curr[counter].answerid){ //changes the header to green if correct
             header.innerHTML = "<h3 style='color:green; display:'inline;'>Correct</h3>";
             $('#results').modal('show');
@@ -227,7 +226,7 @@
 
     function runNextQuestion(){
         $('#results').modal('hide');
-        
+
         var popAns1 = document.getElementById('popupAns1');
         var popAns2 = document.getElementById('popupAns2');
         var popAns3 = document.getElementById('popupAns3');
@@ -262,10 +261,14 @@
     function sendAnswer(userID, questKey, userAnswer){
         try{
                 $.ajax({
-                  type: "POST",
-                  url: "/answerSingle",
-                  dataType: 'json',
-                  data: JSON.stringify({"userID": userID, "qKey": questKey, "userSelection": userAnswer})
+                    type: "POST",
+                    url: "/answerSingle",
+                    contentType: "application/json; charset=utf-8",
+                    //dataType: 'json',
+                    data: JSON.stringify({"userID": userID, "qKey": questKey, "userSelection": userAnswer})
+                    success: function(data) {
+                    alert("AJAX done");
+                }
               });
                 // .done(function( data ) {
                 //     alert("cool");
