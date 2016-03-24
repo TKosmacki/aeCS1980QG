@@ -332,15 +332,13 @@ class answerSingle(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers['Content-Type'] = 'application/json'
         logging.warning("WHAT UP")
-        logging.warning(self.request.get('userID'))
-        logging.warning(self.request.get('qKey'))
-        logging.warning(self.request.get('userSelection'))
-        data = self.request.get('data')
-
-        logging.warning(data)
-        #obj = json.loads(data)
-        #logging.warning(obj[userSelection])
-        #createAnswer(obj['userID'],obj['qKey'],obj[userSelection])
+        logging.warning(self.request.body)
+        data = json.loads(self.request.body)
+        logging.warning(data['userID'])
+        logging.warning(data['qKey'])
+        question = models.getQuestionFromURL(data['qKey'])
+        logging.warning(data['userSelection'])
+        models.createAnswer(data['userID'],question.key,str(data['userSelection']))
 
 class submitAnswer(webapp2.RequestHandler):
     def post(self):
