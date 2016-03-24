@@ -25,16 +25,6 @@
 		<h4>The answer is:</h4>
         <span class = "red-text">{{review.answerid}}</span>
 		<hr>
-		
-		<div style="display:none;" id="hiddenForm2">
-			<form  method="post" action=/report >
-				<span> Describe the problem </span>
-				<textarea rows="3" cols="40" name="comment" maxlength="350" required >
-				</textarea>
-				<br>
-				<input type="submit" value="Submit" >
-			</form>
-		</div>
 		<br>
         {% if review.accepted %}
         <div class="col-lg-10"></div>
@@ -80,16 +70,6 @@
     <h1 style="position:absolute; top:50%; left:20%;">You Must Be An Logged In to View This Page!</h1>
 </div>
 {% endif %}
-	<script>
-		function reportPopUp() {
-			  if (document.getElementById("hiddenForm2").style.display == "none"){
-  			  	document.getElementById("hiddenForm2").style.display = "block";
-			  }
-			  else if (document.getElementById("hiddenForm2").style.display == "block"){
-				document.getElementById("hiddenForm2").style.display = "none";
-			  }
-		}
-	</script>
 </body>
 </html>
 {% endblock %}

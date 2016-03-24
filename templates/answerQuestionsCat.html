@@ -29,7 +29,7 @@
         timerId = setInterval(function() {
               if (timeLeft < 0) {
                 clearTimeout(timerId);
-                (5);
+                submit(5);
               } else {
                 elem.innerHTML = "<p>" + timeLeft + "</p>";
                 timeLeft--;
@@ -81,7 +81,10 @@
         var s2p = Math.floor((s2 / total) * 100);
         var s3p = Math.floor((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
-
+        
+        //used for reporting
+        document.getElementById("reportForm").action = "/reportQuiz?id=" + curr[counter].urlkey;
+        
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
         popAns3.innerHTML = a3 + " (" + s3p + "%)";
@@ -151,7 +154,7 @@
           <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
         </font>
 	</div>
-    <div id="popup" style="display: none; width: 650px; height: 400px; overflow: auto">
+    <div id="popup" style=" display: none; width: 650px; height: 400px; overflow: auto">
         <div id="title" rel="title">
             <span style="color:red" id="popupHead"></span>
         </div>
@@ -169,8 +172,29 @@
         </div>
         <div rel="buttons">
             <button class="btn btn-default" onclick="runNextQuestion()">Next Question</button>
+            <a class="col-lg-3" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
         </div>
     </div>
+    <div style="z-index:2147483646;" class="modal fade" id="sendreport" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form id="reportForm" role = "form"  method="post" class="form-horizontal" action="">
+					<div class="modal-header">
+						<he5>Report Question</he5>
+					</div>
+					<div class="modal-body">
+						Describe the problem:<br><br>
+						<textarea class="form-control" rows="3" cols="40" name="comment" maxlength="350" required ></textarea>
+						<br>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-default text-right" data-dismiss="modal">Close</a>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 <script>
     window.onload = start();
@@ -194,6 +218,7 @@
 
     function runNextQuestion(){
         w2popup.close();
+        
         var popAns1 = document.getElementById('popupAns1');
         var popAns2 = document.getElementById('popupAns2');
         var popAns3 = document.getElementById('popupAns3');
@@ -216,7 +241,15 @@
         }
         runQuestion();
     }
-
+    $(document).ready(function(){
+       var $form = $('reportForm');
+       $form.submit(function(){
+          $.post($(this).attr('action'), $(this).serialize(), function(response){
+                $('.modal').modal('hide');
+          },'json');
+          return false;
+       });
+    });
     function sendAnswer(userID, questKey, userAnswer){
         try{
                 $.ajax({
