@@ -276,7 +276,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
 
             # if the uploaded file is not an image
             else:
-                models.update_profile(id, name, year, interests, bio, employer)
+                models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
 
             self.redirect('/profile?id=' + id)
         # no image to upload
@@ -287,7 +287,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             interests = self.request.get("interests")
             employer = self.request.get("employer")
             bio = self.request.get("bio")
-            models.update_profile(id, name, year, interests, bio, employer)
+            models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
 
         self.redirect('/profile?id=' + id)
 
