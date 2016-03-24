@@ -48,7 +48,7 @@ class MainPageHandler(webapp2.RequestHandler):
         q = models.check_if_user_exists(id)
 	page_params = {
         'user_email': get_user_email(),
-        'login_url': users.create_login_url('/workAround'),
+        'login_url': users.create_login_url('/firstLogin'),
         'logout_url': users.create_logout_url('/'),
         'user_id': id,
         'admin' : is_admin
@@ -57,8 +57,12 @@ class MainPageHandler(webapp2.RequestHandler):
 
 class LoginPageHandler(webapp2.RequestHandler):
     def get(self):
-	id = get_user_id()
-	self.redirect('/profile?id=' + id)
+        id = get_user_id()
+        user = models.get_User(id)
+        if user is None:
+            self.redirect('/profile?id=' + id)
+        else:
+            self.redirect('/')
 
 class SubmitPageHandler(webapp2.RequestHandler):
     def get(self):
@@ -465,6 +469,6 @@ mappings = [
   ('/imageQ', ImageHandlerQuestion),
   ('/decrementVote', decVote),
   ('/takeQuiz', categoryQuiz),
-  ('/workAround', LoginPageHandler)
+  ('/firstLogin', LoginPageHandler)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
