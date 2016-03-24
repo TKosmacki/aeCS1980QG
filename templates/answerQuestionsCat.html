@@ -113,7 +113,6 @@
         runQuestion();
     }
 </script>
-<link rel="stylesheet" type="text/css" href="/static/css/w2ui-1.4.3.min.css">
 <body>
 	<div class = "container" style=" height: 240px; text-align:center; position:relative;">
 		<br><br><br>
@@ -154,27 +153,34 @@
           <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
         </font>
 	</div>
-    <div id="popup" style=" display: none; width: 650px; height: 400px; overflow: auto">
-        <div id="title" rel="title">
-            <span style="color:red" id="popupHead"></span>
-        </div>
-        <div id='body' rel="body" >
-            <div style=" font-size: 24px; line-height: 110%; text-align:left;">
-                <ol id="list">
-                    <li style="color: #f44336;" id='popupAns1'></li>
-                    <li style="color: #f44336;" id='popupAns2'></li>
-                    <li style="color: #f44336;" id='popupAns3'></li>
-                    <li style="color: #f44336;" id='popupAns4'></li>
-                </ol>
-                <h3>Explanation: </h3>
-                <p id='explanation'></p>
+    
+     <div class="modal fade" data-keyboard="false" id ="results" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" id="title" style="text-align:center;">
+                    <span style="color:red" id="popupHead"></span>
+                </div>
+                <div class="modal-body">
+                    <div style=" font-size: 24px; line-height: 110%; text-align:left;">
+                        <h3 style="display:inline">Results: </h3>
+                        <ol id="list">
+                            <li style="color: #f44336;" id='popupAns1'></li>
+                            <li style="color: #f44336;" id='popupAns2'></li>
+                            <li style="color: #f44336;" id='popupAns3'></li>
+                            <li style="color: #f44336;" id='popupAns4'></li>
+                        </ol>
+                        <h3 style="display:inline">Explanation: </h3>
+                        <p id='explanation'></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default text-left" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
+                    <button class="btn btn-primary text-right" onclick="runNextQuestion()">Next Question</button>
+                </div>
             </div>
-        </div>
-        <div rel="buttons">
-            <button class="btn btn-default" onclick="runNextQuestion()">Next Question</button>
-            <a class="col-lg-3" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
-        </div>
+        </div>    
     </div>
+    
     <div style="z-index:2147483646;" class="modal fade" id="sendreport" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -196,28 +202,31 @@
 		</div>
 	</div>
 </body>
+
 <script>
     window.onload = start();
+    
     function submit(selection){
         clearTimeout(timerId); //stops timer
         var header = document.getElementById('title');
-        var body = document.getElementById('body');
+        $('#results').modal({ backdrop: 'static',keyboard: false })
         //send selection back to python
-        if(selection == curr[counter].answerid){
-            header.innerHTML = "<span style='color:green'>Correct</span>";
-            $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
+        
+        if(selection == curr[counter].answerid){ //changes the header to green if correct
+            header.innerHTML = "<h3 style='color:green; display:'inline;'>Correct</h3>";
+            $('#results').modal('show');
             sendAnswer(userid,questkey,selection);
             //logic for score in here
         }
-        else{
-            header.innerHTML = "<span style='color:red'>Incorrect</span>";
-            $('#popup').w2popup({modal: true, showClose: false, keyboard: false});
+        else{ //red if incorrect
+            header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect</h3>";
+            $('#results').modal('show');
             sendAnswer(userid,questkey,selection);
         }
     }
 
     function runNextQuestion(){
-        w2popup.close();
+        $('#results').modal('hide');
         
         var popAns1 = document.getElementById('popupAns1');
         var popAns2 = document.getElementById('popupAns2');
