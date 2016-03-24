@@ -336,8 +336,9 @@ class answerSingle(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         logging.warning(data['userID'])
         logging.warning(data['qKey'])
+        question = models.getQuestionFromURL(data['qKey'])
         logging.warning(data['userSelection'])
-        models.createAnswer(data['userID'],data['qKey'],data['userSelection'])
+        models.createAnswer(data['userID'],question.key,str(data['userSelection']))
 
 class submitAnswer(webapp2.RequestHandler):
     def post(self):
