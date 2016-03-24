@@ -356,8 +356,9 @@ footer p {
 
 ::selection {
     text-shadow: none;
-    background: #fcfcfc;
-    background: rgba(255,255,255,.2);
+    background: #3297FD;
+    //background: #fcfcfc;
+    //background: rgba(255,255,255,.2);
 }
 
 img::selection {
