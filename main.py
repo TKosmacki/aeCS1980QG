@@ -336,6 +336,7 @@ class answerSingle(webapp2.RequestHandler):
         logging.warning(self.request.get('qKey'))
         logging.warning(self.request.get('userSelection'))
         data = self.request.get('data')
+
         logging.warning(data)
         #obj = json.loads(data)
         #logging.warning(obj[userSelection])
