@@ -1,0 +1,166 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<!DOCTYPE html>
+
+<html>
+<br><br><br>
+<body>
+{% if user_email %}
+	<div class = "container">
+        {% if review.accepted %}
+        <h3 style="display:inline;">Question:</h3>
+        {% else %}
+		<h3 style="display:inline;">New Question:</h3>
+        {% endif %}
+        <hr>
+        {% if review.image_urlQ %}
+            <div class = "col-lg-6">
+                <h4 style="display:inline;">{{review.question}}</h4><br>
+                <span class="red-text">{{review.answer1}}</span><br>
+                <span class="blue-text">{{review.answer2}}</span><br>
+                <span class="green-text">{{review.answer3}}</span><br>
+                <span class="yellow-text">{{review.answer4}}</span><br><br>
+            </div>
+            <div class= "col-lg-6">
+                <img src="/imageQ?urlkey={{review.urlkey}}" class="img-responsive smaller-image" >
+            </div>
+        {% else %}
+            <h4 style="display:inline;">{{review.question}}</h4><br>
+            <span class="red-text">{{review.answer1}}</span><br>
+            <span class="blue-text">{{review.answer2}}</span><br>
+            <span class="green-text">{{review.answer3}}</span><br>
+            <span class="yellow-text">{{review.answer4}}</span><br><br>
+        {% endif %}
+        
+        <h4 style="display:inline;">Explanation:</h4>
+        <p>{{review.explanation}}</p>
+		<h4 style="display:inline;">The answer is:</h4><br>
+        <span id="answer" class = "red-text"></span>
+		<hr>
+		<br>
+        {% if review.accepted %}
+            <div class="col-lg-10"></div>
+            <!--put the edit box functionality here -->
+        {% else %}
+        <span>Should this question be added?</p>
+        <div class="col-lg-10">
+            <form method="post" class="horizontal-form" action="/incrementVote">
+                <input type="hidden" name="id" value="{{review.id}}">
+                <button action="/incrementVote" type="submit">Yes</button>
+            </form>
+            <form method="post" class="horizontal-form" action="/decrementVote">
+                <input type="hidden" name="id" value="{{review.id}}">
+                <button action="/decrementVote" type="submit">No</button>
+            </form>
+        </div>
+        {% endif %}
+        {% if review.accepted %}
+        <a class="btn btn-primary pull-right" href="#editquestion" data-toggle="modal">Edit Question</a>
+        {% else %}
+        <a class="col-lg-2" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
+        {% endif %}
+    </div>
+    <div class="modal fade" id="editquestion" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form role = "form"  method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
+					<div class="modal-header">
+						<he5>Edit Question Information</he5>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for: "name" class="col-lg-2 control-label">Question: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="name" id="name" value="{{review.question}}" maxlength=70 required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for: "Location" class="col-lg-2 control-label">Answer 1: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer1" id="answer1" value="{{review.answer1}}" maxlength=35 required>
+							</div>
+						</div>
+					   <div class="form-group">
+							<label for: "Location" class="col-lg-2 control-label">Answer 2: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer2" id="answer2" value="{{review.answer2}}" maxlength=35 required>
+							</div>
+						</div>
+					   <div class="form-group">
+							<label for: "Location" class="col-lg-2 control-label">Answer 3: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer3" id="answer3" value="{{review.answer3}}" maxlength=35 required>
+							</div>
+						</div>
+					   <div class="form-group">
+							<label for: "Location" class="col-lg-2 control-label">Answer 4: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer4" id="answer4" value="{{review.answer4}}" maxlength=35 required>
+							</div>
+						</div>
+					   <div class="form-group">
+							<label for: "img" class="col-lg-2 control-label">Image: </label>
+							<div class="col-lg-10">
+								<input type="file" class="form-control" name="file" id="Location">
+							</div>
+						</div>
+					<div class="modal-footer">
+						<a class="btn btn-default text-right" data-dismiss="modal">Close</a>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+    
+	<div class="modal fade" id="sendreport" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form role = "form"  method="post" class="form-horizontal" action="/report?id={{review.urlkey}}">
+					<div class="modal-header">
+						<he5>Report Question</he5>
+					</div>
+					<div class="modal-body">
+						Describe the problem:<br><br>
+						<textarea class="form-control" rows="3" cols="40" name="comment" maxlength="350" required ></textarea>
+						<br>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-default text-right" data-dismiss="modal">Close</a>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% else %}
+    <div class = "intro container">
+        <br><br><br>
+        <h1 style="position:absolute; top:50%; left:20%;">You Must Be An Logged In to View This Page!</h1>
+    </div>
+{% endif %}
+</body>
+<script>
+    window.onload = function() {
+        switch("{{review.answerid}}"){
+            case "1":
+                $("#answer").css("color", "#f44336");
+		$("#answer").text("{{review.answer1}}");
+                break;
+            case "2":
+              	$("#answer").css("color", "#0266C8");
+		$("#answer").text("{{review.answer2}}");
+                break;
+            case "3":
+                $("#answer").css("color", "#00933B");
+		$("#answer").text("{{review.answer3}}");
+                break;
+            case "4":
+                $("#answer").css("color", "#F2B50F");
+		$("#answer").text("{{review.answer4}}");
+                break;
+        }
+    };
+</script>
+</html>
+{% endblock %}

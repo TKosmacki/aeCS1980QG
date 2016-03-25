@@ -76,9 +76,9 @@
         var s3 = parseInt(curr[counter].answer3Selections);
         var s4 = parseInt(curr[counter].answer4Selections);
         var total = s1+s2+s3+s4;
-        var s1p = Math.floor((s1 / total) * 100);
-        var s2p = Math.floor((s2 / total) * 100);
-        var s3p = Math.floor((s3 / total) * 100);
+        var s1p = Math.round((s1 / total) * 100);
+        var s2p = Math.round((s2 / total) * 100);
+        var s3p = Math.round((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
 
         //used for reporting
@@ -112,6 +112,7 @@
         runQuestion();
     }
 </script>
+
 <body>
 	<div class = "container" style=" height: 240px; text-align:center; position:relative;">
 		<br><br><br>
@@ -121,6 +122,7 @@
         <h3 class= "col-lg-1" style="text-align:right" id="counter"></h3>
         <h3 id = "question" class="col-lg-11" style="text-align:center"></h3>
     </div>
+    
     <div class = "container text-align-center">
         <font size = 5>
           <input type="hidden" name="hidden_score" value="{{score}}">
@@ -200,6 +202,7 @@
 			</div>
 		</div>
 	</div>
+    
 </body>
 
 <script>
@@ -244,11 +247,11 @@
             popAns4.style.color = "#f44336";
         }
         if( counter == "{{num}}"){
-            //redirect to another page here
-            //end quiz, hidden form action?
+            
         }
         runQuestion();
     }
+    
     $(document).ready(function(){
        var $form = $('reportForm');
        $form.submit(function(){
@@ -258,6 +261,7 @@
           return false;
        });
     });
+    
     function sendAnswer(userID, questKey, userAnswer){
         try{
                 $.ajax({

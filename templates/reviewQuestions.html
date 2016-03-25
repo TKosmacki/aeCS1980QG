@@ -44,8 +44,7 @@
 
 			{% for question_obj in review %}
 					<tr.table-hover>
-						<th><a
-                                                                              href="/ReviewQuestion?id={{question_obj.urlkey}}">{{question_obj.question}}</a></th>
+						<th><a href="/ReviewQuestion?id={{question_obj.urlkey}}">{{question_obj.question}}</a></th>
                         <th>{{question_obj.class_}}</th>
 						<th>{{question_obj.score}}</th>
 						<th>{{question_obj.create_datetime}}</th>

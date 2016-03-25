@@ -142,14 +142,14 @@ class ReviewSingleQuestion(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-        'user_email': get_user_email(),
-        'login_url': users.create_login_url(),
-        'logout_url': users.create_logout_url('/'),
-        'user_id': uID,
-        'review': review,
-        'admin' : is_admin
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'user_id': uID,
+            'review': review,
+            'admin' : is_admin
         }
-        render_template(self, 'newQuestionReview.html', page_params)
+        render_template(self, 'questionReview.html', page_params)
 
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewNewQuestions(webapp2.RequestHandler):
@@ -417,7 +417,7 @@ class categoryQuiz(webapp2.RequestHandler):
         #self.response.out.write("</br></br></br>")
         #self.response.out.write(qList)
         page_params = {
-              'userid': get_user_id(),
+              'user_id': get_user_id(),
               'num':number,
               'question_list' : jList,
               'user_email': get_user_email(),
