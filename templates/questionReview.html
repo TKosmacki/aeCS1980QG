@@ -84,30 +84,26 @@
 {% endif %}
 </body>
 <script>
-    try{
     window.onload = function() {
-
-        window.alert("ass");
         switch("{{review.answerid}}"){
             case "1":
-                $("#answer").style("color:#f44336");
-                $("#answer").text("review.answer1");
+                $("#answer").css("color", "#f44336");
+		$("#answer").text("{{review.answer1}}");
                 break;
             case "2":
-                $("#answer").style("color:#0266C8");
-                $("#answer").text("review.answer2");
+              	$("#answer").css("color", "#0266C8");
+		$("#answer").text("{{review.answer2}}");
                 break;
             case "3":
-                $("#answer").style("color:#00933B");
-                $("#answer").text("review.answer3");
+                $("#answer").css("color", "#00933B");
+		$("#answer").text("{{review.answer3}}");
                 break;
             case "4":
-                $("#answer").style("color:#F2B50F");
-                $("#answer").text("review.answer4");
+                $("#answer").css("color", "#F2B50F");
+		$("#answer").text("{{review.answer4}}");
                 break;
         }
     };
-    }catch(err) { window.alert(err.message); }
 </script>
 </html>
 {% endblock %}
