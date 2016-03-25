@@ -111,10 +111,9 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
         creator=creator,
         accepted=valid,
         image_urlQ=image_urlQ,)
-    logging.warning(question.key)
     question.put()
 
-    logging.warning(question.key.urlsafe())
+    #logging.warning(question.key.urlsafe())
     question.urlkey = question.key.urlsafe()
     question.put()
     return question.key
@@ -231,24 +230,52 @@ def populateQuestions():
     for line in txt:
         list.append(line)
 
-    for x in range(0,len(list)/2, 6):
-        question = list[x]
-        answer1 = list[x+1]
-        answer2 = list[x+2]
-        answer3 = list[x+3]
-        answer4 = list[x+4]
-        answerid = list[x+5]
-        create_question("Test", question, answer1, answer2, answer3,
+    for x in range(0,len(list), 6):
+            question = list[x]
+            logging.warning(x+1)
+            answer1 = list[x+1]
+            answer2 = list[x+2]
+            answer3 = list[x+3]
+            answer4 = list[x+4]
+            answerid = list[x+5]
+            create_question("PHARM2001", question, answer1, answer2, answer3,
+            answer4, answerid,"None","Stephen Curry",True)
+    for x in range(60,len(list), 6):
+            question = list[x]
+            answer1 = list[x+1]
+            answer2 = list[x+2]
+            answer3 = list[x+3]
+            answer4 = list[x+4]
+            answerid = list[x+5]
+            create_question("PHARM3023", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
-    for x in range((len(list)/2), len(list), 6):
-        question = list[x]
-        answer1 = list[x+1]
-        answer2 = list[x+2]
-        answer3 = list[x+3]
-        answer4 = list[x+4]
-        answerid = list[x+5]
-        create_question("Test2", question, answer1, answer2, answer3,
+    for x in range(120,len(list), 6):
+            question = list[x]
+            answer1 = list[x+1]
+            answer2 = list[x+2]
+            answer3 = list[x+3]
+            answer4 = list[x+4]
+            answerid = list[x+5]
+            create_question("PHARM3028", question, answer1, answer2, answer3,
+            answer4, answerid,"None","Stephen Curry",True)
+    for x in range(180,len(list), 6):
+            question = list[x]
+            answer1 = list[x+1]
+            answer2 = list[x+2]
+            answer3 = list[x+3]
+            answer4 = list[x+4]
+            answerid = list[x+5]
+            create_question("PHARM3040", question, answer1, answer2, answer3,
+            answer4, answerid,"None","Stephen Curry",True)
+    for x in range(240,len(list), 6):
+            question = list[x]
+            answer1 = list[x+1]
+            answer2 = list[x+2]
+            answer3 = list[x+3]
+            answer4 = list[x+4]
+            answerid = list[x+5]
+            create_question("PHARM5218", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
 #creates one Answer per Question per User
