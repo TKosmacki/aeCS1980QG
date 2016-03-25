@@ -129,7 +129,7 @@ def update_profile(id, name, year, interests, bio, employer, image_url = None):
 
 #increments the vote counter
 def addVote(id,email):
-    question = ndb.Key(Question,id).get()
+    question = getQuestionFromURL(id)
 
     if not check_if_up_voted(question.up_voters, email):
         question.up_voters.append(email)
@@ -142,7 +142,7 @@ def addVote(id,email):
         question.put()
 
 def decVote(id,email):
-    question = ndb.Key(Question,id).get()
+    question = getQuestionFromURL(id)
 
     if not check_if_down_voted(question.down_voters, email):
         question.down_voters.append(email)
