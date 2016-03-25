@@ -12,7 +12,7 @@
     <!-- Custom CSS -->
     <link href="/static/css/grayscale.css" rel="stylesheet">
     <title>Pharma Quiz Game</title>
-    
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -23,13 +23,13 @@
 <script>
     $(document).ready(function() {
         $('#on-play').click(function(){
-            $('#description').animate({ 
+            $('#description').animate({
                 left:"-150%"} , "slow");
             $('#dropdown').animate({left:"0%"} , "slow");
             document.getElementById("dropdown").style.display = "block";
         });
         $('#on-back').click(function(){
-            $('#description').animate({ 
+            $('#description').animate({
                 left:"0%"} , "slow");
             $('#dropdown').animate({left:"15%"} , "slow");
             document.getElementById("dropdown").style.display = "none";
@@ -71,19 +71,19 @@
                     <div class ="container col-lg-8 text-align-left">
                         Select a Category:
                         <select style="color:black" id="category" name="category" method="POST"><!--maybe pull in all categories from python-->
-                            <option value="PHARM 2001">PHARM 2001</option>
-                            <option value="PHARM 3023">PHARM 3023</option>
-                            <option value="PHARM 3028">PHARM 3028</option>
-                            <option value="PHARM 3040">PHARM 3040</option>
-                            <option value="PHARM 5218">PHARM 5218</option>
+                            <option value="PHARM2001">PHARM 2001</option>
+                            <option value="PHARM3023">PHARM 3023</option>
+                            <option value="PHARM3028">PHARM 3028</option>
+                            <option value="PHARM3040">PHARM 3040</option>
+                            <option value="PHARM5218">PHARM 5218</option>
                         </select>
                         <br><br>
                         Select the Number of Questions:
                         <select style="color:black" id="number" name="number" method="POST">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
+                            <option value=10>10</option>
+                            <option value=15>15</option>
+                            <option value=25>25</option>
+                            <option value=50>50</option>
                         </select>
                         <br><br>
                         <button style="color:black" type='submit'>Start Quiz</button>
@@ -105,9 +105,9 @@
         </div>
     </section>
     <div class = "container text-center">
-        <a style="color:white" href="https://www.facebook.com"><i class="fa fa-facebook-square fa-3x"></i></a>&nbsp;&nbsp;   
-        <a style="color:white" href="https://www.twitter.com"><i class="fa fa-twitter-square fa-3x"></i></a>&nbsp;&nbsp;  
-        <a style="color:white" href="https://www.plus.google.com"><i class="fa fa-google-plus-square fa-3x"></i></a>&nbsp;&nbsp;   
+        <a style="color:white" href="https://www.facebook.com"><i class="fa fa-facebook-square fa-3x"></i></a>&nbsp;&nbsp;
+        <a style="color:white" href="https://www.twitter.com"><i class="fa fa-twitter-square fa-3x"></i></a>&nbsp;&nbsp;
+        <a style="color:white" href="https://www.plus.google.com"><i class="fa fa-google-plus-square fa-3x"></i></a>&nbsp;&nbsp;
         <a style="color:white" href="https://www.github.com"><i class="fa fa-github-square fa-3x"></i></a>&nbsp;&nbsp;
         <a style="color:white" href="https://www.reddit.com"><i class="fa fa-reddit-square fa-3x"></i></a>
     </div>
@@ -117,9 +117,9 @@
             <p>Copyright &copy; PharmaQuizGame 2016</p>
         </div>
     </footer>
-    
+
     <!-- jQuery -->
-    <script src="static/js/jquery.min.js"></script> 
+    <script src="static/js/jquery.min.js"></script>
 
     <!-- Plugin JavaScript -->
     <script src="static/js/jquery.easing.min.js"></script>

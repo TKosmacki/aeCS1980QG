@@ -397,14 +397,15 @@ class categoryQuiz(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        #category = self.request.get('category')
+        category = self.request.get('category')
         number = self.request.get('number')
-        category = "Test"
-        number = 7
-        questions = models.getQuestionsCat(category,number)
+        logging.warning(category)
+        logging.warning(number)
+        logging.warning(int(number))
+        questions = models.getQuestionsCat(category,int(number))
 
         #for i in questions:
-        #    self.response.out.write(json.dumps(i.to_dict(exclude=['category','creator','accepted','up_voted','down_voted','create_datetime']))+"</br></br>")
+        #    self.response.out.write(json.dumps(i.to_intdict(exclude=['category','creator','accepted','up_voted','down_voted','create_datetime']))+"</br></br>")
 
 
         qList = []
@@ -418,7 +419,7 @@ class categoryQuiz(webapp2.RequestHandler):
         #self.response.out.write(qList)
         page_params = {
               'user_id': get_user_id(),
-              'num':number,
+              'num':int(number),
               'question_list' : jList,
               'user_email': get_user_email(),
               'login_url': users.create_login_url(),
