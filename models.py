@@ -196,6 +196,7 @@ def getQuestionsCat(category,number):
     #still need to random
     questions = list()
     for i in q.fetch(number):
+        questions.append(i)
     return questions
 
 def check_if_up_voted(has_up_voted,email):

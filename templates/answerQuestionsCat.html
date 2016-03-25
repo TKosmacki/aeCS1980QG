@@ -7,7 +7,7 @@
 <script src="/static/js/w2ui-1.4.3.min.js"></script>
 <script type="text/javascript">
     var timeLeft;
-    var counter = 0;
+    var counter = -1;
     var curr;
     var timerId;
 
@@ -40,7 +40,11 @@
 
         counter+=1; //increments at each question
 
-        count.innerHTML = counter + "."; //prints out the question number
+        if( (counter) == "{{num}}"){
+            window.location.href = "/";
+            return;
+        }
+        count.innerHTML = (counter+1) + "."; //prints out the question number
         elem.innerHTML = "<p>" + 15 + "</p>";
         //code for retrieving and printing the question
         var quest = document.getElementById("question");
@@ -202,7 +206,6 @@
 			</div>
 		</div>
 	</div>
-
 </body>
 
 <script>
@@ -245,9 +248,6 @@
         }
         if( "4" == curr[counter].answerid){
             popAns4.style.color = "#f44336";
-        }
-        if( counter == "{{num}}"){
-
         }
         runQuestion();
     }

@@ -419,7 +419,7 @@ class categoryQuiz(webapp2.RequestHandler):
         #self.response.out.write(qList)
         page_params = {
               'user_id': get_user_id(),
-              'num':int(number),
+              'num': int(number),
               'question_list' : jList,
               'user_email': get_user_email(),
               'login_url': users.create_login_url(),
