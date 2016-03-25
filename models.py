@@ -196,7 +196,6 @@ def getQuestionsCat(category,number):
     #still need to random
     questions = list()
     for i in q.fetch(number):
-        questions.append(i)
     return questions
 
 def check_if_up_voted(has_up_voted,email):
@@ -239,7 +238,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM2001", question, answer1, answer2, answer3,
+            create_question("PHARM 2001", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
     for x in range(60,len(list), 6):
             question = list[x]
@@ -248,7 +247,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM3023", question, answer1, answer2, answer3,
+            create_question("PHARM 3023", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
     for x in range(120,len(list), 6):
@@ -258,7 +257,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM3028", question, answer1, answer2, answer3,
+            create_question("PHARM 3028", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
     for x in range(180,len(list), 6):
             question = list[x]
@@ -267,7 +266,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM3040", question, answer1, answer2, answer3,
+            create_question("PHARM 3040", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
     for x in range(240,len(list), 6):
             question = list[x]
@@ -276,7 +275,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM5218", question, answer1, answer2, answer3,
+            create_question("PHARM 5218", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
 #creates one Answer per Question per User
