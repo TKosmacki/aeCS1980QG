@@ -142,12 +142,12 @@ class ReviewSingleQuestion(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-        'user_email': get_user_email(),
-        'login_url': users.create_login_url(),
-        'logout_url': users.create_logout_url('/'),
-        'user_id': uID,
-        'review': review,
-        'admin' : is_admin
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'user_id': uID,
+            'review': review,
+            'admin' : is_admin
         }
         render_template(self, 'questionReview.html', page_params)
 

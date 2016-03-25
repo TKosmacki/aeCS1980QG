@@ -126,6 +126,7 @@ def update_profile(id, name, year, interests, bio, employer, image_url = None):
     profile.populate(name = name, year = year, interests = interests, bio = bio, employer = employer, image_url = image_url)
     profile.put()
     memcache.set(id, profile, namespace="profile")
+    
 
 #increments the vote counter
 def addVote(id,email):
