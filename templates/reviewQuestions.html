@@ -1,15 +1,12 @@
 {% extends "_base.html" %}
 {% block bodycontent %}
 
-<link rel="stylesheet" type="text/css" href="../static/css/datatable.min.css">
-<script type="text/javascript" src="../static/js/datatable.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../static/css/dataTables.bootstrap.min.css">
+<script type="text/javascript" src="../static/js/datatables.min.js"></script>
 <script>
-	var url = document.URL; 
-	url = url.split("search=") <!--This line will automatically search based on url search param-->
-	url = url[1] /* why doesn't this crash when there is no search? */
+	var url = document.URL;
 	$(document).ready(function() {
-    var table = $('#example').DataTable();
-	table.search(url).draw()
+        var table = $('#example').DataTable();
 } );
 </script>
 {% if user_email %}
@@ -45,7 +42,7 @@
 			{% for question_obj in review %}
 					<tr.table-hover>
 						<th><a href="/ReviewQuestion?id={{question_obj.urlkey}}">{{question_obj.question}}</a></th>
-                        <th>{{question_obj.class_}}</th>
+                        <th>{{question_obj.category}}</th>
 						<th>{{question_obj.score}}</th>
 						<th>{{question_obj.create_datetime}}</th>
 						<th>{{question_obj.creator}}</th>
