@@ -35,31 +35,32 @@
         <h4 style="display:inline;">Explanation:</h4>
         <p>{{review.explanation}}</p>
 		<h4 style="display:inline;">The answer is:</h4><br>
-        <span id="answer" class = "red-text"></span>
+        <span id="answer" class = "red-text">{{review.answerid}}</span>
 		<hr>
 		<br>
-        {% if review.accepted %}
-            <div class="col-lg-10"></div>
-            <!--put the edit box functionality here -->
-        {% else %}
+        
+        {% if not review.accepted %}
         <span>Should this question be added?</p>
         <div class="col-lg-10">
+            
             <form method="post" class="horizontal-form" action="/incrementVote">
-                <input type="hidden" name="id" value="{{review.id}}">
+                <input type="hidden" name="id" value="{{review.urlkey}}">
                 <button action="/incrementVote" type="submit">Yes</button>
             </form>
             <form method="post" class="horizontal-form" action="/decrementVote">
-                <input type="hidden" name="id" value="{{review.id}}">
+                <input type="hidden" name="id" value="{{review.urlkey}}">
                 <button action="/decrementVote" type="submit">No</button>
             </form>
         </div>
         {% endif %}
+        
         {% if review.accepted %}
-        <a class="btn btn-primary pull-right" href="#editquestion" data-toggle="modal">Edit Question</a>
+        <!--<a class="btn btn-primary pull-right" href="#editquestion" data-toggle="modal">Edit Question</a>-->
         {% else %}
         <a class="col-lg-2" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
         {% endif %}
     </div>
+    
     <div class="modal fade" id="editquestion" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -145,19 +146,19 @@
         switch("{{review.answerid}}"){
             case "1":
                 $("#answer").css("color", "#f44336");
-		$("#answer").text("{{review.answer1}}");
+                $("#answer").text("{{review.answer1}}");
                 break;
             case "2":
               	$("#answer").css("color", "#0266C8");
-		$("#answer").text("{{review.answer2}}");
+                $("#answer").text("{{review.answer2}}");
                 break;
             case "3":
                 $("#answer").css("color", "#00933B");
-		$("#answer").text("{{review.answer3}}");
+                $("#answer").text("{{review.answer3}}");
                 break;
             case "4":
                 $("#answer").css("color", "#F2B50F");
-		$("#answer").text("{{review.answer4}}");
+                $("#answer").text("{{review.answer4}}");
                 break;
         }
     };
