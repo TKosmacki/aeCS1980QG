@@ -30,8 +30,8 @@
                 clearTimeout(timerId);
                 submit(5);
               } else {
-                elem.innerHTML = "<p>" + timeLeft + "</p>";
-                timeLeft--;
+                    elem.innerHTML = "<p>" + timeLeft + "</p>";
+                    timeLeft--;
               }
             }, 1000);
 
@@ -44,7 +44,7 @@
             window.location.href = "/";
             return;
         }
-        count.innerHTML = (counter+1) + "."; //prints out the question number
+        count.innerHTML = "Question " + (counter+1); //prints out the question number
         elem.innerHTML = "<p>" + 15 + "</p>";
         //code for retrieving and printing the question
         var quest = document.getElementById("question");
@@ -52,11 +52,6 @@
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
-        var exp = document.getElementById("explanation");
-        var popAns1 = document.getElementById('popupAns1');
-        var popAns2 = document.getElementById('popupAns2');
-        var popAns3 = document.getElementById('popupAns3');
-        var popAns4 = document.getElementById('popupAns4');
         curr = "{{question_list}}";
         curr = curr.replace(/&quot;/g,'"');
         curr = curr.replace(/[\u0000-\u0019]+/g,"");
@@ -72,38 +67,12 @@
         ans2.innerHTML = a2;
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
-        exp.innerHTML = curr[counter].explanation;
+        
 
-        var q = curr[counter].question;
-        var s1 = parseInt(curr[counter].answer1Selections);
-        var s2 = parseInt(curr[counter].answer2Selections);
-        var s3 = parseInt(curr[counter].answer3Selections);
-        var s4 = parseInt(curr[counter].answer4Selections);
-        var total = s1+s2+s3+s4;
-        var s1p = Math.round((s1 / total) * 100);
-        var s2p = Math.round((s2 / total) * 100);
-        var s3p = Math.round((s3 / total) * 100);
-        var s4p = 100-(s1p+s2p+s3p);
+        
 
         //used for reporting
         document.getElementById("reportForm").action = "/reportQuiz?id=" + curr[counter].urlkey;
-
-        popAns1.innerHTML = a1 + " (" + s1p + "%)";
-        popAns2.innerHTML = a2 + " (" + s2p + "%)";
-        popAns3.innerHTML = a3 + " (" + s3p + "%)";
-        popAns4.innerHTML = a4 + " (" + s4p + "%)";
-        if( "1" == curr[counter].answerid){
-            popAns1.style.color = "#00933B";
-        }
-        if( "2" == curr[counter].answerid){
-            popAns2.style.color = "#00933B";
-        }
-        if( "3" == curr[counter].answerid){
-            popAns3.style.color = "#00933B";
-        }
-        if( "4" == curr[counter].answerid){
-            popAns4.style.color = "#00933B";
-        }
     }
 
     function score(){
@@ -118,48 +87,44 @@
 </script>
 
 <body>
-	<div class = "container" style=" height: 240px; text-align:center; position:relative;">
-		<br><br><br>
-        <div id="demo"></div>
-        <div style="text-align:center">Time Left</div>
-        <div id="timer" style="text-align:center"><p>15</p></div>
-        <h3 class= "col-lg-1" style="text-align:right" id="counter"></h3>
-        <h3 id = "question" class="col-lg-11" style="text-align:center"></h3>
+    <br><br><br><br>
+    <div class = "container" style= "text-align:center; position:relative;">
+        <h3 style="display:inline;" id="counter"></h3>
+    </div>
+    <hr>
+        <h4 id = "question" style="text-align:center"></h4>
     </div>
 
-    <div class = "container text-align-center">
-        <font size = 5>
-          <input type="hidden" name="hidden_score" value="{{score}}">
-
-          <div class ="container">
-              <div class = "col-lg-3"></div>
-              <div class="col-lg-3">
-                  <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1">
-                  </button>
-              </div>
-              <div class="col-lg-3">
-                  <button onclick="submit(2)" id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2">
-                  </button>
-              </div>
-              <div class="col-lg-3"></div>
-          </div>
-          <div class ="container">
-              <div class="col-lg-3"></div>
-              <div class="col-lg-3">
-                  <button onclick="submit(3)" id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3">
-                  </button>
-                  </div>
-              <div class="col-lg-3">
-                  <button onclick="submit(4)" id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4">
-                  </button>
-                  </div>
-              <div class="col-lg-3"></div>
-          </div>
-          <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
-        </font>
-	</div>
-
-     <div class="modal fade" data-keyboard="false" id ="results" role="dialog">
+    <!--Quiz-->
+    <font size = 5>
+      <input type="hidden" name="hidden_score" value="{{score}}">
+        <div class ="container">
+            <div class = "col-lg-3"></div>
+            <div class="col-lg-3" style= "text-align:center; position:relative;">
+                <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1"></button>
+            </div>
+            <div class="col-lg-3" style= "text-align:center; position:relative;">
+                <button onclick="submit(2)" id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2"></button>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+        <div class ="container">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3" style= "text-align:center; position:relative;">
+                <button onclick="submit(3)" id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3"></button>
+                </div>
+            <div class="col-lg-3" style= "text-align:center; position:relative;">
+                <button onclick="submit(4)" id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4"></button>
+                </div>
+            <div class="col-lg-3"></div>
+        </div>
+        <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
+    </font>
+    <hr>
+    <div class="container" id="timer" style="text-align:center"><p>15</p></div>
+    
+    <!--Results Modal-->
+    <div class="modal fade" data-keyboard="false" id ="results" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" id="title" style="text-align:center;">
@@ -185,7 +150,8 @@
             </div>
         </div>
     </div>
-
+    
+    <!--Report Modal-->
     <div style="z-index:2147483646;" class="modal fade" id="sendreport" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -206,12 +172,60 @@
 			</div>
 		</div>
 	</div>
+    
 </body>
 
 <script>
     window.onload = start();
 
     function submit(selection){
+            var a1 = curr[counter].answer1;
+            var a2 = curr[counter].answer2;
+            var a3 = curr[counter].answer3;
+            var a4 = curr[counter].answer4;
+            var exp = document.getElementById("explanation");
+            var popAns1 = document.getElementById('popupAns1');
+            var popAns2 = document.getElementById('popupAns2');
+            var popAns3 = document.getElementById('popupAns3');
+            var popAns4 = document.getElementById('popupAns4');
+            var s1 = parseInt(curr[counter].answer1Selections);
+            var s2 = parseInt(curr[counter].answer2Selections);
+            var s3 = parseInt(curr[counter].answer3Selections);
+            var s4 = parseInt(curr[counter].answer4Selections);
+            var total = s1+s2+s3+s4;
+            var s1p = Math.round((s1 / total) * 100);
+            var s2p = Math.round((s2 / total) * 100);
+            var s3p = Math.round((s3 / total) * 100);
+            var s4p = 100-(s1p+s2p+s3p);
+            popAns1.innerHTML = a1 + " (" + s1p + "%)";
+            popAns2.innerHTML = a2 + " (" + s2p + "%)";
+            popAns3.innerHTML = a3 + " (" + s3p + "%)";
+            popAns4.innerHTML = a4 + " (" + s4p + "%)";
+            exp.innerHTML = curr[counter].explanation;
+            if( "1" == curr[counter].answerid){
+                popAns1.style.color = "#00933B";
+            }
+            if( "2" == curr[counter].answerid){
+                popAns2.style.color = "#00933B";
+            }
+            if( "3" == curr[counter].answerid){
+                popAns3.style.color = "#00933B";
+            }
+            if( "4" == curr[counter].answerid){
+                popAns4.style.color = "#00933B";
+            }
+            if( 1 == selection){
+                popAns1.style.fontWeight = "bold";
+            }
+            if( 2 == selection){
+                popAns2.style.fontWeight = "bold";
+            }
+            if( 3 == selection){
+                popAns3.style.fontWeight = "bold";
+            }
+            if( 4 == selection){
+                popAns4.style.fontWeight = "bold";
+            }
         clearTimeout(timerId); //stops timer
         var header = document.getElementById('title');
         $('#results').modal({ backdrop: 'static',keyboard: false })
@@ -249,6 +263,10 @@
         if( "4" == curr[counter].answerid){
             popAns4.style.color = "#f44336";
         }
+        popAns1.style.fontWeight = "normal";
+        popAns2.style.fontWeight = "normal";
+        popAns3.style.fontWeight = "normal";
+        popAns4.style.fontWeight = "normal";
         runQuestion();
     }
 
