@@ -244,18 +244,16 @@ def populateQuestions():
 
     for line in txt:
         list.append(line.rstrip())
-
-    for x in range(0,len(list), 6):
+    for x in range(0,60,6):
             question = list[x]
-            logging.warning(x+1)
             answer1 = list[x+1]
             answer2 = list[x+2]
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
             create_question("PHARM 2001", question, answer1, answer2, answer3,
-            answer4, answerid,"None","Stephen Curry",True)
-    for x in range(60,len(list), 6):
+            answer4, answerid,"None","Stephen Curry",True)        
+    for x in range(60,120, 6):
             question = list[x]
             answer1 = list[x+1]
             answer2 = list[x+2]
@@ -265,7 +263,7 @@ def populateQuestions():
             create_question("PHARM 3023", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
-    for x in range(120,len(list), 6):
+    for x in range(120,180, 6):
             question = list[x]
             answer1 = list[x+1]
             answer2 = list[x+2]
@@ -274,7 +272,7 @@ def populateQuestions():
             answerid = list[x+5]
             create_question("PHARM 3028", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
-    for x in range(180,len(list), 6):
+    for x in range(180,240, 6):
             question = list[x]
             answer1 = list[x+1]
             answer2 = list[x+2]
@@ -283,7 +281,7 @@ def populateQuestions():
             answerid = list[x+5]
             create_question("PHARM 3040", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
-    for x in range(240,len(list), 6):
+    for x in range(240,300, 6):
             question = list[x]
             answer1 = list[x+1]
             answer2 = list[x+2]
