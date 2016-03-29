@@ -126,6 +126,20 @@ def update_profile(id, name, year, interests, bio, employer, image_url = None):
     profile.put()
     memcache.set(id, profile, namespace="profile")
     
+def updateQuestion(questKey,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
+    question = questKey.get()
+    question.category=category
+    question.question=questionIn
+    question.answer1=answer1
+    question.answer2=answer2
+    question.answer3=answer3
+    question.answer4=answer4
+    question.answerid=answerid
+    question.explanation=explanation
+    question.creator=creator
+    question.accepted=valid
+    question.image_urlQ=image_urlQ
+    question.put()
 
 #increments the vote counter
 def addVote(id,email):
