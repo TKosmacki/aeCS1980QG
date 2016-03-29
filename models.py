@@ -243,7 +243,7 @@ def populateQuestions():
     list = []
 
     for line in txt:
-        list.append(line)
+        list.append(line.rstrip())
 
     for x in range(0,len(list), 6):
             question = list[x]

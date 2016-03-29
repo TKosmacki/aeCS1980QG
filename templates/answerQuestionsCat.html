@@ -172,53 +172,53 @@
     window.onload = start();
 
     function submit(selection){
-            var a1 = curr[counter].answer1;
-            var a2 = curr[counter].answer2;
-            var a3 = curr[counter].answer3;
-            var a4 = curr[counter].answer4;
-            var exp = document.getElementById("explanation");
-            var popAns1 = document.getElementById('popupAns1');
-            var popAns2 = document.getElementById('popupAns2');
-            var popAns3 = document.getElementById('popupAns3');
-            var popAns4 = document.getElementById('popupAns4');
-            var s1 = parseInt(curr[counter].answer1Selections);
-            var s2 = parseInt(curr[counter].answer2Selections);
-            var s3 = parseInt(curr[counter].answer3Selections);
-            var s4 = parseInt(curr[counter].answer4Selections);
-            var total = s1+s2+s3+s4;
-            var s1p = Math.round((s1 / total) * 100);
-            var s2p = Math.round((s2 / total) * 100);
-            var s3p = Math.round((s3 / total) * 100);
-            var s4p = 100-(s1p+s2p+s3p);
-            popAns1.innerHTML = a1 + " (" + s1p + "%)";
-            popAns2.innerHTML = a2 + " (" + s2p + "%)";
-            popAns3.innerHTML = a3 + " (" + s3p + "%)";
-            popAns4.innerHTML = a4 + " (" + s4p + "%)";
-            exp.innerHTML = curr[counter].explanation;
-            if( "1" == curr[counter].answerid){
-                popAns1.style.color = "#00933B";
-            }
-            if( "2" == curr[counter].answerid){
-                popAns2.style.color = "#00933B";
-            }
-            if( "3" == curr[counter].answerid){
-                popAns3.style.color = "#00933B";
-            }
-            if( "4" == curr[counter].answerid){
-                popAns4.style.color = "#00933B";
-            }
-            if( 1 == selection){
-                popAns1.style.fontWeight = "bold";
-            }
-            if( 2 == selection){
-                popAns2.style.fontWeight = "bold";
-            }
-            if( 3 == selection){
-                popAns3.style.fontWeight = "bold";
-            }
-            if( 4 == selection){
-                popAns4.style.fontWeight = "bold";
-            }
+        var a1 = curr[counter].answer1;
+        var a2 = curr[counter].answer2;
+        var a3 = curr[counter].answer3;
+        var a4 = curr[counter].answer4;
+        var exp = document.getElementById("explanation");
+        var popAns1 = document.getElementById('popupAns1');
+        var popAns2 = document.getElementById('popupAns2');
+        var popAns3 = document.getElementById('popupAns3');
+        var popAns4 = document.getElementById('popupAns4');
+        var s1 = parseInt(curr[counter].answer1Selections);
+        var s2 = parseInt(curr[counter].answer2Selections);
+        var s3 = parseInt(curr[counter].answer3Selections);
+        var s4 = parseInt(curr[counter].answer4Selections);
+        var total = s1+s2+s3+s4;
+        var s1p = Math.round((s1 / total) * 100);
+        var s2p = Math.round((s2 / total) * 100);
+        var s3p = Math.round((s3 / total) * 100);
+        var s4p = 100-(s1p+s2p+s3p);
+        popAns1.innerHTML = a1 + " (" + s1p + "%)";
+        popAns2.innerHTML = a2 + " (" + s2p + "%)";
+        popAns3.innerHTML = a3 + " (" + s3p + "%)";
+        popAns4.innerHTML = a4 + " (" + s4p + "%)";
+        exp.innerHTML = curr[counter].explanation;
+        if( "1" == curr[counter].answerid){
+            popAns1.style.color = "#00933B";
+        }
+        if( "2" == curr[counter].answerid){
+            popAns2.style.color = "#00933B";
+        }
+        if( "3" == curr[counter].answerid){
+            popAns3.style.color = "#00933B";
+        }
+        if( "4" == curr[counter].answerid){
+            popAns4.style.color = "#00933B";
+        }
+        if( 1 == selection){
+            popAns1.style.fontWeight = "bold";
+        }
+        if( 2 == selection){
+            popAns2.style.fontWeight = "bold";
+        }
+        if( 3 == selection){
+            popAns3.style.fontWeight = "bold";
+        }
+        if( 4 == selection){
+            popAns4.style.fontWeight = "bold";
+        }
             
         clearTimeout(timerId); //stops timer
         var header = document.getElementById('title');

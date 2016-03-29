@@ -148,7 +148,8 @@
 </body>
 <script>
     window.onload = function() {
-        switch("{{review.answerid}}"){
+        var ans = "{{review.answerid}}".replace(/[\u0000-\u0019]+/g,"");
+        switch(ans){
             case "1":
                 $("#answer").css("color", "#f44336");
                 $("#answer").text("{{review.answer1}}");
