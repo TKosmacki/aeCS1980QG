@@ -91,7 +91,8 @@
     <div class = "container" style= "text-align:center; position:relative;">
         <h3 style="display:inline;" id="counter"></h3>
     </div>
-    <hr>
+    <div class="container">
+        <hr>
         <h4 id = "question" style="text-align:center"></h4>
     </div>
 
@@ -120,7 +121,7 @@
         </div>
         <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
     </font>
-    <hr>
+    
     <div class="container" id="timer" style="text-align:center"><p>15</p></div>
     
     <!--Results Modal-->
@@ -144,7 +145,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!--<a class="btn btn-default text-left" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>-->
+                    <a class="btn btn-default text-left" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
                     <button class="btn btn-primary text-right" onclick="runNextQuestion()">Next Question</button>
                 </div>
             </div>
@@ -155,20 +156,18 @@
     <div style="z-index:2147483646;" class="modal fade" id="sendreport" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="reportForm" role = "form"  method="post" class="form-horizontal" action="">
-					<div class="modal-header">
-						<he5>Report Question</he5>
-					</div>
-					<div class="modal-body">
-						Describe the problem:<br><br>
-						<textarea class="form-control" rows="3" cols="40" name="comment" maxlength="350" required ></textarea>
-						<br>
-					</div>
-					<div class="modal-footer">
-						<a class="btn btn-default text-right" data-dismiss="modal">Close</a>
-						<button type="submit" class="btn btn-primary">Submit</button>
-					</div>
-				</form>
+                <div class="modal-header">
+                    <he5>Report Question</he5>
+                </div>
+                <div class="modal-body">
+                    Describe the problem:<br><br>
+                    <textarea class="form-control" rows="3" cols="40" id="comment" name="comment" maxlength="350" required ></textarea>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default text-right" data-dismiss="modal">Close</a>
+                    <button class="btn btn-primary" onclick="sendReport()">Submit</button>
+                </div>
 			</div>
 		</div>
 	</div>
@@ -245,41 +244,41 @@
     }
 
     function runNextQuestion(){
+        //hide and reset modal
         $('#results').modal('hide');
-
         var popAns1 = document.getElementById('popupAns1');
         var popAns2 = document.getElementById('popupAns2');
         var popAns3 = document.getElementById('popupAns3');
         var popAns4 = document.getElementById('popupAns4');
-        if( "1" == curr[counter].answerid){
-            popAns1.style.color = "#f44336";
-        }
-        if( "2" == curr[counter].answerid){
-            popAns2.style.color = "#f44336";
-        }
-        if( "3" == curr[counter].answerid){
-            popAns3.style.color = "#f44336";
-        }
-        if( "4" == curr[counter].answerid){
-            popAns4.style.color = "#f44336";
-        }
+        //Set all of the styles back to normal
+        popAns1.style.color = "#f44336";
+        popAns2.style.color = "#f44336";
+        popAns3.style.color = "#f44336";
+        popAns4.style.color = "#f44336";
         popAns1.style.fontWeight = "normal";
         popAns2.style.fontWeight = "normal";
         popAns3.style.fontWeight = "normal";
         popAns4.style.fontWeight = "normal";
+        
+        
         runQuestion();
     }
-
-    $(document).ready(function(){
-       var $form = $('reportForm');
-       $form.submit(function(){
-          $.post($(this).attr('action'), $(this).serialize(), function(response){
-                $('.modal').modal('hide');
-          },'json');
-          return false;
-       });
-    });
-
+    function sendReport(){
+        $('#sendreport').modal('hide');
+        var comment = document.getElementById('comment').value;
+        //clear report question text box
+        document.getElementById('comment').value= "";
+        var urlkey = curr[counter].urlkey;
+        $.ajax({
+                    type: "POST",
+                    url: "/reportQuiz",
+                    contentType: "application/json; charset=utf-8",
+                    //dataType: 'json',
+                    data: JSON.stringify({"comment": comment, "urlkey": urlkey})
+               });
+        confirm('Report Sent'); //maybe do something else here dunno what      
+        
+    }
     function sendAnswer(userID, questKey, userAnswer){
         try{
                 $.ajax({

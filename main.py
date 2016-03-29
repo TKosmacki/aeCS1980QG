@@ -442,9 +442,13 @@ class reportHandler(webapp2.RequestHandler):
 #used for reporting a question in the quiz
 class reportQuizHandler(webapp2.RequestHandler):
     def post(self):
-        body = "Comment:\n" + self.request.get("comment")
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        comment = data['comment']
+        body = "Comment:\n" + comment
         sender_address = get_user_email() #not sure if we want to do this
-        question = self.request.get("id")
+        question = data['urlkey']
         body = body + "\n\nVisit the question here: aecs1980qg.appspot.com/ReviewQuestion?id=" + question
         subject = "A question has been reported"
         mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
