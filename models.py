@@ -45,7 +45,7 @@ class Question(ndb.Model):
     answer4Selections = ndb.IntegerProperty(default=0)
     totalAnswers = ndb.IntegerProperty(default=0)
     explanation = ndb.StringProperty(default="No Explanation Provided")
-    create_datetime = ndb.DateTimeProperty(auto_now_add=True)
+    create_date = ndb.DateProperty(auto_now_add=True)
     accepted = ndb.BooleanProperty(default=False)
     up_voters = ndb.StringProperty(repeated=True)
     down_voters = ndb.StringProperty(repeated=True)
@@ -227,10 +227,10 @@ def check_if_down_voted(has_down_voted, email):
 def get_oldest_questions(num,val):
     if val: #searches for valid questions for reviewal
         query= Question.query(Question.accepted == True)
-        query.order(Question.create_datetime)
+        query.order(Question.create_date)
     else: #search for invalid questions
         query= Question.query(Question.accepted == False)
-        query.order(Question.create_datetime)
+        query.order(Question.create_date)
 
     return query.fetch(num)
 

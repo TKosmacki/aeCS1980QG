@@ -132,6 +132,7 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
         }
         render_template(self, 'confirmationPage.html', page_params)
 
+#Used for reviewing a single question, whether from the tables or from email
 class ReviewSingleQuestion(webapp2.RequestHandler):
     def get(self):
         id = self.request.get('id')
@@ -208,31 +209,15 @@ class test(webapp2.RequestHandler):
             is_admin = 1
         q = models.check_if_user_exists(id)
         page_params = {
-        'user_email': get_user_email(),
-        'login_url': users.create_login_url(),
-        'logout_url': users.create_logout_url('/'),
-        'user_id': id,
-        'admin' : is_admin
-        }
-        render_template(self, 'index.html', page_params)
-
-class AnswerQuestion(webapp2.RequestHandler):
-    def get(self):
-        #answerid = self.request.get('answerid')
-        #id = self.request.get('id')
-        review = models.get_oldest_questions(1)
-        is_admin = 0
-        if users.is_current_user_admin():
-            is_admin = 1
-        page_params = {
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
-            'review': review,
-            'admin': is_admin,
+            'user_id': id,
+            'admin' : is_admin
         }
-        render_template(self, 'answerQuestion.html',page_params)
+        render_template(self, 'index.html', page_params)
 
+#Handles everything that happens on the profile page
 class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
         if not get_user_email(): #stops from creating a profile if not logged in
@@ -311,22 +296,7 @@ class ImageHandlerQuestion(blobstore_handlers.BlobstoreDownloadHandler):
     except Exception:
      pass
 
-class submitQuiz(webapp2.RequestHandler):
-    def post(self):
-        is_admin = 0
-        if users.is_current_user_admin():
-            is_admin = 1
-        page_params = {
-            'user_email': get_user_email(),
-            'login_url': users.create_login_url(),
-            'logout_url': users.create_logout_url('/'),
-            'correctCount': numCorrect,
-            'totalCount': numTotal,
-            'question_obj': argQ,
-            'admin': is_admin,
-        }
-        render_template(self,'quizResults.html',page_params)
-
+#Processes the AJAX post for updating of the answer selected by the user in a quiz
 class answerSingle(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
@@ -340,58 +310,10 @@ class answerSingle(webapp2.RequestHandler):
         logging.warning(data['userSelection'])
         models.createAnswer(data['userID'],question.key,str(data['userSelection']))
 
-class submitAnswer(webapp2.RequestHandler):
-    def post(self):
-        id = self.request.get('hidden_questionid')
-        question = models.getQuestion(id)
-        if not question: #checks to make sure a question was actually fetched
-            #maybe redirect here instead of showing an empty question page, error page possibly
-            self.redirect('home')
-            logging.warning("no question found with that id")
-        answerid = question.answerid
-        questionid = self.request.get('userAnswer')
-        correctCount = self.request.get('hidden_correctCount')
-        totalCount = self.request.get('hidden_totalCount')
-        answerid = int(answerid)
-        questionid = int(questionid)
-        correctCount = int(correctCount)
-        totalCount = int(totalCount)
-        id = get_user_id()
-        is_admin = 0
-        if users.is_current_user_admin():
-            is_admin = 1
-        if (questionid == answerid):
-            correctCount = correctCount+1
-        totalCount = totalCount+1
-        if (totalCount == 10):
-            page_params = {
-                'user_email': get_user_email(),
-                'login_url': users.create_login_url(),
-                'logout_url': users.create_logout_url('/'),
-                'correctCount': correctCount,
-                'totalCount': totalCount,
-                'admin': is_admin,
-            }
-            render_template(self,'quizResults.html',page_params)
-            return
-        argQ = models.getQuestion(str(2+totalCount))
-        page_params = {
-            'user_email': get_user_email(),
-            'login_url': users.create_login_url(),
-            'logout_url': users.create_logout_url('/'),
-            'correctCount': correctCount,
-            'totalCount': totalCount,
-            'question_obj': argQ,
-            'user_id':id,
-            'admin': is_admin,
-        }
-        render_template(self,'answerSingle.html',page_params)
-
-
 def obj_dict(obj):
     return obj.__dict__
 
-
+#Fetches the quiz and passes the questions and relevant information to the page.
 class categoryQuiz(webapp2.RequestHandler):
     def get(self):
         is_admin = 0
@@ -404,19 +326,12 @@ class categoryQuiz(webapp2.RequestHandler):
         logging.warning(int(number))
         questions = models.getQuestionsCat(category,int(number))
 
-        #for i in questions:
-        #    self.response.out.write(json.dumps(i.to_intdict(exclude=['category','creator','accepted','up_voted','down_voted','create_datetime']))+"</br></br>")
-
-
         qList = []
         for q in questions:
-            temp = q.to_dict(exclude=['image_urlQ','category','creator','accepted','up_voters','down_voters','create_datetime'])
+            temp = q.to_dict(exclude=['image_urlQ','category','creator','accepted','up_voters','down_voters','create_date'])
             qList.append(temp)
-
         jList = json.dumps(qList, default=obj_dict)
-        #jList = json.dumps([temp.__dict__ for temp in qList])
-        #self.response.out.write("</br></br></br>")
-        #self.response.out.write(qList)
+        
         page_params = {
               'user_id': get_user_id(),
               'num': int(number),
@@ -453,6 +368,7 @@ class reportQuizHandler(webapp2.RequestHandler):
         subject = "A question has been reported"
         mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
 
+#Upvoting a question
 class addVote(webapp2.RequestHandler):
     def post(self):
         id = self.request.get("id")
@@ -461,6 +377,7 @@ class addVote(webapp2.RequestHandler):
         time.sleep(1)
         self.redirect("/ReviewNewQuestions") #maybe want a confirmation page
 
+#Downvoting a question
 class decVote(webapp2.RequestHandler):
     def post(self):
         id = self.request.get("id")
@@ -479,10 +396,7 @@ mappings = [
   ('/meanstackakalamestack', test),
   ('/ReviewNewQuestions', ReviewNewQuestions),
   ('/ReviewOldQuestions', ReviewOldQuestions),
-  ('/AnswerQuestion', AnswerQuestion),
-  ('/submitQuiz',submitQuiz),
   ('/answerSingle',answerSingle),
-  ('/submitAnswer',submitAnswer),
   ('/report', reportHandler),
   ('/reportQuiz', reportQuizHandler),
   ('/incrementVote' , addVote),

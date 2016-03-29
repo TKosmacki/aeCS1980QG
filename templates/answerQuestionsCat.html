@@ -67,12 +67,6 @@
         ans2.innerHTML = a2;
         ans3.innerHTML = a3;
         ans4.innerHTML = a4;
-        
-
-        
-
-        //used for reporting
-        document.getElementById("reportForm").action = "/reportQuiz?id=" + curr[counter].urlkey;
     }
 
     function score(){
@@ -225,6 +219,7 @@
             if( 4 == selection){
                 popAns4.style.fontWeight = "bold";
             }
+            
         clearTimeout(timerId); //stops timer
         var header = document.getElementById('title');
         $('#results').modal({ backdrop: 'static',keyboard: false })
@@ -260,9 +255,9 @@
         popAns3.style.fontWeight = "normal";
         popAns4.style.fontWeight = "normal";
         
-        
         runQuestion();
     }
+    //AJAX
     function sendReport(){
         $('#sendreport').modal('hide');
         var comment = document.getElementById('comment').value;
@@ -277,7 +272,6 @@
                     data: JSON.stringify({"comment": comment, "urlkey": urlkey})
                });
         confirm('Report Sent'); //maybe do something else here dunno what      
-        
     }
     function sendAnswer(userID, questKey, userAnswer){
         try{
