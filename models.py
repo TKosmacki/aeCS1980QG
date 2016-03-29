@@ -118,6 +118,8 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
     question.put()
     return question.key
 
+
+    
 #MODIFIERS
 ###############################################################################
 def update_profile(id, name, year, interests, bio, employer, image_url = None):
@@ -167,6 +169,10 @@ def decVote(id,email):
         if question.score < 0:
             question.score = 0
         question.put()
+
+def delete_question(key):
+    getQuestion(key).delete()
+    return
 
 #GETTERS
 ###############################################################################

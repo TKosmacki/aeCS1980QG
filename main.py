@@ -386,6 +386,13 @@ class decVote(webapp2.RequestHandler):
         time.sleep(1)
         self.redirect("/ReviewNewQuestions")
 
+class deleteQuestion(webapp2.RequestHandler):
+    def post(self):
+        logging.warning("here")
+        key = self.request.get(id)
+        models.delete_question(key)
+        self.redirect("/ReviewOldQuestions")
+        
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
@@ -393,6 +400,7 @@ mappings = [
   ('/submitNew', SubmitPageHandler),
   ('/NewQuestion', NewQuestion),
   ('/ReviewQuestion', ReviewSingleQuestion),
+  ('/deleteQuestion', deleteQuestion),
   ('/meanstackakalamestack', test),
   ('/ReviewNewQuestions', ReviewNewQuestions),
   ('/ReviewOldQuestions', ReviewOldQuestions),

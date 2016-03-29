@@ -1,4 +1,4 @@
 cron:
 - description: if question is upvoted enough, validates it
   url: /tasks/validate_questions
-  schedule: every 1 mins
+  schedule: every 5 mins
