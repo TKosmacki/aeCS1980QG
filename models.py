@@ -19,7 +19,6 @@ class User(ndb.Model):
     employer = ndb.StringProperty(default="University of Pittsburgh")
     bio = ndb.StringProperty()
     image_url = ndb.BlobKeyProperty()
-    score = ndb.IntegerProperty(default=0) #maybe have a score variable for each category
 
 class Answer(ndb.Model):
     questionKey = ndb.KeyProperty()
@@ -56,6 +55,13 @@ class Question(ndb.Model):
     image_urlQ = ndb.BlobKeyProperty()
     urlkey = ndb.StringProperty()
 
+class Score(ndb.Model):
+    category = ndb.StringProperty()
+    score = ndb.IntegerProperty()
+    day = ndb.StringProperty()
+    month = ndb.StringProperty()
+    year = ndb.StringProperty()
+
 #CREATORS
 ###############################################################################
 def createUser(id):
@@ -68,9 +74,19 @@ def createUser(id):
 
 #adds an Answer object to the Datastore, as a child of User 'userid'
 #updates Question with statistics
-def createAnswer(userid, questionKey, chosenAnswer):
+def createAnswer(userid, questionKey, chosenAnswer, points = 0):
     answer = Answer(parent=ndb.Key(User, userid), )
     question = getQuestion(questionKey)
+
+    scoreList = Score.query(Score.category == question.category, ancestor = ndb.Key(User, userid)).fetch(1)
+
+    #Score hasn't been created
+    if len(scoreList) == 0:
+        logging.warning("Score does not exist yet")
+        createScore(userid, question.category, points)
+    else:
+        logging.warning("Score exists, updating...")
+        updateScore(userid, question.category, points)
 
     answer.questionKey = questionKey
     answer.chosenAnswer = chosenAnswer
@@ -100,6 +116,19 @@ def createAnswer(userid, questionKey, chosenAnswer):
 
     question.put()
     answer.put()
+
+def createScore(userid, category, points):
+    scoreObj = Score(parent=ndb.Key(User, userid))
+    scoreObj.category = category
+    scoreObj.score = points
+    scoreObj.put()
+
+def updateScore(userid, category, points):
+    scoreList = Score.query(Score.category == category, ancestor = ndb.Key(User,
+        userid)).fetch(1)
+    scoreObj = scoreList[0]
+    scoreObj.score = scoreObj.score + points
+    scoreObj.put()
 
 #creates and stores question in database
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
