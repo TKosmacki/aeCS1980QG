@@ -52,21 +52,29 @@
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
+        var rating = document.getElementById("numVotes");
         curr = "{{question_list}}";
         curr = curr.replace(/&quot;/g,'"');
         curr = curr.replace(/[\u0000-\u0019]+/g,"");
         curr = JSON.parse(curr);
-        var q = curr[counter].question;
-        var a1 = curr[counter].answer1;
-        var a2 = curr[counter].answer2;
-        var a3 = curr[counter].answer3;
-        var a4 = curr[counter].answer4;
         questkey = curr[counter].urlkey;
-        quest.innerHTML = q;
-        ans1.innerHTML = a1;
-        ans2.innerHTML = a2;
-        ans3.innerHTML = a3;
-        ans4.innerHTML = a4;
+        quest.innerHTML = curr[counter].question;
+        ans1.innerHTML = curr[counter].answer1;
+        ans2.innerHTML = curr[counter].answer2;
+        ans3.innerHTML = curr[counter].answer3;
+        ans4.innerHTML = curr[counter].answer4;
+        if(curr[counter].rating < 0){
+            rating.innerHTML = curr[counter].rating + " votes";
+            rating.style.color = "#f44336";
+        }
+        else if( curr[counter].rating == 0){
+            rating.innerHTML = curr[counter].rating + " votes";
+            rating.style.color = "black";
+        }
+        else{
+            rating.innerHTML = curr[counter].rating + " votes";
+            rating.style.color = "#00933B";
+        }
     }
 
     function score(){
@@ -139,6 +147,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button onclick="vote(1)" class="btn btn-success fa fa-arrow-up pull-left"></button>
+                    <button onclick="vote(0)" class="btn btn-danger fa fa-arrow-down pull-left"></button>
+                    <p style="display:inline" class="btn btn-link pull-left" id="numVotes">15 votes</p>
                     <a class="btn btn-default text-left" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
                     <button class="btn btn-primary text-right" onclick="runNextQuestion()">Next Question</button>
                 </div>
@@ -170,7 +181,29 @@
 
 <script>
     window.onload = start();
-
+    function vote(direction){
+        alert(direction);
+        var urlkey = curr[counter].urlkey;
+        if (direction == 1){
+            $.ajax({
+                        type: "POST",
+                        url: "/addVoteQuiz",
+                        contentType: "application/json; charset=utf-8",
+                        //dataType: 'json',
+                        data: JSON.stringify({"urlkey": urlkey})
+                   });
+        }
+        if (direction == 0){
+            $.ajax({
+                            type: "POST",
+                            url: "/decVoteQuiz",
+                            contentType: "application/json; charset=utf-8",
+                            //dataType: 'json',
+                            data: JSON.stringify({"urlkey": urlkey})
+                       });
+        }
+        return;
+    }
     function submit(selection){
         var a1 = curr[counter].answer1;
         var a2 = curr[counter].answer2;

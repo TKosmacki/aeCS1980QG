@@ -49,6 +49,9 @@ class Question(ndb.Model):
     accepted = ndb.BooleanProperty(default=False)
     up_voters = ndb.StringProperty(repeated=True)
     down_voters = ndb.StringProperty(repeated=True)
+    up_votes = ndb.IntegerProperty(default = 0)
+    down_votes = ndb.IntegerProperty(default = 0)
+    rating = ndb.ComputedProperty(lambda self:  self.up_votes - self.down_votes)
     score = ndb.IntegerProperty(default=0)
     image_urlQ = ndb.BlobKeyProperty()
     urlkey = ndb.StringProperty()
@@ -149,12 +152,10 @@ def addVote(id,email):
 
     if not check_if_up_voted(question.up_voters, email):
         question.up_voters.append(email)
+        question.up_votes+=1
         if check_if_down_voted(question.down_voters, email):
             question.down_voters.remove(email)
-
-        question.score = len(question.up_voters) - len(question.down_voters)
-        if question.score < 0:
-            question.score = 0
+            question.down_votes-=1
         question.put()
 
 def decVote(id,email):
@@ -162,12 +163,10 @@ def decVote(id,email):
 
     if not check_if_down_voted(question.down_voters, email):
         question.down_voters.append(email)
+        question.down_votes+=1
         if check_if_up_voted(question.up_voters, email):
             question.up_voters.remove(email)
-
-        question.score = len(question.up_voters) - len(question.down_voters)
-        if question.score < 0:
-            question.score = 0
+            question.up_votes-=1
         question.put()
 
 def delete_question(key):
@@ -212,12 +211,15 @@ def getQuestionFromURL(key):
     return key.get()
 
 def getQuestionsCat(category,number):
-    q = Question.query(Question.category == category)
-    #still need to random
+    q = Question.query(Question.category == category, Question.accepted == True)
     questions = list()
-    for i in q.fetch(number):
+    for i in q.fetch():
         questions.append(i)
-    return questions
+    random.shuffle(questions)
+    results = list()
+    for i in range(0,number):
+        results.append(questions[i]) 
+    return results
 
 def check_if_up_voted(has_up_voted,email):
     if email in has_up_voted:
