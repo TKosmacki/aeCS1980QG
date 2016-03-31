@@ -123,9 +123,9 @@
         </div>
         <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
     </font>
-    
+
     <div class="container" id="timer" style="text-align:center"><p>15</p></div>
-    
+
     <!--Results Modal-->
     <div class="modal fade" data-keyboard="false" id ="results" role="dialog">
         <div class="modal-dialog">
@@ -156,7 +156,7 @@
             </div>
         </div>
     </div>
-    
+
     <!--Report Modal-->
     <div style="z-index:2147483646;" class="modal fade" id="sendreport" role="dialog">
 		<div class="modal-dialog">
@@ -176,7 +176,7 @@
 			</div>
 		</div>
 	</div>
-    
+
 </body>
 
 <script>
@@ -252,7 +252,7 @@
         if( 4 == selection){
             popAns4.style.fontWeight = "bold";
         }
-            
+
         clearTimeout(timerId); //stops timer
         var header = document.getElementById('title');
         $('#results').modal({ backdrop: 'static',keyboard: false })
@@ -260,12 +260,18 @@
 
         if(selection == curr[counter].answerid){ //changes the header to green if correct
             header.innerHTML = "<h3 style='color:green; display:'inline;'>Correct</h3>";
+            var snd = new Audio("/static/sounds/smw_message_block.wav");
+            snd.play();
             $('#results').modal('show');
+            snd.currentTime=0;
             sendAnswer(userid,questkey,selection);
             //logic for score in here
         }
         else{ //red if incorrect
             header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect</h3>";
+            var snd = new Audio("/static/sounds/smw_yoshi_spit.wav");
+            snd.play();
+            snd.currentTime=0;
             $('#results').modal('show');
             sendAnswer(userid,questkey,selection);
         }
@@ -287,7 +293,7 @@
         popAns2.style.fontWeight = "normal";
         popAns3.style.fontWeight = "normal";
         popAns4.style.fontWeight = "normal";
-        
+
         runQuestion();
     }
     //AJAX
@@ -304,7 +310,7 @@
                     //dataType: 'json',
                     data: JSON.stringify({"comment": comment, "urlkey": urlkey})
                });
-        confirm('Report Sent'); //maybe do something else here dunno what      
+        confirm('Report Sent'); //maybe do something else here dunno what
     }
     function sendAnswer(userID, questKey, userAnswer){
         try{
