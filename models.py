@@ -131,7 +131,8 @@ def update_profile(id, name, year, interests, bio, employer, image_url = None):
     profile.put()
     memcache.set(id, profile, namespace="profile")
     
-def updateQuestion(questKey,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
+def updateQuestion(urlkey,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
+    questKey=ndb.Key(urlsafe=urlkey)
     question = questKey.get()
     question.category=category
     question.question=questionIn

@@ -133,7 +133,7 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
         render_template(self, 'confirmationPage.html', page_params)
 
 #Used for reviewing a single question, whether from the tables or from email
-class ReviewSingleQuestion(webapp2.RequestHandler):
+class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
         id = self.request.get('id')
         uID = get_user_id()
@@ -143,6 +143,7 @@ class ReviewSingleQuestion(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
+	    'upload_urlQE': blobstore.create_upload_url('/ReviewQuestion?id=' + id),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
@@ -151,6 +152,70 @@ class ReviewSingleQuestion(webapp2.RequestHandler):
             'admin' : is_admin
         }
         render_template(self, 'questionReview.html', page_params)
+    def post(self):
+	#try to upload an image
+        try:
+            upload_files = self.get_uploads()
+            blob_info = upload_files[0]
+            type = blob_info.content_type
+            id = self.request.get('id')
+	    explanation = models.getQuestionFromURL(id).explanation
+            if not explanation:
+              explanation = "No Explanation Provided"
+            category = models.getQuestionFromURL(id).category
+	    creator = models.getQuestionFromURL(id).creator
+	    questionIn = self.request.get('questiontext')
+            answer1 = self.request.get('answer1')
+            answer2 = self.request.get('answer2')
+            answer3 = self.request.get('answer3')
+            answer4 = self.request.get('answer4')
+            answerid = self.request.get('answerid')
+	    logging.warning(category)
+	    logging.warning(creator)
+	    logging.warning(questionIn)
+	    logging.warning(answer1)
+	    logging.warning(answer2)
+	    logging.warning(answer3)
+	    logging.warning(answer4)
+	    logging.warning('Signed by anonymous user')
+            # if the uploaded file is an image
+            if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
+                image = blob_info.key()
+		models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True,image)
+
+            # if the uploaded file is not an image
+            else:
+		models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
+
+            self.redirect('/ReviewQuestion?id=' + id)
+        # no image to upload
+        except IndexError:
+            id = self.request.get('id')
+	    explanation = models.getQuestionFromURL(id).explanation
+            if not explanation:
+              explanation = "No Explanation Provided"
+            category = models.getQuestionFromURL(id).category
+	    creator = models.getQuestionFromURL(id).creator
+            questionIn = self.request.get('questiontext')
+            answer1 = self.request.get('answer1')
+            answer2 = self.request.get('answer2')
+            answer3 = self.request.get('answer3')
+            answer4 = self.request.get('answer4')
+            answerid = self.request.get('answerid')
+	    logging.warning(explanation)
+	    logging.warning(category)
+	    logging.warning(creator)
+	    logging.warning(questionIn)
+	    logging.warning(answer1)
+	    logging.warning(answer2)
+	    logging.warning(answer3)
+	    logging.warning(answer4)
+	    logging.warning('Signed by anonymous user')
+	    models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
+            #models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
+
+        self.redirect('/ReviewQuestion?id=' + id)
+	
 
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewNewQuestions(webapp2.RequestHandler):
@@ -392,6 +457,7 @@ class deleteQuestion(webapp2.RequestHandler):
         key = self.request.get(id)
         models.delete_question(key)
         self.redirect("/ReviewOldQuestions")
+
         
 ###############################################################################
 mappings = [
