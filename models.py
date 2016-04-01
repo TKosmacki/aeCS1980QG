@@ -186,7 +186,9 @@ def addVote(id,email):
             question.down_voters.remove(email)
             question.down_votes-=1
         question.put()
-
+        return True
+        
+    return False
 def decVote(id,email):
     question = getQuestionFromURL(id)
 
@@ -197,6 +199,9 @@ def decVote(id,email):
             question.up_voters.remove(email)
             question.up_votes-=1
         question.put()
+        return True
+        
+    return False
 
 def delete_question(key):
     getQuestion(key).delete()
@@ -335,5 +340,3 @@ def populateAnswers():
         questions = Question.query()
         for question in questions:
             createAnswer(user.user_id, question.key, str(random.randint(1,4)))
-
-

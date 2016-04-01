@@ -10,7 +10,8 @@
     var counter = -1;
     var curr;
     var timerId;
-
+    var ratingNum;
+    var ratingDiv;
     var questkey;
     var userid = "{{user_id}}";
 
@@ -52,29 +53,20 @@
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
-        var rating = document.getElementById("numVotes");
+        ratingDiv = document.getElementById("numVotes");
         curr = "{{question_list}}";
         curr = curr.replace(/&quot;/g,'"');
         curr = curr.replace(/[\u0000-\u0019]+/g,"");
         curr = JSON.parse(curr);
+        ratingNum = curr[counter].rating;
         questkey = curr[counter].urlkey;
         quest.innerHTML = curr[counter].question;
         ans1.innerHTML = curr[counter].answer1;
         ans2.innerHTML = curr[counter].answer2;
         ans3.innerHTML = curr[counter].answer3;
         ans4.innerHTML = curr[counter].answer4;
-        if(curr[counter].rating < 0){
-            rating.innerHTML = curr[counter].rating + " votes";
-            rating.style.color = "#f44336";
-        }
-        else if( curr[counter].rating == 0){
-            rating.innerHTML = curr[counter].rating + " votes";
-            rating.style.color = "black";
-        }
-        else{
-            rating.innerHTML = curr[counter].rating + " votes";
-            rating.style.color = "#00933B";
-        }
+        ratingDiv.innerHTML = "Rating: " + ratingNum;
+        ratingDiv.style.color = "black";
     }
 
     function score(){
@@ -182,7 +174,6 @@
 <script>
     window.onload = start();
     function vote(direction){
-        alert(direction);
         var urlkey = curr[counter].urlkey;
         if (direction == 1){
             $.ajax({
@@ -190,16 +181,29 @@
                         url: "/addVoteQuiz",
                         contentType: "application/json; charset=utf-8",
                         //dataType: 'json',
-                        data: JSON.stringify({"urlkey": urlkey})
+                        data: JSON.stringify({"urlkey": urlkey}),
+                        success : function(text){
+                            if (text.incced == true){
+                                ratingNum++;
+                                ratingDiv.innerHTML = "Rating: " + ratingNum;
+                            }
+                        }
                    });
         }
         if (direction == 0){
             $.ajax({
-                            type: "POST",
-                            url: "/decVoteQuiz",
-                            contentType: "application/json; charset=utf-8",
-                            //dataType: 'json',
-                            data: JSON.stringify({"urlkey": urlkey})
+                        type: "POST",
+                        url: "/decVoteQuiz",
+                        contentType: "application/json; charset=utf-8",
+                        //dataType: 'json',
+                        data: JSON.stringify({"urlkey": urlkey}),
+                        success : function(text){
+                            if (text.decced == true){
+                                ratingNum--;
+                                ratingDiv.innerHTML = "Rating: " + ratingNum;
+                                //decrement vote
+                            }
+                        }
                        });
         }
         return;
@@ -223,6 +227,7 @@
         var s2p = Math.round((s2 / total) * 100);
         var s3p = Math.round((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
+        if (s4p<0){ s4p = 0; }
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
         popAns3.innerHTML = a3 + " (" + s3p + "%)";
