@@ -454,6 +454,37 @@ class decVote(webapp2.RequestHandler):
         models.decVote(id,email)
         time.sleep(1)
         self.redirect("/ReviewNewQuestions")
+        
+#Upvoting a question
+class addVoteQuiz(webapp2.RequestHandler):
+    def post(self):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        id = data['urlkey']
+        email = get_user_email()
+        result = {}
+        temp = models.addVote(id,email)
+        logging.warning(temp)
+        result['incced'] = temp
+        logging.warning(result)
+        self.response.out.write('Content-Type: application/json\n\n')
+        self.response.out.write(json.dumps(result))
+
+#Downvoting a question
+class decVoteQuiz(webapp2.RequestHandler):
+    def post(self):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        id = data['urlkey']
+        email = get_user_email()
+        temp = models.decVote(id,email)
+        logging.warning(temp)
+        result = {}
+        result['decced'] = temp
+        self.response.out.write('Content-Type: application/json\n\n')
+        self.response.out.write(json.dumps(result))
 
 class deleteQuestion(webapp2.RequestHandler):
     def post(self):
@@ -477,9 +508,11 @@ mappings = [
   ('/report', reportHandler),
   ('/reportQuiz', reportQuizHandler),
   ('/incrementVote' , addVote),
+  ('/decrementVote', decVote),
+  ('/addVoteQuiz', addVoteQuiz),
+  ('/decVoteQuiz', decVoteQuiz),
   ('/image', ImageHandler),
   ('/imageQ', ImageHandlerQuestion),
-  ('/decrementVote', decVote),
   ('/takeQuiz', categoryQuiz),
   ('/firstLogin', LoginPageHandler),
   ('/leaderboard', LeaderBoard)
