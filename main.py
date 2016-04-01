@@ -396,7 +396,7 @@ class categoryQuiz(webapp2.RequestHandler):
             temp = q.to_dict(exclude=['image_urlQ','category','creator','accepted','up_voters','down_voters','create_date'])
             qList.append(temp)
         jList = json.dumps(qList, default=obj_dict)
-        
+
         page_params = {
               'user_id': get_user_id(),
               'num': int(number),
@@ -433,6 +433,10 @@ class reportQuizHandler(webapp2.RequestHandler):
         subject = "A question has been reported"
         mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
 
+class LeaderBoard(webapp2.RequestHandler):
+    def get(self):
+        render_template(self, 'leaderboard.html')
+        
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
     def post(self):
@@ -458,7 +462,6 @@ class deleteQuestion(webapp2.RequestHandler):
         models.delete_question(key)
         self.redirect("/ReviewOldQuestions")
 
-        
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
@@ -478,6 +481,7 @@ mappings = [
   ('/imageQ', ImageHandlerQuestion),
   ('/decrementVote', decVote),
   ('/takeQuiz', categoryQuiz),
-  ('/firstLogin', LoginPageHandler)
+  ('/firstLogin', LoginPageHandler),
+  ('/leaderboard', LeaderBoard)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

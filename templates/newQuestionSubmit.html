@@ -11,7 +11,7 @@
         <h3>New Question Submission</h3>
         <hr>
         <form action="{{upload_urlQ}}" enctype="multipart/form-data" method="post"><font size = 5>
-            Category:
+            Category</br>
             <select id="Category" name="category" method="POST" >
                 <option value="PHARM 2001">PHARM 2001</option>
                 <option value="PHARM 3023">PHARM 3023</option>
@@ -19,11 +19,11 @@
                 <option value="PHARM 3040">PHARM 3040</option>
                 <option value="PHARM 5218">PHARM 5218</option>
             </select>
-            </br><br>
-            Question:
-            <input type="text" size = "45" name="questiontext" method=POST required>
-            <br><br>
-            Answers:
+        </br></br>
+            Question
+            <textarea type="text" name="questiontext" class="form-control" rows="1" METHOD=POST maxlength="144" required></textarea>
+        </br>
+            Answers
             <ol>
                 <li class="red-text">
                 <input type="text" method=POST name="answer1" size = "30" maxlength="30" required>
@@ -38,6 +38,7 @@
                 <input type="text" method=POST name="answer4" size = "30" maxlength="30" required>
                 </li>
             </ol>
+        </br>
 	    Import Image:
 	    <input type="file" class="form-control" name="file" id="Location">
             Explanation:<br>
