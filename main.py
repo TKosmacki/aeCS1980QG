@@ -294,6 +294,8 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+
+        categoryScores = models.getCatUserScore(get_user_id())
         page_params = {
             'upload_url': blobstore.create_upload_url('/profile'),
             'user_email': get_user_email(),
@@ -301,6 +303,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             'logout_url': users.create_logout_url('/'),
             'user_id': get_user_id(),
             'profile': models.get_User(id),
+            'categoryScores':categoryScores,
             'admin': is_admin,
         }
         render_template(self, 'profile.html', page_params)
@@ -395,6 +398,7 @@ class categoryQuiz(webapp2.RequestHandler):
             temp = q.to_dict(exclude=['image_urlQ','category','creator','accepted','up_voters','down_voters','create_date'])
             qList.append(temp)
         jList = json.dumps(qList, default=obj_dict)
+        logging.warning(jList)
 
         page_params = {
             'user_id': get_user_id(),

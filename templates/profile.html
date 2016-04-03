@@ -1,6 +1,50 @@
 {% extends "_base.html" %}
 {% block bodycontent %}
-<body>
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var curr = "{{categoryScores}}";
+        curr = curr.replace(/&quot;/g, '"');
+        curr = curr.replace(/[\u0000-\u0019]+/g,"");
+        curr = JSON.parse(curr);
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Score');
+        for (score in curr)
+        {
+            data.addRows([[curr[score].category, curr[score].score]]);
+        }
+
+        // Set chart options
+        var options = {'title':'How Much Pizza I Ate Last Night',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div"></div>
 	<br><br><br>
 	{% if user_email %}
 
@@ -90,5 +134,6 @@
         <h1 style="position:absolute; top:50%; left:20%;">You Must Be An Logged In to View This Page!</h1>
     </div>
 	{% endif %}
-</body>
 {% endblock %}
+
+
