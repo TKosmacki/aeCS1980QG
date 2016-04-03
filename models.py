@@ -79,7 +79,6 @@ def createUser(id):
 def createAnswer(userid, questionKey, chosenAnswer, points = 0):
     answer = Answer(parent=ndb.Key(User, userid), )
     question = getQuestion(questionKey)
-    logging.warning(user.name + str(user.totalScore))
 
     scoreList = Score.query(Score.category == question.category, ancestor = ndb.Key(User, userid)).fetch(1)
 
@@ -93,7 +92,6 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
     rightAnswer = question.answerid
     if int(chosenAnswer) == int(rightAnswer):
         question.correctAnswers += 1
-        #logging.warning("Answered Correctly")
         answer.correct = True
         correctFlag = True
     else:
@@ -103,14 +101,11 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
 
     #Score hasn't been created
     if len(scoreList) == 0:
-        logging.warning("Score does not exist yet")
         if correctFlag == True:
             createScore(userid, question.category, points)
-            logging.warning("ALERT: 69")
         else:
             createScore(userid, question.category, 0)
     else:
-        logging.warning("Score exists, updating...")
         if correctFlag:
             updateScore(userid, question.category, points)
 
