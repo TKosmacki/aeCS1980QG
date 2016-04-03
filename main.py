@@ -485,8 +485,12 @@ class decVoteQuiz(webapp2.RequestHandler):
 
 class deleteQuestion(webapp2.RequestHandler):
     def post(self):
-        logging.warning("here")
-        key = self.request.get(id)
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        logging.warning("HERE")
+        key = data['urlkey']
+        logging.warning(key)
         models.delete_question(key)
         self.redirect("/ReviewOldQuestions")
 
