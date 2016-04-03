@@ -46,7 +46,7 @@ class MainPageHandler(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
-	page_params = {
+        page_params = {
         'user_email': get_user_email(),
         'login_url': users.create_login_url('/firstLogin'),
         'logout_url': users.create_logout_url('/'),
@@ -143,7 +143,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
         if users.is_current_user_admin():
             is_admin = 1
         page_params = {
-	    'upload_urlQE': blobstore.create_upload_url('/ReviewQuestion?id=' + id),
+            'upload_urlQE': blobstore.create_upload_url('/ReviewQuestion?id=' + id),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
@@ -153,69 +153,68 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
         }
         render_template(self, 'questionReview.html', page_params)
     def post(self):
-	#try to upload an image
+        #try to upload an image
         try:
             upload_files = self.get_uploads()
             blob_info = upload_files[0]
             type = blob_info.content_type
             id = self.request.get('id')
-	    explanation = models.getQuestionFromURL(id).explanation
+            explanation = models.getQuestionFromURL(id).explanation
             if not explanation:
-              explanation = "No Explanation Provided"
+                explanation = "No Explanation Provided"
             category = models.getQuestionFromURL(id).category
-	    creator = models.getQuestionFromURL(id).creator
-	    questionIn = self.request.get('questiontext')
-            answer1 = self.request.get('answer1')
-            answer2 = self.request.get('answer2')
-            answer3 = self.request.get('answer3')
-            answer4 = self.request.get('answer4')
-            answerid = self.request.get('answerid')
-	    logging.warning(category)
-	    logging.warning(creator)
-	    logging.warning(questionIn)
-	    logging.warning(answer1)
-	    logging.warning(answer2)
-	    logging.warning(answer3)
-	    logging.warning(answer4)
-	    logging.warning('Signed by anonymous user')
-            # if the uploaded file is an image
-            if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
-                image = blob_info.key()
-		models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True,image)
-
-            # if the uploaded file is not an image
-            else:
-		models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
-
-            self.redirect('/ReviewQuestion?id=' + id)
-        # no image to upload
-        except IndexError:
-            id = self.request.get('id')
-	    explanation = models.getQuestionFromURL(id).explanation
-            if not explanation:
-              explanation = "No Explanation Provided"
-            category = models.getQuestionFromURL(id).category
-	    creator = models.getQuestionFromURL(id).creator
+            creator = models.getQuestionFromURL(id).creator
             questionIn = self.request.get('questiontext')
             answer1 = self.request.get('answer1')
             answer2 = self.request.get('answer2')
             answer3 = self.request.get('answer3')
             answer4 = self.request.get('answer4')
             answerid = self.request.get('answerid')
-	    logging.warning(explanation)
-	    logging.warning(category)
-	    logging.warning(creator)
-	    logging.warning(questionIn)
-	    logging.warning(answer1)
-	    logging.warning(answer2)
-	    logging.warning(answer3)
-	    logging.warning(answer4)
-	    logging.warning('Signed by anonymous user')
-	    models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
-            #models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
+            logging.warning(category)
+            logging.warning(creator)
+            logging.warning(questionIn)
+            logging.warning(answer1)
+            logging.warning(answer2)
+            logging.warning(answer3)
+            logging.warning(answer4)
+            logging.warning('Signed by anonymous user')
+                # if the uploaded file is an image
+            if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
+                image = blob_info.key()
+                models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True,image)
+
+                # if the uploaded file is not an image
+            else:
+                models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
+
+                self.redirect('/ReviewQuestion?id=' + id)
+        # no image to upload
+        except IndexError:
+            id = self.request.get('id')
+            explanation = models.getQuestionFromURL(id).explanation
+            if not explanation:
+                explanation = "No Explanation Provided"
+            category = models.getQuestionFromURL(id).category
+            creator = models.getQuestionFromURL(id).creator
+            questionIn = self.request.get('questiontext')
+            answer1 = self.request.get('answer1')
+            answer2 = self.request.get('answer2')
+            answer3 = self.request.get('answer3')
+            answer4 = self.request.get('answer4')
+            answerid = self.request.get('answerid')
+            logging.warning(explanation)
+            logging.warning(category)
+            logging.warning(creator)
+            logging.warning(questionIn)
+            logging.warning(answer1)
+            logging.warning(answer2)
+            logging.warning(answer3)
+            logging.warning(answer4)
+            logging.warning('Signed by anonymous user')
+            models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
+                #models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
 
         self.redirect('/ReviewQuestion?id=' + id)
-	
 
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewNewQuestions(webapp2.RequestHandler):
@@ -373,7 +372,7 @@ class answerSingle(webapp2.RequestHandler):
         logging.warning(data['qKey'])
         question = models.getQuestionFromURL(data['qKey'])
         logging.warning(data['userSelection'])
-        models.createAnswer(data['userID'],question.key,str(data['userSelection']))
+        models.createAnswer(data['userID'],question.key,str(data['userSelection']), 10)
 
 def obj_dict(obj):
     return obj.__dict__
@@ -398,13 +397,13 @@ class categoryQuiz(webapp2.RequestHandler):
         jList = json.dumps(qList, default=obj_dict)
 
         page_params = {
-              'user_id': get_user_id(),
-              'num': int(number),
-              'question_list' : jList,
-              'user_email': get_user_email(),
-              'login_url': users.create_login_url(),
-              'logout_url': users.create_logout_url('/'),
-			  'admin': is_admin,
+            'user_id': get_user_id(),
+            'num': int(number),
+            'question_list' : jList,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
             }
         render_template(self, 'answerQuestionsCat.html', page_params)
 
@@ -436,7 +435,7 @@ class reportQuizHandler(webapp2.RequestHandler):
 class LeaderBoard(webapp2.RequestHandler):
     def get(self):
         render_template(self, 'leaderboard.html')
-        
+
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
     def post(self):
@@ -454,7 +453,7 @@ class decVote(webapp2.RequestHandler):
         models.decVote(id,email)
         time.sleep(1)
         self.redirect("/ReviewNewQuestions")
-        
+
 #Upvoting a question
 class addVoteQuiz(webapp2.RequestHandler):
     def post(self):

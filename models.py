@@ -1,3 +1,4 @@
+import json
 import random
 import logging
 import os
@@ -19,6 +20,7 @@ class User(ndb.Model):
     employer = ndb.StringProperty(default="University of Pittsburgh")
     bio = ndb.StringProperty()
     image_url = ndb.BlobKeyProperty()
+    totalScore = ndb.IntegerProperty(default = 0)
 
 class Answer(ndb.Model):
     questionKey = ndb.KeyProperty()
@@ -74,31 +76,44 @@ def createUser(id):
 
 #adds an Answer object to the Datastore, as a child of User 'userid'
 #updates Question with statistics
+#updates Score object per category
 def createAnswer(userid, questionKey, chosenAnswer, points = 0):
     answer = Answer(parent=ndb.Key(User, userid), )
     question = getQuestion(questionKey)
+    logging.warning(user.name + str(user.totalScore))
 
     scoreList = Score.query(Score.category == question.category, ancestor = ndb.Key(User, userid)).fetch(1)
 
-    #Score hasn't been created
-    if len(scoreList) == 0:
-        logging.warning("Score does not exist yet")
-        createScore(userid, question.category, points)
-    else:
-        logging.warning("Score exists, updating...")
-        updateScore(userid, question.category, points)
 
     answer.questionKey = questionKey
     answer.chosenAnswer = chosenAnswer
     answer.category = question.category
 
+    correctFlag = False
+
     rightAnswer = question.answerid
     if int(chosenAnswer) == int(rightAnswer):
         question.correctAnswers += 1
+        #logging.warning("Answered Correctly")
         answer.correct = True
+        correctFlag = True
     else:
         question.incorrectAnswers += 1
         answer.correct = False
+        correctFlag = False
+
+    #Score hasn't been created
+    if len(scoreList) == 0:
+        logging.warning("Score does not exist yet")
+        if correctFlag == True:
+            createScore(userid, question.category, points)
+            logging.warning("ALERT: 69")
+        else:
+            createScore(userid, question.category, 0)
+    else:
+        logging.warning("Score exists, updating...")
+        if correctFlag:
+            updateScore(userid, question.category, points)
 
     question.totalAnswers += 1
 
@@ -123,12 +138,6 @@ def createScore(userid, category, points):
     scoreObj.score = points
     scoreObj.put()
 
-def updateScore(userid, category, points):
-    scoreList = Score.query(Score.category == category, ancestor = ndb.Key(User,
-        userid)).fetch(1)
-    scoreObj = scoreList[0]
-    scoreObj.score = scoreObj.score + points
-    scoreObj.put()
 
 #creates and stores question in database
 def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
@@ -175,6 +184,13 @@ def updateQuestion(urlkey,category,questionIn,answer1,answer2,answer3,answer4,an
     question.accepted=valid
     question.image_urlQ=image_urlQ
     question.put()
+
+def updateScore(userid, category, points):
+    scoreList = Score.query(Score.category == category, ancestor = ndb.Key(User,
+        userid)).fetch(1)
+    scoreObj = scoreList[0]
+    scoreObj.score = scoreObj.score + points
+    scoreObj.put()
 
 #increments the vote counter
 def addVote(id,email):
@@ -227,11 +243,12 @@ def get_category_answers(inCategory):
     return answers
 
 def get_User(id):
-    result = memcache.get(id, namespace="profile")
-    if not result:
-        result = ndb.Key(User, id).get()
-        memcache.set(id, result, namespace="profile")
-    return result
+    return User.query(User.user_id == id).fetch(1)[0]
+    #result = memcache.get(id, namespace="profile")
+    #if not result:
+    #    result = ndb.Key(User, id).get()
+    #    memcache.set(id, result, namespace="profile")
+    #return result
 
 def get_image(image_id):
   return ndb.Key(urlsafe=image_id).get()
@@ -276,6 +293,34 @@ def get_oldest_questions(num,val):
         query.order(Question.create_date)
 
     return query.fetch(num)
+
+#returns JSON list of {category, score} for a given user
+def getCatUserScore(userid):
+    user = get_User(userid)
+    scores = Score.query(ancestor = ndb.Key(User, userid))
+    scoreList = []
+    for score in scores:
+        temp = score.to_dict(include=['category', 'score'])
+        scoreList.append(temp)
+    jsonList = json.dumps(scoreList, default = obj_dict)
+    logging.warning("JSON: "+jsonList)
+    return jsonList
+
+def getAllUserScores():
+    users = User.query()
+    scoreList = dict()
+    for user in users:
+        scores = Score.query(ancestor = ndb.Key(User, user.user_id))
+        counter = 0
+        for score in scores:
+            counter += score.score
+        scoreList[user.name] = counter
+    jsonList = json.dumps(scoreList, default = obj_dict)
+    logging.warning("JSON: "+jsonList)
+    return jsonList
+
+
+     
 
 #UTILITY
 ###############################################################################
@@ -340,4 +385,8 @@ def populateAnswers():
     for user in users:
         questions = Question.query()
         for question in questions:
-            createAnswer(user.user_id, question.key, str(random.randint(1,4)))
+            createAnswer(user.user_id, question.key, str(random.randint(1,4)), 10)
+
+
+def obj_dict(obj):
+    return obj.__dict__
