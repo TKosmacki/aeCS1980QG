@@ -7,7 +7,7 @@
     <script type="text/javascript">
 
       // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart']});
+      google.charts.load('current', {'packages':['bar']});
 
       // Set a callback to run when the Google Visualization API is loaded.
       google.charts.setOnLoadCallback(drawChart);
@@ -18,34 +18,35 @@
       function drawChart() {
 
         // Create the data table.
-        var curr = "{{categoryScores}}";
-        curr = curr.replace(/&quot;/g, '"');
-        curr = curr.replace(/[\u0000-\u0019]+/g,"");
-        curr = JSON.parse(curr);
+        var curr = {{categoryScores|safe}};
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Category');
         data.addColumn('number', 'Score');
-        for (score in curr)
+        for (i in curr)
         {
-            data.addRows([[curr[score].category, curr[score].score]]);
+            data.addRows([[curr[i].category, curr[i].score]]);
         }
 
         // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
-                       'width':400,
-                       'height':300};
+        var options = {
+                       bars : 'vertical',
+                       vAxis : {minorGridlines : {count:5}},
+                       colors : ['#aaaaaa'],
+                       height: 500,
+                       width: 500,
+                       legend: {position : 'none'},
+                       titlePosition : 'none',
+        };
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+        var chart = new
+            google.charts.Bar(document.getElementById('barchart_material'));
         chart.draw(data, options);
       }
     </script>
   </head>
 
   <body>
-    <!--Div that will hold the pie chart-->
-    <div id="chart_div"></div>
-	<br><br><br>
 	{% if user_email %}
 
 	<div class= "container col-lg-12s">
@@ -128,6 +129,9 @@
 		</div>
 	</div>
 	
+    <!--Div that will hold the pie chart-->
+    <div id="barchart_material"></div>
+	<br><br><br>
 	{% else %}
     <div class = "intro container">
         <br><br><br>
