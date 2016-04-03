@@ -20,7 +20,6 @@ class User(ndb.Model):
     employer = ndb.StringProperty(default="University of Pittsburgh")
     bio = ndb.StringProperty()
     image_url = ndb.BlobKeyProperty()
-    totalScore = ndb.IntegerProperty(default = 0)
 
 class Answer(ndb.Model):
     questionKey = ndb.KeyProperty()
@@ -243,7 +242,10 @@ def get_category_answers(inCategory):
     return answers
 
 def get_User(id):
-    return User.query(User.user_id == id).fetch(1)[0]
+    query =  User.query(User.user_id == id).fetch(1)
+    if len(query) == 0:
+        return None
+    return query[0]
     #result = memcache.get(id, namespace="profile")
     #if not result:
     #    result = ndb.Key(User, id).get()
@@ -263,7 +265,11 @@ def getQuestionFromURL(key):
     return key.get()
 
 def getQuestionsCat(category,number):
-    q = Question.query(Question.category == category, Question.accepted == True)
+    q = Question.query(Question.category == category, Question.accepted ==
+            True).fetch()
+    if len(q) == 0:
+        logging.warning("There aren't any questions. Have you populated the database?")
+        return None
     questions = list()
     for i in q.fetch():
         questions.append(i)

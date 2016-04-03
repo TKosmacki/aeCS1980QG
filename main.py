@@ -390,22 +390,23 @@ class categoryQuiz(webapp2.RequestHandler):
         logging.warning(int(number))
         questions = models.getQuestionsCat(category,int(number))
 
-        qList = []
-        for q in questions:
-            temp = q.to_dict(exclude=['image_urlQ','category','creator','accepted','up_voters','down_voters','create_date'])
-            qList.append(temp)
-        jList = json.dumps(qList, default=obj_dict)
+        if questions:
+            qList = []
+            for q in questions:
+                temp = q.to_dict(exclude=['image_urlQ','category','creator','accepted','up_voters','down_voters','create_date'])
+                qList.append(temp)
+            jList = json.dumps(qList, default=obj_dict)
 
-        page_params = {
-            'user_id': get_user_id(),
-            'num': int(number),
-            'question_list' : jList,
-            'user_email': get_user_email(),
-            'login_url': users.create_login_url(),
-            'logout_url': users.create_logout_url('/'),
-            'admin': is_admin,
-            }
-        render_template(self, 'answerQuestionsCat.html', page_params)
+            page_params = {
+                'user_id': get_user_id(),
+                'num': int(number),
+                'question_list' : jList,
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'admin': is_admin,
+                }
+            render_template(self, 'answerQuestionsCat.html', page_params)
 
 #used for reporting a question from the review question page
 class reportHandler(webapp2.RequestHandler):
