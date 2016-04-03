@@ -5,6 +5,7 @@ import os
 import webapp2
 import datetime
 import time
+from random import shuffle
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -196,10 +197,11 @@ def addVote(id,email):
         if check_if_down_voted(question.down_voters, email):
             question.down_voters.remove(email)
             question.down_votes-=1
+            question.put()
+            return 2
         question.put()
-        return True
-        
-    return False
+        return 1    
+    return 0
 def decVote(id,email):
     question = getQuestionFromURL(id)
 
@@ -209,14 +211,15 @@ def decVote(id,email):
         if check_if_up_voted(question.up_voters, email):
             question.up_voters.remove(email)
             question.up_votes-=1
+            question.put()
+            return 2
         question.put()
-        return True
-        
-    return False
+        return 1
+    return 0
 
 def delete_question(key):
-    getQuestion(key).delete()
-    return
+    ndb.Key(urlsafe=key).delete()
+    return;
 
 #GETTERS
 ###############################################################################
@@ -265,13 +268,10 @@ def getQuestionsCat(category,number):
     if len(q) == 0:
         logging.warning("There aren't any questions. Have you populated the database?")
         return None
-    questions = list()
-    for i in q.fetch():
-        questions.append(i)
-    random.shuffle(questions)
+    shuffle(q)
     results = list()
     for i in range(0,number):
-        results.append(questions[i]) 
+        results.append(q[i]) 
     return results
 
 def check_if_up_voted(has_up_voted,email):

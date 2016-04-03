@@ -68,8 +68,10 @@
                     <label class="control-label">Bio:</label> {{profile.bio}}<br>
                     <br><br><br>
                 </div>
-			<a class="btn btn-default pull-right" href="#editprofile" data-toggle="modal">Edit Profile Information</a>
-			<br><br>
+            {% if profile.user_id == user_id %}
+                <a class="btn btn-default pull-right" href="#editprofile" data-toggle="modal">Edit Profile Information</a>
+			{% endif %}
+            <br><br>
 	</div>
     
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.css"/>
@@ -135,7 +137,7 @@
 	{% else %}
     <div class = "intro container">
         <br><br><br>
-        <h1 style="position:absolute; top:50%; left:20%;">You Must Be An Logged In to View This Page!</h1>
+        <h1 style="position:absolute; top:50%; left:20%;">You Must Be Logged In to View This Page!</h1>
     </div>
 	{% endif %}
 {% endblock %}

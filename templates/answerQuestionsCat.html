@@ -19,6 +19,7 @@
     function runQuestion(){
         try{
             clearTimeout(timerId);
+            $("#getready").modal('hide');
         }
         catch(err){
         }
@@ -74,9 +75,6 @@
         //the time variable and using that as part of it, as well as using
         //information from the question_obj, or we can probably use jquery or
         //something, attach onsubmit="score()" into the form
-    }
-    function start(){
-        runQuestion();
     }
 </script>
 
@@ -168,11 +166,22 @@
 			</div>
 		</div>
 	</div>
-
+    <div style="z-index:2147483646;" class="modal fade" id="getready" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <div class="modal-body">
+                    Are You Ready?<br><br>
+                    <button class="btn btn-link" onclick= "runQuestion()"> Go! </button>
+                    <br>
+                </div>
+			</div>
+		</div>
+	</div>
 </body>
 
 <script>
-    window.onload = start();
+    window.onload = $("#getready").modal({ backdrop: 'static',keyboard: false });
+    
     function vote(direction){
         var urlkey = curr[counter].urlkey;
         if (direction == 1){
@@ -180,14 +189,17 @@
                         type: "POST",
                         url: "/addVoteQuiz",
                         contentType: "application/json; charset=utf-8",
-                        //dataType: 'json',
                         data: JSON.stringify({"urlkey": urlkey}),
+                        dataType: 'json',
                         success : function(text){
-                            if (text.incced == true){
-                                ratingNum++;
+                            if (text.incced >0){
+                                ratingNum+=text.incced;
                                 ratingDiv.innerHTML = "Rating: " + ratingNum;
                             }
-                        }
+                            else{
+                                alert("You have already upvoted this.");
+                            }
+                        },
                    });
         }
         if (direction == 0){
@@ -195,13 +207,14 @@
                         type: "POST",
                         url: "/decVoteQuiz",
                         contentType: "application/json; charset=utf-8",
-                        //dataType: 'json',
                         data: JSON.stringify({"urlkey": urlkey}),
                         success : function(text){
-                            if (text.decced == true){
-                                ratingNum--;
+                            if (text.decced > 0){
+                                ratingNum-=text.decced;
                                 ratingDiv.innerHTML = "Rating: " + ratingNum;
-                                //decrement vote
+                            }
+                            else{
+                                alert("You have already downvoted this.");
                             }
                         }
                        });
@@ -260,7 +273,7 @@
 
         clearTimeout(timerId); //stops timer
         var header = document.getElementById('title');
-        $('#results').modal({ backdrop: 'static',keyboard: false })
+        $('#results').modal({ backdrop: 'static',keyboard: false });
         //send selection back to python
 
         if(selection == curr[counter].answerid){ //changes the header to green if correct
