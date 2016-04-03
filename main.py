@@ -468,7 +468,6 @@ class addVoteQuiz(webapp2.RequestHandler):
         logging.warning(temp)
         result['incced'] = temp
         logging.warning(result)
-        self.response.out.write('Content-Type: application/json\n\n')
         self.response.out.write(json.dumps(result))
 
 #Downvoting a question
@@ -480,10 +479,8 @@ class decVoteQuiz(webapp2.RequestHandler):
         id = data['urlkey']
         email = get_user_email()
         temp = models.decVote(id,email)
-        logging.warning(temp)
         result = {}
         result['decced'] = temp
-        self.response.out.write('Content-Type: application/json\n\n')
         self.response.out.write(json.dumps(result))
 
 class deleteQuestion(webapp2.RequestHandler):
