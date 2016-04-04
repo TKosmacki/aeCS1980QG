@@ -187,7 +187,10 @@
                     url: "/deleteQuestion",
                     contentType: "application/json; charset=utf-8",
                     //dataType: 'json',
-                    data: JSON.stringify({"urlkey": "{{review.urlkey}}"})
+                    data: JSON.stringify({"urlkey": "{{review.urlkey}}"}),
+                    success: function(){
+                        window.location.href = "/ReviewOldQuestions";
+                    }
                });
         }
         else{

@@ -14,8 +14,6 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import mail
 from google.appengine.ext.webapp import blobstore_handlers
 
-run=False
-
 ###############################################################################
 # We'll just use this convenience function to retrieve and render a template.
 def render_template(handler, templatename, templatevalues={}):
@@ -256,17 +254,13 @@ class ReviewOldQuestions(webapp2.RequestHandler):
 
 class test(webapp2.RequestHandler):
     def get(self):
-        #if not users.is_current_user_admin(): #stops from running this if user is not admin
-        #    self.redirect("/")
-        #    return
-        #global run
-        #if run==True: #stops from running more than once
-        #    self.redirect("/")
-        #    return
-        #run=True
+        if not users.is_current_user_admin(): #stops from running this if user is not admin
+            self.redirect("/")
+            return
+        
         models.populateQuestions()
         models.populateAnswers()
-       # models.createAnswer(get_user_id(),'1','2')
+        #models.createAnswer(get_user_id(),'1','2')
         id = get_user_id()
         is_admin = 0
         if users.is_current_user_admin():
@@ -494,9 +488,9 @@ class deleteQuestion(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         logging.warning("HERE")
         key = data['urlkey']
-        logging.warning(key)
         models.delete_question(key)
-        self.redirect("/ReviewOldQuestions")
+        #need this for some reason, for redirect in javascript to work
+        self.redirect("/ReviewOldQuestions") 
 
 ###############################################################################
 mappings = [

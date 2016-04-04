@@ -218,8 +218,7 @@ def decVote(id,email):
     return 0
 
 def delete_question(key):
-    ndb.Key(urlsafe=key).delete()
-    return;
+    return ndb.Key(urlsafe=key).delete()
 
 #GETTERS
 ###############################################################################
