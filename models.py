@@ -326,6 +326,23 @@ def getAllUserScores():
     logging.warning("JSON: "+jsonList)
     return jsonList
 
+def getAllUserScoresForCat(param):
+    users = User.query()
+    scoreList = dict()
+    for user in users:
+        scores = Score.query(Score.category == param, ancestor = ndb.Key(User, user.user_id))
+        counter = 0
+        for score in scores:
+            counter += score.score
+        scoreList[user.name] = counter
+
+    sortList = sorted(scoreList.items(), key=itemgetter(1), reverse=True)
+    scoreList = OrderedDict(sortList)
+    jsonList = json.dumps(scoreList, default = obj_dict)
+    logging.warning("JSON: "+jsonList)
+    return jsonList
+
+
 
 
 

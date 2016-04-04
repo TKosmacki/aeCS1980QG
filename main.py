@@ -435,7 +435,8 @@ class reportQuizHandler(webapp2.RequestHandler):
 
 class LeaderBoard(webapp2.RequestHandler):
     def get(self):
-        jAson = models.getAllUserScores()
+        #jAson = models.getAllUserScores()
+        jAson = models.getAllUserScoresForCat("PHARM 2001")
         userList = json.dumps(jAson)
         page_params = {
             'user_id': get_user_id(),
@@ -501,7 +502,7 @@ class deleteQuestion(webapp2.RequestHandler):
         key = data['urlkey']
         models.delete_question(key)
         #need this for some reason, for redirect in javascript to work
-        self.redirect("/ReviewOldQuestions") 
+        self.redirect("/ReviewOldQuestions")
 
 ###############################################################################
 mappings = [
