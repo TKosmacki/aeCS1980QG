@@ -14,8 +14,9 @@
     var ratingDiv;
     var questkey;
     var userid = "{{user_id}}";
-
-
+    var score = 0;
+    var totalScore = 0;
+    var maxTime = 15;
     function runQuestion(){
         try{
             clearTimeout(timerId);
@@ -28,11 +29,12 @@
         var elem = document.getElementById('timer');
 
         timerId = setInterval(function() {
-              if (timeLeft < 0) {
+              elem.innerHTML = "<p>" + timeLeft + "</p>";
+              if (timeLeft == 0) {
                 clearTimeout(timerId);
                 submit(5);
               } else {
-                    elem.innerHTML = "<p>" + timeLeft + "</p>";
+                    
                     timeLeft--;
               }
             }, 1000);
@@ -55,10 +57,7 @@
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
         ratingDiv = document.getElementById("numVotes");
-        curr = "{{question_list}}";
-        curr = curr.replace(/&quot;/g,'"');
-        curr = curr.replace(/[\u0000-\u0019]+/g,"");
-        curr = JSON.parse(curr);
+        curr = {{question_list|safe}};
         ratingNum = curr[counter].rating;
         questkey = curr[counter].urlkey;
         quest.innerHTML = curr[counter].question;
@@ -70,11 +69,14 @@
         ratingDiv.style.color = "black";
     }
 
-    function score(timeLeft,percentCorrect){
-        //this is where we can do the calculations for the score by grabbing
-        //the time variable and using that as part of it, as well as using
-        //information from the question_obj, or we can probably use jquery or
-        //something, attach onsubmit="score()" into the form
+    function calcScore(timeRemaining,percentCorrect){
+        var value = 50;
+        value = value * (timeRemaining+1)/maxTime;
+        value = value * ((100-percentCorrect)/100);
+        value = +value.toFixed(1);
+        value+= 50;
+        value = value * 10;
+        return value;
     }
 </script>
 
@@ -223,6 +225,7 @@
     }
     function submit(selection){
         clearTimeout(timerId); //stops timer
+        
         var a1 = curr[counter].answer1;
         var a2 = curr[counter].answer2;
         var a3 = curr[counter].answer3;
@@ -242,6 +245,25 @@
         var s3p = Math.round((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
         if (s4p<0){ s4p = 0; }
+        if (selection != curr[counter].answerid){
+            score = 0;
+        }
+        else{
+            if( "1" == curr[counter].answerid){
+                score = calcScore(timeLeft,s1p);
+            }
+            if( "2" == curr[counter].answerid){
+                score = calcScore(timeLeft,s2p);
+            }
+            if( "3" == curr[counter].answerid){
+                score = calcScore(timeLeft,s3p);
+            }
+            if( "4" == curr[counter].answerid){
+                score = calcScore(timeLeft,s4p);
+            }
+        }
+        totalScore += score;
+        alert(score);
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
         popAns3.innerHTML = a3 + " (" + s3p + "%)";
@@ -278,7 +300,7 @@
         //send selection back to python
 
         if(selection == curr[counter].answerid){ //changes the header to green if correct
-            header.innerHTML = "<h3 style='color:green; display:'inline;'>Correct</h3>";
+            header.innerHTML = "<h3 style='color:green; display:inline;'>Correct</h3>";
             var snd = new Audio("/static/sounds/smw_message_block.wav");
             snd.play();
             $('#results').modal('show');

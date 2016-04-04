@@ -231,7 +231,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
         'review': review,
         'admin' : is_admin
         }
-        render_template(self, 'reviewQuestions.html', page_params)
+        render_template(self, 'reviewNewQuestions.html', page_params)
 
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewOldQuestions(webapp2.RequestHandler):
@@ -250,14 +250,16 @@ class ReviewOldQuestions(webapp2.RequestHandler):
             'review': review,
             'admin' : is_admin
         }
-        render_template(self, 'reviewQuestionsValid.html', page_params)
+        render_template(self, 'viewDatabase.html', page_params)
 
 class test(webapp2.RequestHandler):
     def get(self):
         if not users.is_current_user_admin(): #stops from running this if user is not admin
             self.redirect("/")
             return
-        
+        if (len(models.get_oldest_questions(100,True)) > 3):
+            self.redirect("/")
+            return
         models.populateQuestions()
         models.populateAnswers()
         #models.createAnswer(get_user_id(),'1','2')
