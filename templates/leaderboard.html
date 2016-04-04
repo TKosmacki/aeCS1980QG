@@ -33,43 +33,24 @@
 	<table id="leaderboard">
 	  <tr>
 		<th>Points</th>
-	    <th>First Name</th>
-	    <th>Last Name</th>
-		<th>Year</th>
-	  </tr>
-	  <tr>
-		<td>128</td>
-	    <td>💎&nbsp;&nbsp;&nbsp;Ravi</td>
-	    <td>Patel</td>
-		<td>2016</td>
-	  </tr>
-	  <tr>
-		<td>64</td>
-	    <td>🚀&nbsp;&nbsp;&nbsp;Larry</td>
-	    <td>Ellison</td>
-		<td>1980</td>
-	  </tr>
-	  <tr>
-		<td>32</td>
-	    <td>🚀&nbsp;&nbsp;&nbsp;John</td>
-	    <td>Doe</td>
-		<td>2000</td>
-	  </tr>
-	  <tr>
-		<td>16</td>
-	    <td>🎇&nbsp;&nbsp;&nbsp;Stephen</td>
-	    <td>Curry</td>
-		<td>1988</td>
-	  </tr>
-	  <tr>
-		<td>8</td>
-	    <td>🌠&nbsp;&nbsp;&nbsp;Boban</td>
-	    <td>Marjanovic</td>
-		<td>2012</td>
+	    <th>Name</th>
 	  </tr>
 	</table>
 	</div>
 
 </body>
+<script type="text/javascript">
+var scoreList =  {{list|safe}};
+console.log(scoreList);
+for (var prop in scoreList){
+  console.log("obj." + prop + " = " + scoreList[prop]);
+  var board = document.getElementById('leaderboard');
+  var newRow = board.insertRow(board.rows.length);
+  newRow.innerHTML = "<td>"+prop+"</td><td>"+scoreList[prop]+"</td>";
+}
+//alert(scoreList);
+var board = document.getElementById('leaderboard');
+
+</script>
 </html>
 {% endblock %}

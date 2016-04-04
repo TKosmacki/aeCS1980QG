@@ -435,7 +435,16 @@ class reportQuizHandler(webapp2.RequestHandler):
 
 class LeaderBoard(webapp2.RequestHandler):
     def get(self):
-        render_template(self, 'leaderboard.html')
+        jAson = models.getAllUserScores()
+        userList = json.dumps(jAson)
+        page_params = {
+            'user_id': get_user_id(),
+            'list': jAson,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            }
+        render_template(self, 'leaderboard.html', page_params)
 
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
