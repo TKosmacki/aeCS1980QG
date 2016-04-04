@@ -79,48 +79,60 @@
 						<he5>Edit Question Information</he5>
 					</div>
 					<div class="modal-body">
-						<div class="form-group">
-							<label for: "name" class="col-lg-2 control-label">Question: </label>
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Question: </label>
 							<div class="col-lg-10">
-								<input type="text" class="form-control" name="questiontext" id="questiontext" value="{{review.question}}" maxlength=70 required>
+								<textarea type="text" class="form-control" name="questiontext" id="questiontext" maxlength=150 required>{{review.question}}</textarea>  
 							</div>
 						</div>
-						<div class="form-group">
-							<label for: "Location" class="col-lg-2 control-label">Answer 1: </label>
-							<div class="col-lg-10">
-								<input type="text" class="form-control" name="answer1" id="answer1" value="{{review.answer1}}" maxlength=35 required>
-							</div>
-						</div>
-					   <div class="form-group">
-							<label for: "Location" class="col-lg-2 control-label">Answer 2: </label>
-							<div class="col-lg-10">
-								<input type="text" class="form-control" name="answer2" id="answer2" value="{{review.answer2}}" maxlength=35 required>
-							</div>
-						</div>
-					   <div class="form-group">
-							<label for: "Location" class="col-lg-2 control-label">Answer 3: </label>
-							<div class="col-lg-10">
-								<input type="text" class="form-control" name="answer3" id="answer3" value="{{review.answer3}}" maxlength=35 required>
-							</div>
-						</div>
-					   <div class="form-group">
-							<label for: "Location" class="col-lg-2 control-label">Answer 4: </label>
-							<div class="col-lg-10">
-								<input type="text" class="form-control" name="answer4" id="answer4" value="{{review.answer4}}" maxlength=35 required>
-							</div>
-						</div>
-					   <div class="form-group">
-							<label for: "Location" class="col-lg-2 control-label">Correct answer: </label>
-							<div class="col-lg-10">
-								<input type="text" class="form-control" name="answerid" id="answerid" value="{{review.answerid}}" maxlength=35 required>
-							</div>
-						</div>
-					   <div class="form-group">
+                        <div class="form-group">
 							<label for: "img" class="col-lg-2 control-label">Image: </label>
 							<div class="col-lg-10">
 								<input type="file" class="form-control" name="file" id="Location">
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Option 1: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer1" id="answer1" value="{{review.answer1}}" maxlength=35 required>
+							</div>
+						</div>
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Option 2: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer2" id="answer2" value="{{review.answer2}}" maxlength=35 required>
+							</div>
+						</div>
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Option 3: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer3" id="answer3" value="{{review.answer3}}" maxlength=35 required>
+							</div>
+						</div>
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Option 4: </label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="answer4" id="answer4" value="{{review.answer4}}" maxlength=35 required>
+							</div>
+						</div>
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Answer: </label>
+							<div class="col-lg-10">
+                                <select class="form-control" name="answerid" id="answerid" method="POST"><!--maybe pull in all categories from python-->
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+							</div>
+                        </div>
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Explanation: </label>
+							<div class="col-lg-10">
+								<textarea type="text" class="form-control" name="answer4" id="answer4">{{review.explanation}}</textarea>
+							</div>
+						</div>
+                        
 					<div class="modal-footer">
 						<a class="btn btn-default text-right" data-dismiss="modal">Close</a>
 						<button type="submit" class="btn btn-primary">Submit</button>
@@ -178,6 +190,7 @@
                 $("#answer").text("{{review.answer4}}");
                 break;
         }
+        $('#answerid').val("{{review.answerid}}");
     };
     function deleteQuestion(){
         var ok = window.confirm("Are you sure you want to delete this question?");
