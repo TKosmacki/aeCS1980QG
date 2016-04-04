@@ -46,7 +46,7 @@ for (var prop in scoreList){
   console.log("obj." + prop + " = " + scoreList[prop]);
   var board = document.getElementById('leaderboard');
   var newRow = board.insertRow(board.rows.length);
-  newRow.innerHTML = "<td>"+prop+"</td><td>"+scoreList[prop]+"</td>";
+  newRow.innerHTML = "<td>"+scoreList[prop]+"</td><td>"+prop+"</td>";
 }
 //alert(scoreList);
 var board = document.getElementById('leaderboard');

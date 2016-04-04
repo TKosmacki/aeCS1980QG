@@ -5,6 +5,8 @@ import os
 import webapp2
 import datetime
 import time
+from operator import itemgetter
+from collections import OrderedDict
 from random import shuffle
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
@@ -155,7 +157,7 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
     return question.key
 
 
-    
+
 #MODIFIERS
 ###############################################################################
 def update_profile(id, name, year, interests, bio, employer, image_url = None):
@@ -163,7 +165,7 @@ def update_profile(id, name, year, interests, bio, employer, image_url = None):
     profile.populate(name = name, year = year, interests = interests, bio = bio, employer = employer, image_url = image_url)
     profile.put()
     memcache.set(id, profile, namespace="profile")
-    
+
 def updateQuestion(urlkey,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
     questKey=ndb.Key(urlsafe=urlkey)
     question = questKey.get()
@@ -200,7 +202,7 @@ def addVote(id,email):
             question.put()
             return 2
         question.put()
-        return 1    
+        return 1
     return 0
 def decVote(id,email):
     question = getQuestionFromURL(id)
@@ -270,7 +272,7 @@ def getQuestionsCat(category,number):
     shuffle(q)
     results = list()
     for i in range(0,number):
-        results.append(q[i]) 
+        results.append(q[i])
     return results
 
 def check_if_up_voted(has_up_voted,email):
@@ -315,12 +317,17 @@ def getAllUserScores():
         for score in scores:
             counter += score.score
         scoreList[user.name] = counter
+
+    sortList = sorted(scoreList.items(), key=itemgetter(1), reverse=True)
+    for x in sortList:
+        logging.warning(x[0]+"  "+x[0])
+    scoreList = OrderedDict(sortList)
     jsonList = json.dumps(scoreList, default = obj_dict)
     logging.warning("JSON: "+jsonList)
     return jsonList
 
 
-     
+
 
 #UTILITY
 ###############################################################################
@@ -340,7 +347,7 @@ def populateQuestions():
             answer4 = list[x+4]
             answerid = list[x+5]
             create_question("PHARM 2001", question, answer1, answer2, answer3,
-            answer4, answerid,"None","Stephen Curry",True)        
+            answer4, answerid,"None","Stephen Curry",True)
     for x in range(60,120, 6):
             question = list[x]
             answer1 = list[x+1]
