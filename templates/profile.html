@@ -50,6 +50,9 @@
 	{% if user_email %}
 
 	<div class= "container col-lg-12s">
+            <br>
+            <br>
+            <br>
 			<div class="text-left"><he5>Profile Information:</he5></div>
                 <hr>
                 <div class="col-lg-3">
@@ -132,7 +135,15 @@
 	</div>
 	
     <!--Div that will hold the pie chart-->
-    <div id="barchart_material"></div>
+    <div class="container">
+        <hr>
+        <he5>Statistics:</he5><br><br>
+        {% if numScores > 2 %} 
+            <div  id="barchart_material"></div>
+        {% else %}
+            <span>No Scores Reported</span>
+        {% endif %}
+    </div>
 	<br><br><br>
 	{% else %}
     <div class = "intro container">

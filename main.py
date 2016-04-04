@@ -303,6 +303,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             'logout_url': users.create_logout_url('/'),
             'user_id': get_user_id(),
             'profile': models.get_User(id),
+            'numScores': len(categoryScores),
             'categoryScores':categoryScores,
             'admin': is_admin,
         }

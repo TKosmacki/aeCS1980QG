@@ -70,7 +70,7 @@
         ratingDiv.style.color = "black";
     }
 
-    function score(){
+    function score(timeLeft,percentCorrect){
         //this is where we can do the calculations for the score by grabbing
         //the time variable and using that as part of it, as well as using
         //information from the question_obj, or we can probably use jquery or
@@ -222,6 +222,7 @@
         return;
     }
     function submit(selection){
+        clearTimeout(timerId); //stops timer
         var a1 = curr[counter].answer1;
         var a2 = curr[counter].answer2;
         var a3 = curr[counter].answer3;
@@ -271,7 +272,7 @@
             popAns4.style.fontWeight = "bold";
         }
 
-        clearTimeout(timerId); //stops timer
+
         var header = document.getElementById('title');
         $('#results').modal({ backdrop: 'static',keyboard: false });
         //send selection back to python
