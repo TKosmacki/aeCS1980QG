@@ -262,7 +262,9 @@
                 score = calcScore(timeLeft,s4p);
             }
         }
+        
         totalScore += score;
+        
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
         popAns3.innerHTML = a3 + " (" + s3p + "%)";
@@ -304,7 +306,7 @@
             snd.play();
             $('#results').modal('show');
             snd.currentTime=0;
-            sendAnswer(userid,questkey,selection);
+            sendAnswer(userid,questkey,selection, score);
             //logic for score in here
         }
         else{ //red if incorrect
@@ -313,7 +315,7 @@
             snd.play();
             snd.currentTime=0;
             $('#results').modal('show');
-            sendAnswer(userid,questkey,selection);
+            sendAnswer(userid,questkey,selection, score);
         }
     }
 
@@ -352,14 +354,14 @@
                });
         confirm('Report Sent'); //maybe do something else here dunno what
     }
-    function sendAnswer(userID, questKey, userAnswer){
+    function sendAnswer(userID, questKey, userAnswer, score){
         try{
                 $.ajax({
                     type: "POST",
                     url: "/answerSingle",
                     contentType: "application/json; charset=utf-8",
                     //dataType: 'json',
-                    data: JSON.stringify({"userID": userID, "qKey": questKey, "userSelection": userAnswer})
+                    data: JSON.stringify({"userID": userID, "qKey": questKey, "userSelection": userAnswer, "score": score})
               });
                 // .done(function( data ) {
                 //     alert("cool");
