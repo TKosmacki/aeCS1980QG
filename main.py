@@ -157,9 +157,10 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             blob_info = upload_files[0]
             type = blob_info.content_type
             id = self.request.get('id')
-            explanation = models.getQuestionFromURL(id).explanation
-            if not explanation:
-                explanation = "No Explanation Provided"
+            #explanation = models.getQuestionFromURL(id).explanation
+            explanation = self.request.get('explanation')
+	    if not explanation:
+                explanation = "None"
             category = models.getQuestionFromURL(id).category
             creator = models.getQuestionFromURL(id).creator
             questionIn = self.request.get('questiontext')
@@ -189,9 +190,10 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
         # no image to upload
         except IndexError:
             id = self.request.get('id')
-            explanation = models.getQuestionFromURL(id).explanation
+            #explanation = models.getQuestionFromURL(id).explanation
+	    explanation = self.request.get('explanation')
             if not explanation:
-                explanation = "No Explanation Provided"
+                explanation = "None"
             category = models.getQuestionFromURL(id).category
             creator = models.getQuestionFromURL(id).creator
             questionIn = self.request.get('questiontext')
@@ -210,7 +212,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             logging.warning(answer4)
             logging.warning('Signed by anonymous user')
             models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
-                #models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
+                
 
         self.redirect('/ReviewQuestion?id=' + id)
 
