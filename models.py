@@ -17,6 +17,7 @@ from google.appengine.api import memcache
 ###############################################################################
 class User(ndb.Model):
     user_id = ndb.StringProperty()
+    username = ndb.StringProperty()
     name = ndb.StringProperty()
     year = ndb.StringProperty()
     interests = ndb.StringProperty()
