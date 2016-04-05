@@ -212,7 +212,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             logging.warning(answer4)
             logging.warning('Signed by anonymous user')
             models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
-                
+
 
         self.redirect('/ReviewQuestion?id=' + id)
 
@@ -372,7 +372,7 @@ class answerSingle(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         logging.warning(data['userID'])
         logging.warning(data['qKey'])
-        
+
         question = models.getQuestionFromURL(data['qKey'])
         logging.warning(data['userSelection'])
         models.createAnswer(data['userID'],question.key,str(data['userSelection']), int(data['score']))
@@ -441,6 +441,7 @@ class LeaderBoard(webapp2.RequestHandler):
         jAson = models.getAllUserScores()
         userList = json.dumps(jAson)
         page_params = {
+            'category': 'ALL',
             'user_id': get_user_id(),
             'list': jAson,
             'user_email': get_user_email(),
@@ -454,6 +455,7 @@ class LeaderBoard(webapp2.RequestHandler):
         jAson = models.getAllUserScoresForCat(cat)
         userList = json.dumps(jAson)
         page_params = {
+            'category': cat,
             'user_id': get_user_id(),
             'list': jAson,
             'user_email': get_user_email(),
