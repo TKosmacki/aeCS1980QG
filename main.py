@@ -452,7 +452,10 @@ class LeaderBoard(webapp2.RequestHandler):
 
     def post(self):
         cat = self.request.get('category')
-        jAson = models.getAllUserScoresForCat(cat)
+        if (cat == 'ALL'):
+            jAson = models.getAllUserScores()
+        else:
+            jAson = models.getAllUserScoresForCat(cat)
         userList = json.dumps(jAson)
         page_params = {
             'category': cat,
