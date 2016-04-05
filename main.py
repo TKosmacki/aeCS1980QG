@@ -370,9 +370,10 @@ class answerSingle(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         logging.warning(data['userID'])
         logging.warning(data['qKey'])
+        
         question = models.getQuestionFromURL(data['qKey'])
         logging.warning(data['userSelection'])
-        models.createAnswer(data['userID'],question.key,str(data['userSelection']), 10)
+        models.createAnswer(data['userID'],question.key,str(data['userSelection']), int(data['score']))
 
 def obj_dict(obj):
     return obj.__dict__
