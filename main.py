@@ -290,7 +290,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-            
+
         if q == []:
             # page_params = {
                 # 'upload_url': blobstore.create_upload_url('/profile'),
@@ -300,11 +300,11 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
                 # 'user_id': get_user_id(),
                 # 'profile': models.get_User(id),
                 # 'admin': is_admin
-            # }   
+            # }
             # render_template(self, 'createProfile.html' ,page_params)
             # return
             models.createUser(id) #will need to be moved to occur after form submission
-        
+
 
         categoryScores = models.getCatUserScore(get_user_id())
         page_params = {
@@ -488,6 +488,10 @@ class LeaderBoard(webapp2.RequestHandler):
             }
         render_template(self, 'leaderboard.html', page_params)
 
+class quizResults(webapp2.RequestHandler):
+    def get(self):
+        render_template(self, 'quizResults.html')
+
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
     def post(self):
@@ -567,6 +571,7 @@ mappings = [
   ('/imageQ', ImageHandlerQuestion),
   ('/takeQuiz', categoryQuiz),
   ('/firstLogin', LoginPageHandler),
-  ('/leaderboard', LeaderBoard)
+  ('/leaderboard', LeaderBoard),
+  ('/quizResults', quizResults)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
