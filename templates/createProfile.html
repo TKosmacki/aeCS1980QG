@@ -1,0 +1,48 @@
+{% extends "_baseCreate.html" %}
+{% block bodycontent %}
+<html>
+    <body>
+    <br><br><br><br>
+    <div class="container">
+        <h3>Create Profile</h3>
+        <hr>
+        <form role = "form"  method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
+            <div class="container col-lg-12">
+                <div class="container col-lg-6" style="margin-bottom:10px">
+                    <span>User Name: </span><br>
+                    <input type="text" class="form-control" name="name" id="name" value="{{profile.username}}" maxlength=15 required>
+                </div>
+                <div class="container col-lg-6" style="margin-bottom:10px">
+                    <span>Name: </span><br>
+                    <input type="text" class="form-control" name="name" id="name" value="{{profile.name}}" maxlength=70 required>
+                </div>
+                <div class="container col-lg-6" style="margin-bottom:10px">
+                    <span>Year: </span><br>
+                    <input type="text" class="form-control" name="year" id="year" value="{{profile.year}}" maxlength=10 required>
+                </div>
+                <div class="container col-lg-6" style="margin-bottom:10px">
+                    <span>Employer: </span><br>
+                    <input type="text" class="form-control" name="employer" id="employer" value="{{profile.employer}}" maxlength=70>
+                </div>
+                <div class="container col-lg-6" style="margin-bottom:10px">
+                    <span>Interests: </span><br>
+                    <textarea type="text" class="form-control" name="interests" id="interests" value="" maxlength=140>{{profile.interests}}</textarea>
+                </div>
+                <div class="container col-lg-6" style="margin-bottom:10px">
+                    <span>Bio: </span><br>
+                    <textarea type="text" class="form-control" name="bio" id="bio" value="" maxlength=140>{{profile.bio}}</textarea>
+                </div>
+                <div class="col-lg-6">
+                    <span>Profile Picture: </span><br>
+                    <input type="file" class="form-control" name="file" id="Location">
+                    <br>
+                </div>
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    </body>
+</html>
+{% endblock %}

@@ -45,11 +45,11 @@ class MainPageHandler(webapp2.RequestHandler):
             is_admin = 1
         q = models.check_if_user_exists(id)
         page_params = {
-        'user_email': get_user_email(),
-        'login_url': users.create_login_url('/firstLogin'),
-        'logout_url': users.create_logout_url('/'),
-        'user_id': id,
-        'admin' : is_admin
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url('/firstLogin'),
+            'logout_url': users.create_logout_url('/'),
+            'user_id': id,
+            'admin' : is_admin
         }
         render_template(self, 'index.html', page_params)
 
@@ -287,13 +287,24 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             return
         id = self.request.get("id")
         q = models.check_if_user_exists(id)
-        if q == []:
-            models.createUser(id)
-            
-            
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+            
+        if q == []:
+            # page_params = {
+                # 'upload_url': blobstore.create_upload_url('/profile'),
+                # 'user_email': get_user_email(),
+                # 'login_url': users.create_login_url(),
+                # 'logout_url': users.create_logout_url('/'),
+                # 'user_id': get_user_id(),
+                # 'profile': models.get_User(id),
+                # 'admin': is_admin
+            # }   
+            # render_template(self, 'createProfile.html' ,page_params)
+            # return
+            models.createUser(id) #will need to be moved to occur after form submission
+        
 
         categoryScores = models.getCatUserScore(get_user_id())
         page_params = {
