@@ -289,6 +289,8 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         q = models.check_if_user_exists(id)
         if q == []:
             models.createUser(id)
+            
+            
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
@@ -440,6 +442,9 @@ class LeaderBoard(webapp2.RequestHandler):
     def get(self):
         jAson = models.getAllUserScores()
         userList = json.dumps(jAson)
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
             'category': 'ALL',
             'user_id': get_user_id(),
@@ -447,11 +452,15 @@ class LeaderBoard(webapp2.RequestHandler):
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
             }
         render_template(self, 'leaderboard.html', page_params)
 
     def post(self):
         cat = self.request.get('category')
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         if (cat == 'ALL'):
             jAson = models.getAllUserScores()
         else:
@@ -464,6 +473,7 @@ class LeaderBoard(webapp2.RequestHandler):
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
             }
         render_template(self, 'leaderboard.html', page_params)
 

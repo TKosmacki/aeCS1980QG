@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Quiz Game</title>
+    <title>PharmGenius</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/static/img/mario_DrMarioPill.gif">
     <link rel="stylesheet" href="/static/style.css">
@@ -17,7 +17,7 @@
   <body>
 	<div class = "navbar navbar-inverse navbar-fixed-top">
 		<div class = "container">
-			<a href = "/" class = "navbar-brand">PharmaQG</a>
+			<a href = "/" class = "navbar-brand">PharmGenius</a>
 			<button class = "navbar-toggle" data-toggle= "collapse" data-target = ".navHeaderCollapse">
 			V
 			</button>
@@ -35,8 +35,8 @@
 						</ul>
 					</li>
 					{% endif %}
+                    <li><a href = "/leaderboard">Leaderboard</a></li>
 					{% if not admin %}
-                    <li><a href="/leaderboard">LeaderBoard</a></li>
 					<li><a href="/submitNew">Submit Question</a></li>
 					{% endif %}
                     {% endif %}
