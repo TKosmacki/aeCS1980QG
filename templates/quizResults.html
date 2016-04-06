@@ -2,15 +2,50 @@
 {% block bodycontent %}
 <!DOCTYPE html>
 <html>
+<style>
+.alignleft {
+  float: left;
+  width:33.33333%;
+  text-align:left;
+  font-weight: bold;
+}
+.aligncenter {
+  float: left;
+  width:33.33333%;
+  text-align:center;
+}
+.alignright {
+ float: left;
+ width:33.33333%;
+ text-align:right;
+}​
+
+</style>
 <body>
 	<div class = "container " style="text-align:center">
-    </br></br></br><h3>You got {{correctCount}} out of {{totalCount}}!</h3>
+    </br></br></br><h3  style="text-align:center">You got 3 out of 4 questions correct!</h3>
+	<hr>
+	<span class="alignleft">Who is the coolest Pokemon?</span>
+	<span class="aligncenter" style="color:green;">Blastoise</span>
+	<span class="alignright" style="color:green;">+151 Points</span>
+</br>
+	<hr>
+	<span class="alignleft">Who is the raddest Pokemon?</span>
+	<span class="aligncenter" style="color:green;">Blastoise</span>
+	<span class="alignright" style="color:green;">+151 Points</span>
+	</br>
+	<hr>
+	<span class="alignleft">Who is the fasttttest Pokemon?</span>
+	<span class="aligncenter" style="color:green;">Blastoise</span>
+	<span class="alignright" style="color:green;">+151 Points</span>
+	</br>
+	<hr>
+	<span class="alignleft">Who is the best Pokemon of the original 151?</span>
+	<span class="aligncenter" style="color:red;">Onyx</span>
+	<span class="alignright" style="color:red;">0 Points</span>
+	</br>
+	<hr>
 	</div>
-    {% if correctCount < 1 %}
-    <div class="container">
-        <img src="https://i.ytimg.com/vi/5Q_2nrp9OTg/maxresdefault.jpg" no-repeat></img>
-    </div>
-    {% endif %}
 </body>
 </html>
 {% endblock %}
