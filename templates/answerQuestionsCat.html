@@ -17,6 +17,15 @@
     var score = 0;
     var totalScore = 0;
     var maxTime = 15;
+    var userResults = [];
+
+    function result(){  //none of these constructor values should remain after proper code executes
+        this.qTxt = "Question Text Goes Here";
+        this.uAns = "Timeout by default";
+        this.points = 0;
+        this.correct = false;
+    }
+
     function runQuestion(){
         try{
             clearTimeout(timerId);
@@ -34,7 +43,7 @@
                 clearTimeout(timerId);
                 submit(5);
               } else {
-                    
+
                     timeLeft--;
               }
             }, 1000);
@@ -45,6 +54,7 @@
         counter+=1; //increments at each question
 
         if( (counter) == "{{num}}"){
+            //sendResults(userResults);
             window.location.href = "/";
             return;
         }
@@ -97,7 +107,7 @@
         <hr>
         <h4 id = "question" style="text-align:center"></h4>
     </div>
-    
+
     <!--Quiz-->
     <font size = 5>
         <div class ="container">
@@ -193,7 +203,7 @@
 
 <script>
     window.onload = $("#getready").modal({ backdrop: 'static',keyboard: false });
-    
+
     function vote(direction){
         var urlkey = curr[counter].urlkey;
         if (direction == 1){
@@ -235,7 +245,7 @@
     }
     function submit(selection){
         clearTimeout(timerId); //stops timer
-        
+
         var a1 = curr[counter].answer1;
         var a2 = curr[counter].answer2;
         var a3 = curr[counter].answer3;
@@ -272,9 +282,43 @@
                 score = calcScore(timeLeft,s4p);
             }
         }
-        
+
         totalScore += score;
-        
+
+        var newResult = new result();
+        newResult.qTxt = curr[counter].question;
+        if (selection == '1'){
+            newResult.uAns = a1;
+        }
+        else if (selection == '2'){
+            newResult.uAns = a2;
+        }
+        else if (selection == '3'){
+            newResult.uAns = a3;
+        }
+        else if (selection == '4'){
+            newResult.uAns = a1;
+        }
+        else{
+            newResult.uAns = 'Timeout';
+        }
+        newResult.points = score;
+        if (score > 0){
+            newResult.correct = true;
+        }
+        else{
+            newResult.correct = false;
+        }
+
+        console.log("TRACKING ANSWER:");
+        console.log(newResult.qTxt);
+        console.log(newResult.uAns);
+        console.log(newResult.points);
+        console.log(newResult.correct);
+        console.log("^^^ ANSWER DATA ^^^");
+
+        userResults.push(newResult);
+
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
         popAns3.innerHTML = a3 + " (" + s3p + "%)";
@@ -376,6 +420,19 @@
                 // .done(function( data ) {
                 //     alert("cool");
                 // });
+          }
+          catch(err){
+              window.alert(err.message);
+          }
+    }
+    function sendResults(uResults){
+        try{
+                $.ajax({
+                    type: "POST",
+                    url: "/quizResults",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(uResults)
+              });
           }
           catch(err){
               window.alert(err.message);
