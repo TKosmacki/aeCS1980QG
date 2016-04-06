@@ -48,7 +48,7 @@
             window.location.href = "/";
             return;
         }
-        count.innerHTML = "Question " + (counter+1); //prints out the question number
+        count.innerHTML = "Total Score: " + totalScore; //prints out the question number
         elem.innerHTML = "<p>" + 15 + "</p>";
 	$('#img').css("display","none");
         //code for retrieving and printing the question
@@ -68,7 +68,7 @@
 	}
         ratingNum = curr[counter].rating;
         questkey = curr[counter].urlkey;
-        quest.innerHTML = curr[counter].question;
+        quest.innerHTML = (counter+1) + ") "  + curr[counter].question ;
         ans1.innerHTML = curr[counter].answer1;
         ans2.innerHTML = curr[counter].answer2;
         ans3.innerHTML = curr[counter].answer3;
@@ -100,7 +100,6 @@
     
     <!--Quiz-->
     <font size = 5>
-      <input type="hidden" name="hidden_score" value="{{score}}">
         <div class ="container">
 	    <div class="large-lg-12 text-center">
                 <img style="display:none;" id="img" src="" style= "text-align:center;" class="smaller-image"></img>
@@ -312,7 +311,7 @@
         //send selection back to python
 
         if(selection == curr[counter].answerid){ //changes the header to green if correct
-            header.innerHTML = "<h3 style='color:green; display:inline;'>Correct</h3>";
+            header.innerHTML = "<h3 style='color:green; display:inline;'>Correct (+" + score + " pts)</h3>";
             var snd = new Audio("/static/sounds/smw_message_block.wav");
             snd.play();
             $('#results').modal('show');
@@ -321,7 +320,7 @@
             //logic for score in here
         }
         else{ //red if incorrect
-            header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect</h3>";
+            header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect (+0 pts)</h3>";
             var snd = new Audio("/static/sounds/smw_yoshi_spit.wav");
             snd.play();
             snd.currentTime=0;

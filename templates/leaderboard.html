@@ -30,19 +30,23 @@
 <body>
 </br></br></br>
 	<div class = "container ">
+	</br>
 		<div class = "container" align="right">
+			<h3><span style="float:left; font-size:5;">{{category}}</span>
 			<form action="/leaderboard" method="post">
 				<select id="Category" name="category" method="POST">
+					<option selected disabled>Category</option>
+					<option value="ALL">ALL</option>
 					<option value="PHARM 2001">PHARM 2001</option>
 					<option value="PHARM 3023">PHARM 3023</option>
 					<option value="PHARM 3028">PHARM 3028</option>
 					<option value="PHARM 3040">PHARM 3040</option>
 					<option value="PHARM 5218">PHARM 5218</option>
 				</select>
-				<button type="submit" value="submit">Select</button>
+				<button type="submit" value="submit" style="font-size:16px">Select</button>
 			</form>
-		</div>
-	</br>
+
+	</div>
 	<table id="leaderboard">
 	  <tr>
 		<th width='5%'>Rank</th>

@@ -212,7 +212,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             logging.warning(answer4)
             logging.warning('Signed by anonymous user')
             models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
-                
+
 
         self.redirect('/ReviewQuestion?id=' + id)
 
@@ -289,6 +289,8 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         q = models.check_if_user_exists(id)
         if q == []:
             models.createUser(id)
+            
+            
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
@@ -372,7 +374,7 @@ class answerSingle(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         logging.warning(data['userID'])
         logging.warning(data['qKey'])
-        
+
         question = models.getQuestionFromURL(data['qKey'])
         logging.warning(data['userSelection'])
         models.createAnswer(data['userID'],question.key,str(data['userSelection']), int(data['score']))
@@ -440,25 +442,38 @@ class LeaderBoard(webapp2.RequestHandler):
     def get(self):
         jAson = models.getAllUserScores()
         userList = json.dumps(jAson)
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
         page_params = {
+            'category': 'ALL',
             'user_id': get_user_id(),
             'list': jAson,
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
             }
         render_template(self, 'leaderboard.html', page_params)
 
     def post(self):
         cat = self.request.get('category')
-        jAson = models.getAllUserScoresForCat(cat)
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
+        if (cat == 'ALL'):
+            jAson = models.getAllUserScores()
+        else:
+            jAson = models.getAllUserScoresForCat(cat)
         userList = json.dumps(jAson)
         page_params = {
+            'category': cat,
             'user_id': get_user_id(),
             'list': jAson,
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
             }
         render_template(self, 'leaderboard.html', page_params)
 
