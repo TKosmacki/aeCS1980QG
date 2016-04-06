@@ -50,14 +50,22 @@
         }
         count.innerHTML = "Question " + (counter+1); //prints out the question number
         elem.innerHTML = "<p>" + 15 + "</p>";
+	$('#img').css("display","none");
         //code for retrieving and printing the question
         var quest = document.getElementById("question");
         var ans1 = document.getElementById("answer1");
         var ans2 = document.getElementById("answer2");
         var ans3 = document.getElementById("answer3");
         var ans4 = document.getElementById("answer4");
+	// curr[counter] == current question
+	// urlkey or image_urlQ
         ratingDiv = document.getElementById("numVotes");
+
         curr = {{question_list|safe}};
+	$('#img').attr("src","/imageQ?urlkey=" + curr[counter].urlkey);
+	if (curr[counter].urlkey != null){
+		$('#img').css("display","inline");
+	}
         ratingNum = curr[counter].rating;
         questkey = curr[counter].urlkey;
         quest.innerHTML = curr[counter].question;
@@ -89,12 +97,15 @@
         <hr>
         <h4 id = "question" style="text-align:center"></h4>
     </div>
-
+    
     <!--Quiz-->
     <font size = 5>
       <input type="hidden" name="hidden_score" value="{{score}}">
         <div class ="container">
-            <div class = "col-lg-3"></div>
+	    <div class="large-lg-12 text-center">
+                <img style="display:none;" id="img" src="" style= "text-align:center;" class="smaller-image"></img>
+	    </div>
+	    <div class = "col-lg-3"></div>
             <div class="col-lg-3" style= "text-align:center; position:relative;">
                 <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1"></button>
             </div>
