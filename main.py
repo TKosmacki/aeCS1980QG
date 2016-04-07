@@ -107,7 +107,7 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         id = get_user_id()
         q = models.get_User(id)
-        creator = q.name
+        creator = q.username
         explanation = self.request.get('explanation')
         if not explanation:
             explanation = "No Explanation Provided"
@@ -386,13 +386,15 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             blob_info = upload_files[0]
             type = blob_info.content_type
             id = get_user_id()
+            models.createUser(id)
             name = self.request.get("name")
             year = self.request.get("year")
             interests = self.request.get("interests")
             employer = self.request.get("employer")
             bio = self.request.get("bio")
-            username= self.request.get('username')
-            models.createUser(id)
+            username= self.request.get('username')            
+            time.sleep(1)
+            id = get_user_id()
             # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
@@ -406,15 +408,17 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         # no image to upload
         except IndexError:
             id = get_user_id()
+            models.createUser(id)
             name = self.request.get("name")
             year = self.request.get("year")
             interests = self.request.get("interests")
             employer = self.request.get("employer")
             bio = self.request.get("bio")
             username = self.request.get('username')
+            time.sleep(1)
+            id = get_user_id()
             models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
-
-        self.redirect('/profile?id=' + id)
+            self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self):

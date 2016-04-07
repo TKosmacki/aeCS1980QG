@@ -104,14 +104,14 @@
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({"username":username}),
                 success: function(text){
-                    if (text.exists != "true"){
-                        $('#exists').show();
+                    if (text.exists == false){
                         $('#doesNotExist').hide();
+                        $('#exists').show();
                         $('#submitForm').prop('disabled', false);
                     }
-                    else{
-                        $('#doesNotExist').show();
+                    if (text.exists == true){
                         $('#exists').hide();
+                        $('#doesNotExist').show();
                         $('#submitForm').prop('disabled', true);
                     }
                 },
