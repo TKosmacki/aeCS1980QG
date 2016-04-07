@@ -82,11 +82,11 @@
             correctString = correctString.concat(correctCount);
             correctString = correctString.concat(" out of ");
             correctString = correctString.concat(counter);
-            correctString = correctString.concat("!");
+            correctString = correctString.concat(" questions correct.");
             document.getElementById('correctBox').innerHTML = correctString;
-            var scoreString = "You got ";
+            var scoreString = "You scored ";
             scoreString = scoreString.concat(totalScore);
-            scoreString = scoreString.concat(" points!");
+            scoreString = scoreString.concat(" points.");
             document.getElementById('pointsBox').innerHTML = scoreString;
             $('#quizResults').show();
             /*while (cnt < counter+1){
@@ -245,7 +245,7 @@
     <div class = "container" id="quizResults" style="text-align:center; display:none">
         <div class = "container">
         <h2 id="correctBox" style="text-align:center"></h2>
-        <h3 id="pointsBox" style="text-align:center"></h3>
+        <h4 id="pointsBox" style="text-align:center"></h4>
         <span class="alignleft">Question</span>
         <span class="aligncenter">Your Answer</span>
         <span class="alignright">Points&nbsp;</span>
