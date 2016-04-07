@@ -79,7 +79,7 @@
             var cnt = 0;
             $('#quizResults').show();
             /*while (cnt < counter+1){
-            
+
             }*/
             //instead of sending the results off the page, just clear the page and construct the new one here,
             //can have an already set up div here and just fill it in as well
@@ -88,7 +88,7 @@
         }
         count.innerHTML = "Total Score: " + totalScore; //prints out the question number
         elem.innerHTML = "<p>" + 15 + "</p>";
-        
+
 	$('#img').css("display","none");
         //code for retrieving and printing the question
         var quest = document.getElementById("question");
@@ -230,7 +230,7 @@
 			</div>
 		</div>
 	</div>
-    
+
     <div class = "container" id="quizResults" style="text-align:center; display:none">
         <h3  style="text-align:center">You got 3 out of 4 questions correct!</h3>
         <hr>
@@ -238,27 +238,6 @@
         <span class="aligncenter">Your Answer</span>
         <span class="alignright">Points</span>
         </br>
-        <hr>
-        <span class="alignleft">1. Who is the coolest Pokemon?</span>
-        <span class="aligncenter" style="color:green;">Blastoise</span>
-        <span class="alignright" style="color:green;">+151</span>
-        </br>
-        <hr>
-        <span class="alignleft">2. Who is the raddest Pokemon?</span>
-        <span class="aligncenter" style="color:green;">Blastoise</span>
-        <span class="alignright" style="color:green;">+151</span>
-        </br>
-        <hr>
-        <span class="alignleft">3. Who is the fasttttest Pokemon?</span>
-        <span class="aligncenter" style="color:green;">Blastoise</span>
-        <span class="alignright" style="color:green;">+151</span>
-        </br>
-        <hr>
-        <span class="alignleft">4. Who is the best Pokemon of the original 151?</span>
-        <span class="aligncenter" style="color:red;">Onyx</span>
-        <span class="alignright" style="color:red;">0</span>
-        </br>
-        <hr>
 	</div>
 </body>
 
@@ -378,7 +357,25 @@
         console.log(newResult.correct);
         console.log("^^^ ANSWER DATA ^^^");
 
-        userResults.push(newResult);
+        var newResLine1 = "<hr><span class='alignleft'>";
+        newResLine1 = newResLine1.concat(newResult.qTxt);
+        if (newResult.correct){
+            var newResline2 = "</span><span class='aligncenter' style='color:green;'>";
+            newResline2 = newResline2.concat(newResult.uAns);
+            var newResline3 = "</span><span class='alignright' style='color:green;'>+";
+            newResline3 = newResline3.concat(newResult.points);
+        }
+        else{
+            var newResline2 = "</span><span class='aligncenter' style='color:red;'>";
+            newResline2 = newResline2.concat(newResult.uAns);
+            var newResline3 = "</span><span class='alignright' style='color:red;'>";
+            newResline3 = newResline3.concat(newResult.points);
+        }
+        var newResline4 = "</span></br>";
+        var resultsTable = document.getElementById('quizResults');
+        resultsTable.innerHTML = resultsTable.innerHTML + newResLine1 + newResline2 + newResline3 + newResline4;
+        //resultsTable.innerHTML = resultsTable.innerHTML + "tesssst";
+        //userResults.push(newResult);
 
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
