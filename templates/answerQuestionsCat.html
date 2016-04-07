@@ -357,7 +357,7 @@
         console.log(newResult.correct);
         console.log("^^^ ANSWER DATA ^^^");
 
-        var newResLine1 = "<hr><span class='alignleft'>";
+        var newResLine1 = "<hr><div class='container'><span class='alignleft'>";
         newResLine1 = newResLine1.concat(newResult.qTxt);
         if (newResult.correct){
             var newResline2 = "</span><span class='aligncenter' style='color:green;'>";
@@ -371,7 +371,7 @@
             var newResline3 = "</span><span class='alignright' style='color:red;'>";
             newResline3 = newResline3.concat(newResult.points);
         }
-        var newResline4 = "</span></br>";
+        var newResline4 = "</span></br></div>";
         var resultsTable = document.getElementById('quizResults');
         resultsTable.innerHTML = resultsTable.innerHTML + newResLine1 + newResline2 + newResline3 + newResline4;
         //resultsTable.innerHTML = resultsTable.innerHTML + "tesssst";
