@@ -305,6 +305,18 @@ def get_oldest_questions(num,val):
 
     return query.fetch(num)
 
+#returns JSON list of unique categories
+def getCategoryList():
+    query = Question.query(projection = [Question.category], distinct = True)
+    catList = []
+    list = query.fetch()
+    for item in list:
+        temp = item.to_dict(include=['category'])
+        catList.append(temp)
+    jsonList = json.dumps(catList, default = obj_dict)
+    logging.warning("JSON: "+jsonList)
+    return jsonList
+
 #returns JSON list of {category, score} for a given user
 def getCatUserScore(userid):
     user = get_User(userid)

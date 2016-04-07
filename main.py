@@ -557,10 +557,14 @@ class LeaderBoard(webapp2.RequestHandler):
 
     def post(self):
         cat = self.request.get('category')
+        logging.warning('cat: ['+ cat+']')
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
         if (cat == 'ALL'):
+            jAson = models.getAllUserScores()
+        elif (len(cat) == 0) :
+            cat = 'ALL'
             jAson = models.getAllUserScores()
         else:
             jAson = models.getAllUserScoresForCat(cat)
