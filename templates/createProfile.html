@@ -3,58 +3,121 @@
 <html>
     <body>
     <br><br><br><br>
+    <script>
+    function usernameValidation(){
+        var illegalChars = /\W/;
+        var username = $('#username').val();
+        if (username.length<3){
+            $('#exists').hide();
+            $('#doesNotExist').hide();
+            $('#invalid').show();
+            $('#submitForm').prop('disabled', true);
+            return;
+        }
+        if (illegalChars.test(username)){//tests to make sure username has valid characters
+            $('#invalid').show();
+            $('#exists').hide();
+            $('#doesNotExist').hide();
+            $('#submitForm').prop('disabled', true);
+            //displays when invalid characters are entered
+        }
+        else{
+            $('#submitForm').prop('disabled', false);
+            $('#invalid').hide();
+        }
+    }
+    </script>
     <div class="container">
         <h3>Create Profile</h3>
         <hr>
-        <form role = "form" onsubmit="usernameValidation()"  method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
+        <form role = "form" method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
             <div class="container col-lg-12">
+                <div class="container" style="margin-bottom:10px; display:none; color:red" id='doesNotExist'><i class="fa fa-exclamation-circle"> Username Taken</i></div>
+                <div class="container" style="margin-bottom:10px; display:none; color:red" id='invalid'><i class="fa fa-exclamation-circle"> Invalid Username</i></div>
+                <div class="container" style="margin-bottom:10px; display:none; color:green" id='exists'><i class="fa fa-exclamation-circle"> Username Available</i></div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>User Name: </span><br>
-                    <input type="text" class="form-control" name="name" id="name" value="{{profile.username}}" maxlength=15 required>
+                    <input type="text" onkeyup="usernameValidation()" class="form-control" name="username" id="username" pattern=".{3,15}" title="3-15 characters,uppercase,lowercase,numbers,underscores" maxlength=15 required></input>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>Name: </span><br>
-                    <input type="text" class="form-control" name="name" id="name" value="{{profile.name}}" maxlength=70 required>
+                    <input type="text" class="form-control" name="name" id="name" maxlength=70 required>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>Year: </span><br>
-                    <input type="text" class="form-control" name="year" id="year" value="{{profile.year}}" maxlength=10 required>
+                    <input type="text" class="form-control" name="year" id="year" maxlength=10 required></input>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>Employer: </span><br>
-                    <input type="text" class="form-control" name="employer" id="employer" value="{{profile.employer}}" maxlength=70>
+                    <input type="text" class="form-control" name="employer" id="employer" maxlength=70></input>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>Interests: </span><br>
-                    <textarea type="text" class="form-control" name="interests" id="interests" value="" maxlength=140>{{profile.interests}}</textarea>
+                    <textarea type="text" class="form-control" name="interests" id="interests" value="" maxlength=140></textarea>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>Bio: </span><br>
-                    <textarea type="text" class="form-control" name="bio" id="bio" value="" maxlength=140>{{profile.bio}}</textarea>
+                    <textarea type="text" class="form-control" name="bio" id="bio" value="" maxlength=140></textarea>
                 </div>
                 <div class="col-lg-6">
                     <span>Profile Picture: </span><br>
-                    <input type="file" class="form-control" name="file" id="Location">
+                    <input type="file" class="form-control" name="file" id="Location"></input>
                     <br>
                 </div>
                 <div class="col-lg-12">
-                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    <button id="submitForm" disabled=true type="submit" class="btn btn-primary pull-right">Submit</button>
                 </div>
             </div>
         </form>
     </div>
     </body>
     <script>
-    function usernameValidation(){
-        var usernameRegex = new RegExp("/^[a-zA-Z0-9]+$/");
-        var username = $('username').val();
-        if (usernameRegex.test(username)){//tests to make sure username has valid characters
-            //validate that the username exists
+    $(document).ready(function() {
+        var x_timer;    
+        $("#username").keyup(function (e){
+            clearTimeout(x_timer);
+            var user_name = $(this).val();
+            x_timer = setTimeout(function(){
+                check_username_ajax(user_name);
+            }, 1000);
+        }); 
+
+        function check_username_ajax(username){
+            if (username.length<3){ //dont want to send names <3 characters
+                $('#exists').hide();
+                $('#doesNotExist').hide();
+                $('#invalid').show();
+                $('#submitForm').prop('disabled', true);
+                return;
+            }
+            var illegalChars = /\W/;
+            if (illegalChars.test(username)){//dont want to send characters with illegal characters
+                $('#invalid').show();
+                $('#submitForm').prop('disabled', true);
+                $('#exists').hide();
+                $('#doesNotExist').hide();
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/checkUsername",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"username":username}),
+                success: function(text){
+                    if (text.exists == false){
+                        $('#doesNotExist').hide();
+                        $('#exists').show();
+                        $('#submitForm').prop('disabled', false);
+                    }
+                    if (text.exists == true){
+                        $('#exists').hide();
+                        $('#doesNotExist').show();
+                        $('#submitForm').prop('disabled', true);
+                    }
+                },
+            });
         }
-        else{
-            //figure out how to stop form from submitting
-        }
-    }
+    });
     </script>
 </html>
 {% endblock %}
