@@ -304,9 +304,13 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             # render_template(self, 'createProfile.html' ,page_params)
             # return
             models.createUser(id) #will need to be moved to occur after form submission
-
+        elif models.get_User(id).name != None:
+            logging.warning("name: "+models.get_User(id).name)
+        else:
+            logging.warning("Name is empty")
 
         categoryScores = models.getCatUserScore(get_user_id())
+        logging.warning("passing params")
         page_params = {
             'upload_url': blobstore.create_upload_url('/profile'),
             'user_email': get_user_email(),
@@ -342,6 +346,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             else:
                 models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
 
+            time.sleep(1)
             self.redirect('/profile?id=' + id)
         # no image to upload
         except IndexError:
@@ -353,6 +358,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             bio = self.request.get("bio")
             models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
 
+        time.sleep(1)
         self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):

@@ -75,8 +75,6 @@ def createUser(id):
     profile.key = ndb.Key(User,id)
     profile.put()
 
-    memcache.set(id, profile, namespace="profile")
-
 #adds an Answer object to the Datastore, as a child of User 'userid'
 #updates Question with statistics
 #updates Score object per category
@@ -165,7 +163,6 @@ def update_profile(id, name, year, interests, bio, employer, image_url = None):
     profile = get_User(id)
     profile.populate(name = name, year = year, interests = interests, bio = bio, employer = employer, image_url = image_url)
     profile.put()
-    memcache.set(id, profile, namespace="profile")
 
 def updateQuestion(urlkey,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
     questKey=ndb.Key(urlsafe=urlkey)
