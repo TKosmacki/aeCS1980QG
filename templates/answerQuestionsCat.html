@@ -234,7 +234,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <div class="modal-body">
-                    Are You Ready?<br><br>
+                    Are You Ready?<br><br><br><br><br><br><br><br><br><br>
                     <button class="btn btn-link" onclick= "runQuestion()"> Go! </button>
                     <br>
                 </div>
@@ -438,7 +438,12 @@
             //logic for score in here
         }
         else{ //red if incorrect
-            header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect (+0 pts)</h3>";
+            if (selection == 5){
+                header.innerHTML = "<h3 style='color:red; display:inline;'>You Ran Out of Time (+0 pts)</h3>";
+            }
+            else{
+                header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect (+0 pts)</h3>";
+            }
             var snd = new Audio("/static/sounds/smw_yoshi_spit.wav");
             snd.play();
             snd.currentTime=0;
