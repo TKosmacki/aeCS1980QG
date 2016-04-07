@@ -6,49 +6,49 @@
 </head>
 <body>
 {% if user_email %}
-    <br><br><br>
+    <br><br><br><br>
     <div class = "container">
         <h3>New Question Submission</h3>
         <hr>
         <form action="{{upload_urlQ}}" enctype="multipart/form-data" method="post"><font size = 5>
-            Category</br>
-            <select id="Category" name="category" method="POST" >
+            <span style="font-size:75%;">Select A Category:&nbsp;</span><select id="Category" name="category" method="POST" >
                 <option value="PHARM 2001">PHARM 2001</option>
                 <option value="PHARM 3023">PHARM 3023</option>
                 <option value="PHARM 3028">PHARM 3028</option>
                 <option value="PHARM 3040">PHARM 3040</option>
                 <option value="PHARM 5218">PHARM 5218</option>
             </select>
-        </br></br>
-            Question
-            <textarea type="text" name="questiontext" class="form-control" rows="4" METHOD=POST maxlength="144" required></textarea>
-        </br>
-            Answers
-            <ol>
-                <li class="red-text">
-                <input type="text" method=POST name="answer1" size = "30" maxlength="30" required>
-                </li>
-                <li class="blue-text">
-                <input type="text" method=POST name="answer2" size = "30" maxlength="30" required>
-                </li>
-                <li class="green-text">
-                <input type="text" method=POST name="answer3" size = "30" maxlength="30" required>
-                </li>
-                <li class="yellow-text">
-                <input type="text" method=POST name="answer4" size = "30" maxlength="30" required>
-                </li>
-            </ol>
-        </br>
+        </br><hr>
+            <div class="col-sm-6" style="display:table;">
+                <textarea type="text" name="questiontext" placeholder="Enter question here..."class="form-control" rows="6" METHOD=POST maxlength="144" required></textarea>
+            </div>
+            <div class="col-sm-4" style="list-style-type:none;display:table;">
+                    <input type="textarea" class="red-text" placeholder="Answer #1" method=POST name="answer1" maxlength="30" required></input>
+                    <input type="textarea" class="blue-text" placeholder="Answer #2" method=POST name="answer2" maxlength="30" required></input>
+                    <input type="textarea" class="green-text" placeholder="Answer #3" method=POST name="answer3" maxlength="30" required></input>
+                    <input type="textarea" class="yellow-text" placeholder="Answer #4" method=POST name="answer4" maxlength="30" required></input>
+            </div>
+        </div>
+        <div class="container">
+            <hr>
 	    Import Image:
 	    <input type="file" class="form-control" name="file" id="Location">
             Explanation:<br>
             <textarea type="text" name="explanation" class="form-control" rows="5" maxlength="750"></textarea>
             <hr>
             Select the correct answer:</br>
-            <button type="submit" name="answerid" value=1 class="submit-q-button-1">1</button>
-            <button type="submit" name="answerid" value=2 class="submit-q-button-2">2</button>
-            <button type="submit" name="answerid" value=3 class="submit-q-button-3">3</button>
-            <button type="submit" name="answerid" value=4 class="submit-q-button-4">4</button>
+            <div class="col-sm-2">
+                <button type="submit" style="width:100%;" name="answerid" value=1 class="submit-q-button-1">1</button>
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" style="width:100%;" name="answerid" value=2 class="submit-q-button-2">2</button>
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" style="width:100%;" name="answerid" value=3 class="submit-q-button-3">3</button>
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" style="width:100%;" name="answerid" value=4 class="submit-q-button-4">4</button>
+            </div>
         </form>
     </div>
     {% else %}
