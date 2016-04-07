@@ -232,12 +232,13 @@
 	</div>
 
     <div class = "container" id="quizResults" style="text-align:center; display:none">
+        <div class = "container">
         <h3  style="text-align:center">You got 3 out of 4 questions correct!</h3>
-        <hr>
         <span class="alignleft">Question</span>
         <span class="aligncenter">Your Answer</span>
-        <span class="alignright">Points</span>
+        <span class="alignright">Points&nbsp;</span>
         </br>
+    </div>
 	</div>
 </body>
 
@@ -357,21 +358,22 @@
         console.log(newResult.correct);
         console.log("^^^ ANSWER DATA ^^^");
 
-        var newResLine1 = "<hr><div class='container'><span class='alignleft'>";
+        var newResLine1 = "<div class='container'><hr><span class='alignleft'>";
         newResLine1 = newResLine1.concat(newResult.qTxt);
         if (newResult.correct){
             var newResline2 = "</span><span class='aligncenter' style='color:green;'>";
             newResline2 = newResline2.concat(newResult.uAns);
             var newResline3 = "</span><span class='alignright' style='color:green;'>+";
             newResline3 = newResline3.concat(newResult.points);
+            var newResline4 = "&nbsp;&nbsp;&nbsp;</span></br></div>";
         }
         else{
             var newResline2 = "</span><span class='aligncenter' style='color:red;'>";
             newResline2 = newResline2.concat(newResult.uAns);
             var newResline3 = "</span><span class='alignright' style='color:red;'>";
             newResline3 = newResline3.concat(newResult.points);
+            var newResline4 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></br></div>";
         }
-        var newResline4 = "</span></br></div>";
         var resultsTable = document.getElementById('quizResults');
         resultsTable.innerHTML = resultsTable.innerHTML + newResLine1 + newResline2 + newResline3 + newResline4;
         //resultsTable.innerHTML = resultsTable.innerHTML + "tesssst";
