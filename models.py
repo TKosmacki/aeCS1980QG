@@ -161,9 +161,9 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
 
 #MODIFIERS
 ###############################################################################
-def update_profile(id, name, year, interests, bio, employer, image_url = None):
+def update_profile(id, name, year, interests, bio, employer,username, image_url = None):
     profile = get_User(id)
-    profile.populate(name = name, year = year, interests = interests, bio = bio, employer = employer, image_url = image_url)
+    profile.populate(name = name, year = year, interests = interests, bio = bio, employer = employer,username = username, image_url = image_url)
     profile.put()
     memcache.set(id, profile, namespace="profile")
 
@@ -286,6 +286,14 @@ def check_if_down_voted(has_down_voted, email):
         return True
     return False
 
+def checkUsername(username):
+    qry = User.query()
+    usernames = qry.fetch(projection=[User.username])
+    for x in usernames:
+        if x.username == username:
+            return False
+    return True
+    
 #return: (list) of questions, oldest first
 def get_oldest_questions(num,val):
     if val: #searches for valid questions for reviewal

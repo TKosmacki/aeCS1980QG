@@ -74,16 +74,8 @@
         counter+=1; //increments at each question
 
         if( (counter) == "{{num}}"){
-            //sendResults(userResults);
-            document.getElementById('content').innerHTML = "";
-            var cnt = 0;
+            $('#content').hide();
             $('#quizResults').show();
-            /*while (cnt < counter+1){
-
-            }*/
-            //instead of sending the results off the page, just clear the page and construct the new one here,
-            //can have an already set up div here and just fill it in as well
-            //window.location.href = "/";
             return;
         }
         count.innerHTML = "Total Score: " + totalScore; //prints out the question number
@@ -480,19 +472,6 @@
                 // .done(function( data ) {
                 //     alert("cool");
                 // });
-          }
-          catch(err){
-              window.alert(err.message);
-          }
-    }
-    function sendResults(uResults){
-        try{
-                $.ajax({
-                    type: "POST",
-                    url: "/quizResults",
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify(uResults)
-              });
           }
           catch(err){
               window.alert(err.message);

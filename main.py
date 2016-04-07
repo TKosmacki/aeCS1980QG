@@ -44,6 +44,18 @@ class MainPageHandler(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
+        if q == []:
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
         page_params = {
             'user_email': get_user_email(),
             'login_url': users.create_login_url('/firstLogin'),
@@ -69,7 +81,18 @@ class SubmitPageHandler(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
-
+        if q == []:
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
         page_params = {
             'upload_urlQ': blobstore.create_upload_url('/NewQuestion'),
             'user_email': get_user_email(),
@@ -134,18 +157,30 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
 class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
         id = self.request.get('id')
-        uID = get_user_id()
-        logging.warning(id)
+        id = get_user_id()
         review = models.getQuestionFromURL(id)
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+        q = models.check_if_user_exists(id)
+        if q == []:
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
         page_params = {
             'upload_urlQE': blobstore.create_upload_url('/ReviewQuestion?id=' + id),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
-            'user_id': uID,
+            'user_id': id,
             'review': review,
             'admin' : is_admin
         }
@@ -219,17 +254,30 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewNewQuestions(webapp2.RequestHandler):
     def get(self):
-        uID = get_user_id()
+        id = get_user_id()
         #just loops and prints every question from query
         review = models.get_oldest_questions(1000,False) #searches 1000 oldest invalid questions
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+        q = models.check_if_user_exists(id)
+        if q == []:
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
         page_params = {
         'user_email': get_user_email(),
         'login_url': users.create_login_url(),
         'logout_url': users.create_logout_url('/'),
-        'user_id': uID,
+        'user_id': id,
         'review': review,
         'admin' : is_admin
         }
@@ -238,17 +286,30 @@ class ReviewNewQuestions(webapp2.RequestHandler):
 #Brings up a table that displays information on the most recent 1000 questions
 class ReviewOldQuestions(webapp2.RequestHandler):
     def get(self):
-        uID = get_user_id()
+        id = get_user_id()
         #just loops and prints every question from query
         review = models.get_oldest_questions(1000,True) #searches 1000 oldest valid questions
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+        q = models.check_if_user_exists(id)
+        if q == []:
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
         page_params = {
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
-            'user_id': uID,
+            'user_id': id,
             'review': review,
             'admin' : is_admin
         }
@@ -290,22 +351,20 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-
+   
         if q == []:
-            # page_params = {
-                # 'upload_url': blobstore.create_upload_url('/profile'),
-                # 'user_email': get_user_email(),
-                # 'login_url': users.create_login_url(),
-                # 'logout_url': users.create_logout_url('/'),
-                # 'user_id': get_user_id(),
-                # 'profile': models.get_User(id),
-                # 'admin': is_admin
-            # }
-            # render_template(self, 'createProfile.html' ,page_params)
-            # return
-            models.createUser(id) #will need to be moved to occur after form submission
-
-
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
+            
         categoryScores = models.getCatUserScore(get_user_id())
         page_params = {
             'upload_url': blobstore.create_upload_url('/profile'),
@@ -321,7 +380,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         render_template(self, 'profile.html', page_params)
 
     def post(self):
-        #try to upload an image
+        #will need to be moved to occur after form submission
         try:
             upload_files = self.get_uploads()
             blob_info = upload_files[0]
@@ -332,15 +391,16 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             interests = self.request.get("interests")
             employer = self.request.get("employer")
             bio = self.request.get("bio")
-
+            username= self.request.get('username')
+            models.createUser(id)
             # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
-                models.update_profile(id, name, year, interests, bio, employer, image)
+                models.update_profile(id, name, year, interests, bio, employer,username, image)
 
             # if the uploaded file is not an image
             else:
-                models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
+                models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
 
             self.redirect('/profile?id=' + id)
         # no image to upload
@@ -351,7 +411,8 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             interests = self.request.get("interests")
             employer = self.request.get("employer")
             bio = self.request.get("bio")
-            models.update_profile(id, name, year, interests, bio, employer, models.get_User(id).image_url)
+            username = self.request.get('username')
+            models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
 
         self.redirect('/profile?id=' + id)
 
@@ -396,9 +457,23 @@ def obj_dict(obj):
 #Fetches the quiz and passes the questions and relevant information to the page.
 class categoryQuiz(webapp2.RequestHandler):
     def get(self):
+        id = get_user_id()
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+        q = models.check_if_user_exists(id)
+        if q == []:
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
         category = self.request.get('category')
         number = self.request.get('number')
         logging.warning(category)
@@ -456,6 +531,19 @@ class LeaderBoard(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+        q = models.check_if_user_exists(id)
+        if q == []:
+            page_params = {
+                'upload_url': blobstore.create_upload_url('/profile'),
+                'user_email': get_user_email(),
+                'login_url': users.create_login_url(),
+                'logout_url': users.create_logout_url('/'),
+                'user_id': get_user_id(),
+                'profile': models.get_User(id),
+                'admin': is_admin
+            }
+            render_template(self, 'createProfile.html' ,page_params)
+            return
         page_params = {
             'category': 'ALL',
             'user_id': get_user_id(),
@@ -487,10 +575,6 @@ class LeaderBoard(webapp2.RequestHandler):
             'admin': is_admin,
             }
         render_template(self, 'leaderboard.html', page_params)
-
-class quizResults(webapp2.RequestHandler):
-    def get(self):
-        render_template(self, 'quizResults.html')
 
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
@@ -549,6 +633,16 @@ class deleteQuestion(webapp2.RequestHandler):
         #need this for some reason, for redirect in javascript to work
         self.redirect("/ReviewOldQuestions")
 
+class checkUsername(webapp2.RequestHandler):
+    def post(self):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        logging.warning(data['username'])
+        result= {}
+        result['exists'] = models.checkUsername(data['username'])
+        self.response.out.write(json.dumps(result))
+        
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
@@ -572,6 +666,6 @@ mappings = [
   ('/takeQuiz', categoryQuiz),
   ('/firstLogin', LoginPageHandler),
   ('/leaderboard', LeaderBoard),
-  ('/quizResults', quizResults)
+  ('/checkUsername', checkUsername),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
