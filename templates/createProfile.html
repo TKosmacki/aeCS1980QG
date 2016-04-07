@@ -6,7 +6,7 @@
     <div class="container">
         <h3>Create Profile</h3>
         <hr>
-        <form role = "form"  method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
+        <form role = "form" onsubmit="usernameValidation()"  method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
             <div class="container col-lg-12">
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>User Name: </span><br>
@@ -44,5 +44,17 @@
         </form>
     </div>
     </body>
+    <script>
+    function usernameValidation(){
+        var usernameRegex = new RegExp("/^[a-zA-Z0-9]+$/");
+        var username = $('username').val();
+        if (usernameRegex.test(username)){//tests to make sure username has valid characters
+            //validate that the username exists
+        }
+        else{
+            //figure out how to stop form from submitting
+        }
+    }
+    </script>
 </html>
 {% endblock %}

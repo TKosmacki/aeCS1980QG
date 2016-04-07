@@ -5,6 +5,26 @@
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="/static/js/w2ui-1.4.3.min.js"></script>
+<style>
+.alignleft {
+  float: left;
+  width:33.33333%;
+  text-align:left;
+  font-weight: bold;
+}
+.aligncenter {
+  float: left;
+  width:33.33333%;
+  text-align:center;
+  font-weight: bold;
+}
+.alignright {
+ float: left;
+ width:33.33333%;
+ text-align:right;
+ font-weight: bold;
+}
+</style>
 <script type="text/javascript">
     var timeLeft;
     var counter = -1;
@@ -55,11 +75,20 @@
 
         if( (counter) == "{{num}}"){
             //sendResults(userResults);
-            window.location.href = "/";
+            document.getElementById('content').innerHTML = "";
+            var cnt = 0;
+            $('#quizResults').show();
+            /*while (cnt < counter+1){
+            
+            }*/
+            //instead of sending the results off the page, just clear the page and construct the new one here,
+            //can have an already set up div here and just fill it in as well
+            //window.location.href = "/";
             return;
         }
         count.innerHTML = "Total Score: " + totalScore; //prints out the question number
         elem.innerHTML = "<p>" + 15 + "</p>";
+        
 	$('#img').css("display","none");
         //code for retrieving and printing the question
         var quest = document.getElementById("question");
@@ -100,44 +129,45 @@
 
 <body>
     <br><br><br><br>
-    <div class = "container" style= "text-align:center; position:relative;">
-        <h3 style="display:inline;" id="counter"></h3>
-    </div>
-    <div class="container">
-        <hr>
-        <h4 id = "question" style="text-align:center"></h4>
-    </div>
-
-    <!--Quiz-->
-    <font size = 5>
-        <div class ="container">
-	    <div class="large-lg-12 text-center">
-                <img style="display:none;" id="img" src="" style= "text-align:center;" class="smaller-image"></img>
-	    </div>
-	    <div class = "col-lg-3"></div>
-            <div class="col-lg-3" style= "text-align:center; position:relative;">
-                <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1"></button>
-            </div>
-            <div class="col-lg-3" style= "text-align:center; position:relative;">
-                <button onclick="submit(2)" id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2"></button>
-            </div>
-            <div class="col-lg-3"></div>
+    <div class="container" id="content">
+        <div class = "container" style= "text-align:center; position:relative;">
+            <h3 style="display:inline;" id="counter"></h3>
         </div>
-        <div class ="container">
-            <div class="col-lg-3"></div>
-            <div class="col-lg-3" style= "text-align:center; position:relative;">
-                <button onclick="submit(3)" id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3"></button>
-                </div>
-            <div class="col-lg-3" style= "text-align:center; position:relative;">
-                <button onclick="submit(4)" id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4"></button>
-                </div>
-            <div class="col-lg-3"></div>
+        <div class="container">
+            <hr>
+            <h4 id = "question" style="text-align:center"></h4>
         </div>
-        <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
-    </font>
 
-    <div class="container" id="timer" style="text-align:center"><p>15</p></div>
+        <!--Quiz-->
+        <font size = 5>
+            <div class ="container">
+            <div class="large-lg-12 text-center">
+                    <img style="display:none;" id="img" src="" style= "text-align:center;" class="smaller-image"></img>
+            </div>
+            <div class = "col-lg-3"></div>
+                <div class="col-lg-3" style= "text-align:center; position:relative;">
+                    <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1"></button>
+                </div>
+                <div class="col-lg-3" style= "text-align:center; position:relative;">
+                    <button onclick="submit(2)" id="answer2" type="submit" name="userAnswer" value=2 class="submit-a-button-2"></button>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <div class ="container">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-3" style= "text-align:center; position:relative;">
+                    <button onclick="submit(3)" id="answer3" type="submit" name="userAnswer" value=3 class="submit-a-button-3"></button>
+                    </div>
+                <div class="col-lg-3" style= "text-align:center; position:relative;">
+                    <button onclick="submit(4)" id="answer4" type="submit" name="userAnswer" value=4 class="submit-a-button-4"></button>
+                    </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <button type="hidden submit" id="submit" name="userAnswer" style="visibility: hidden" value=0></button>
+        </font>
 
+        <div class="container" id="timer" style="text-align:center"><p>15</p></div>
+    </div>
     <!--Results Modal-->
     <div class="modal fade" data-keyboard="false" id ="results" role="dialog">
         <div class="modal-dialog">
@@ -188,6 +218,7 @@
 			</div>
 		</div>
 	</div>
+    <!--Get Ready Modal-->
     <div style="z-index:2147483646;" class="modal fade" id="getready" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -198,6 +229,36 @@
                 </div>
 			</div>
 		</div>
+	</div>
+    
+    <div class = "container" id="quizResults" style="text-align:center; display:none">
+        <h3  style="text-align:center">You got 3 out of 4 questions correct!</h3>
+        <hr>
+        <span class="alignleft">Question</span>
+        <span class="aligncenter">Your Answer</span>
+        <span class="alignright">Points</span>
+        </br>
+        <hr>
+        <span class="alignleft">1. Who is the coolest Pokemon?</span>
+        <span class="aligncenter" style="color:green;">Blastoise</span>
+        <span class="alignright" style="color:green;">+151</span>
+        </br>
+        <hr>
+        <span class="alignleft">2. Who is the raddest Pokemon?</span>
+        <span class="aligncenter" style="color:green;">Blastoise</span>
+        <span class="alignright" style="color:green;">+151</span>
+        </br>
+        <hr>
+        <span class="alignleft">3. Who is the fasttttest Pokemon?</span>
+        <span class="aligncenter" style="color:green;">Blastoise</span>
+        <span class="alignright" style="color:green;">+151</span>
+        </br>
+        <hr>
+        <span class="alignleft">4. Who is the best Pokemon of the original 151?</span>
+        <span class="aligncenter" style="color:red;">Onyx</span>
+        <span class="alignright" style="color:red;">0</span>
+        </br>
+        <hr>
 	</div>
 </body>
 
