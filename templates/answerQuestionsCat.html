@@ -38,6 +38,7 @@
     var totalScore = 0;
     var maxTime = 15;
     var userResults = [];
+    var correctCount = 0;
 
     function result(){  //none of these constructor values should remain after proper code executes
         this.qTxt = "Question Text Goes Here";
@@ -77,6 +78,16 @@
             //sendResults(userResults);
             document.getElementById('content').innerHTML = "";
             var cnt = 0;
+            var correctString = "You got ";
+            correctString = correctString.concat(correctCount);
+            correctString = correctString.concat(" out of ");
+            correctString = correctString.concat(counter);
+            correctString = correctString.concat("!");
+            document.getElementById('correctBox').innerHTML = correctString;
+            var scoreString = "You got ";
+            scoreString = scoreString.concat(totalScore);
+            scoreString = scoreString.concat(" points!");
+            document.getElementById('pointsBox').innerHTML = scoreString;
             $('#quizResults').show();
             /*while (cnt < counter+1){
 
@@ -233,7 +244,8 @@
 
     <div class = "container" id="quizResults" style="text-align:center; display:none">
         <div class = "container">
-        <h3  style="text-align:center">You got 3 out of 4 questions correct!</h3>
+        <h2 id="correctBox" style="text-align:center"></h2>
+        <h3 id="pointsBox" style="text-align:center"></h3>
         <span class="alignleft">Question</span>
         <span class="aligncenter">Your Answer</span>
         <span class="alignright">Points&nbsp;</span>
@@ -306,27 +318,36 @@
         var s3p = Math.round((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
         if (s4p<0){ s4p = 0; }
+        var newResult = new result();
         if (selection != curr[counter].answerid){
             score = 0;
+            newResult.correct = false;
         }
         else{
             if( "1" == curr[counter].answerid){
                 score = calcScore(timeLeft,s1p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
             if( "2" == curr[counter].answerid){
                 score = calcScore(timeLeft,s2p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
             if( "3" == curr[counter].answerid){
                 score = calcScore(timeLeft,s3p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
             if( "4" == curr[counter].answerid){
                 score = calcScore(timeLeft,s4p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
         }
 
         totalScore += score;
 
-        var newResult = new result();
         newResult.qTxt = curr[counter].question;
         if (selection == '1'){
             newResult.uAns = a1;
@@ -344,21 +365,14 @@
             newResult.uAns = 'Timeout';
         }
         newResult.points = score;
-        if (score > 0){
-            newResult.correct = true;
-        }
-        else{
-            newResult.correct = false;
-        }
-
-        console.log("TRACKING ANSWER:");
         console.log(newResult.qTxt);
         console.log(newResult.uAns);
         console.log(newResult.points);
         console.log(newResult.correct);
-        console.log("^^^ ANSWER DATA ^^^");
 
         var newResLine1 = "<div class='container'><hr><span class='alignleft'>";
+        newResLine1 = newResLine1.concat(counter+1);
+        newResLine1 = newResLine1.concat(". ");
         newResLine1 = newResLine1.concat(newResult.qTxt);
         if (newResult.correct){
             var newResline2 = "</span><span class='aligncenter' style='color:green;'>";
