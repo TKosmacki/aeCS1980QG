@@ -94,7 +94,7 @@
 
         curr = {{question_list|safe}};
 	$('#img').attr("src","/imageQ?urlkey=" + curr[counter].urlkey);
-	if (curr[counter].urlkey != null){
+	if (curr[counter].image_urlQ != null){
 		$('#img').css("display","inline");
 	}
         ratingNum = curr[counter].rating;
