@@ -144,12 +144,12 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
 class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
         id = self.request.get('id')
-        id = get_user_id()
+        Uid = get_user_id()
         review = models.getQuestionFromURL(id)
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        q = models.check_if_user_exists(id)
+        q = models.check_if_user_exists(Uid)
         if q == []:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
@@ -157,7 +157,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(id),
+                'profile': models.get_User(Uid),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
