@@ -43,19 +43,6 @@ class MainPageHandler(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        q = models.check_if_user_exists(id)
-        if q == []:
-            page_params = {
-                'upload_url': blobstore.create_upload_url('/profile'),
-                'user_email': get_user_email(),
-                'login_url': users.create_login_url(),
-                'logout_url': users.create_logout_url('/'),
-                'user_id': get_user_id(),
-                'profile': models.get_User(id),
-                'admin': is_admin
-            }
-            render_template(self, 'createProfile.html' ,page_params)
-            return
         page_params = {
             'user_email': get_user_email(),
             'login_url': users.create_login_url('/firstLogin'),
@@ -351,7 +338,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-   
+
         if q == []:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
@@ -364,7 +351,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             }
             render_template(self, 'createProfile.html' ,page_params)
             return
-            
+
         categoryScores = models.getCatUserScore(get_user_id())
         logging.warning("passing params")
         page_params = {
@@ -393,7 +380,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             interests = self.request.get("interests")
             employer = self.request.get("employer")
             bio = self.request.get("bio")
-            username= self.request.get('username')            
+            username= self.request.get('username')
             time.sleep(1)
             id = get_user_id()
             # if the uploaded file is an image
@@ -417,7 +404,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             employer = self.request.get("employer")
             bio = self.request.get("bio")
             username = self.request.get('username')
-            time.sleep(1)
+            time.sleep(5)
             id = get_user_id()
             models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
             time.sleep(1)
@@ -533,6 +520,7 @@ class reportQuizHandler(webapp2.RequestHandler):
 
 class LeaderBoard(webapp2.RequestHandler):
     def get(self):
+        id = get_user_id()
         jAson = models.getAllUserScores()
         userList = json.dumps(jAson)
         is_admin = 0
@@ -653,7 +641,7 @@ class checkUsername(webapp2.RequestHandler):
         result= {}
         result['exists'] = models.checkUsername(data['username'])
         self.response.out.write(json.dumps(result))
-        
+
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),

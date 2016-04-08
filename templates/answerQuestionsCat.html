@@ -38,14 +38,13 @@
     var totalScore = 0;
     var maxTime = 15;
     var userResults = [];
-
+    var correctCount = 0;
     function result(){  //none of these constructor values should remain after proper code executes
         this.qTxt = "Question Text Goes Here";
         this.uAns = "Timeout by default";
         this.points = 0;
         this.correct = false;
     }
-
     function runQuestion(){
         try{
             clearTimeout(timerId);
@@ -54,33 +53,42 @@
         catch(err){
         }
         timeLeft = 14;
-
         var elem = document.getElementById('timer');
-
         timerId = setInterval(function() {
               elem.innerHTML = "<p>" + timeLeft + "</p>";
               if (timeLeft == 0) {
                 clearTimeout(timerId);
                 submit(5);
               } else {
-
                     timeLeft--;
               }
             }, 1000);
-
-
         var count = document.getElementById('counter'); //question number
-
         counter+=1; //increments at each question
-
         if( (counter) == "{{num}}"){
-            $('#content').hide();
+            //sendResults(userResults);
+            document.getElementById('content').innerHTML = "";
+            var cnt = 0;
+            var correctString = "You got ";
+            correctString = correctString.concat(correctCount);
+            correctString = correctString.concat(" out of ");
+            correctString = correctString.concat(counter);
+            correctString = correctString.concat(" questions correct.");
+            document.getElementById('correctBox').innerHTML = correctString;
+            var scoreString = "You scored ";
+            scoreString = scoreString.concat(totalScore);
+            scoreString = scoreString.concat(" points.");
+            document.getElementById('pointsBox').innerHTML = scoreString;
             $('#quizResults').show();
+            /*while (cnt < counter+1){
+            }*/
+            //instead of sending the results off the page, just clear the page and construct the new one here,
+            //can have an already set up div here and just fill it in as well
+            //window.location.href = "/";
             return;
         }
         count.innerHTML = "Total Score: " + totalScore; //prints out the question number
         elem.innerHTML = "<p>" + 15 + "</p>";
-
 	$('#img').css("display","none");
         //code for retrieving and printing the question
         var quest = document.getElementById("question");
@@ -91,7 +99,6 @@
 	// curr[counter] == current question
 	// urlkey or image_urlQ
         ratingDiv = document.getElementById("numVotes");
-
         curr = {{question_list|safe}};
 	$('#img').attr("src","/imageQ?urlkey=" + curr[counter].urlkey);
 	if (curr[counter].image_urlQ != null){
@@ -107,7 +114,6 @@
         ratingDiv.innerHTML = "Rating: " + ratingNum;
         ratingDiv.style.color = "black";
     }
-
     function calcScore(timeRemaining,percentCorrect){
         var value = 50;
         value = value * (timeRemaining+1)/maxTime;
@@ -215,7 +221,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <div class="modal-body">
-                    Are You Ready?<br><br>
+                    Are You Ready?<br><br><br><br><br><br><br><br><br><br>
                     <button class="btn btn-link" onclick= "runQuestion()"> Go! </button>
                     <br>
                 </div>
@@ -225,7 +231,8 @@
 
     <div class = "container" id="quizResults" style="text-align:center; display:none">
         <div class = "container">
-        <h3  style="text-align:center">You got 3 out of 4 questions correct!</h3>
+        <h2 id="correctBox" style="text-align:center"></h2>
+        <h4 id="pointsBox" style="text-align:center"></h4>
         <span class="alignleft">Question</span>
         <span class="aligncenter">Your Answer</span>
         <span class="alignright">Points&nbsp;</span>
@@ -236,7 +243,6 @@
 
 <script>
     window.onload = $("#getready").modal({ backdrop: 'static',keyboard: false });
-
     function vote(direction){
         var urlkey = curr[counter].urlkey;
         if (direction == 1){
@@ -278,7 +284,6 @@
     }
     function submit(selection){
         clearTimeout(timerId); //stops timer
-
         var a1 = curr[counter].answer1;
         var a2 = curr[counter].answer2;
         var a3 = curr[counter].answer3;
@@ -298,27 +303,34 @@
         var s3p = Math.round((s3 / total) * 100);
         var s4p = 100-(s1p+s2p+s3p);
         if (s4p<0){ s4p = 0; }
+        var newResult = new result();
         if (selection != curr[counter].answerid){
             score = 0;
+            newResult.correct = false;
         }
         else{
             if( "1" == curr[counter].answerid){
                 score = calcScore(timeLeft,s1p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
             if( "2" == curr[counter].answerid){
                 score = calcScore(timeLeft,s2p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
             if( "3" == curr[counter].answerid){
                 score = calcScore(timeLeft,s3p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
             if( "4" == curr[counter].answerid){
                 score = calcScore(timeLeft,s4p);
+                correctCount = correctCount+1;
+                newResult.correct = true;
             }
         }
-
         totalScore += score;
-
-        var newResult = new result();
         newResult.qTxt = curr[counter].question;
         if (selection == '1'){
             newResult.uAns = a1;
@@ -336,21 +348,13 @@
             newResult.uAns = 'Timeout';
         }
         newResult.points = score;
-        if (score > 0){
-            newResult.correct = true;
-        }
-        else{
-            newResult.correct = false;
-        }
-
-        console.log("TRACKING ANSWER:");
         console.log(newResult.qTxt);
         console.log(newResult.uAns);
         console.log(newResult.points);
         console.log(newResult.correct);
-        console.log("^^^ ANSWER DATA ^^^");
-
         var newResLine1 = "<div class='container'><hr><span class='alignleft'>";
+        newResLine1 = newResLine1.concat(counter+1);
+        newResLine1 = newResLine1.concat(". ");
         newResLine1 = newResLine1.concat(newResult.qTxt);
         if (newResult.correct){
             var newResline2 = "</span><span class='aligncenter' style='color:green;'>";
@@ -370,7 +374,6 @@
         resultsTable.innerHTML = resultsTable.innerHTML + newResLine1 + newResline2 + newResline3 + newResline4;
         //resultsTable.innerHTML = resultsTable.innerHTML + "tesssst";
         //userResults.push(newResult);
-
         popAns1.innerHTML = a1 + " (" + s1p + "%)";
         popAns2.innerHTML = a2 + " (" + s2p + "%)";
         popAns3.innerHTML = a3 + " (" + s3p + "%)";
@@ -400,12 +403,9 @@
         if( 4 == selection){
             popAns4.style.fontWeight = "bold";
         }
-
-
         var header = document.getElementById('title');
         $('#results').modal({ backdrop: 'static',keyboard: false });
         //send selection back to python
-
         if(selection == curr[counter].answerid){ //changes the header to green if correct
             header.innerHTML = "<h3 style='color:green; display:inline;'>Correct (+" + score + " pts)</h3>";
             var snd = new Audio("/static/sounds/smw_message_block.wav");
@@ -416,7 +416,12 @@
             //logic for score in here
         }
         else{ //red if incorrect
-            header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect (+0 pts)</h3>";
+            if (selection == 5){
+                header.innerHTML = "<h3 style='color:red; display:inline;'>You Ran Out of Time (+0 pts)</h3>";
+            }
+            else{
+                header.innerHTML = "<h3 style='color:red; display:inline;'>Incorrect (+0 pts)</h3>";
+            }
             var snd = new Audio("/static/sounds/smw_yoshi_spit.wav");
             snd.play();
             snd.currentTime=0;
@@ -424,7 +429,6 @@
             sendAnswer(userid,questkey,selection, score);
         }
     }
-
     function runNextQuestion(){
         //hide and reset modal
         $('#results').modal('hide');
@@ -441,7 +445,6 @@
         popAns2.style.fontWeight = "normal";
         popAns3.style.fontWeight = "normal";
         popAns4.style.fontWeight = "normal";
-
         runQuestion();
     }
     //AJAX
@@ -472,6 +475,19 @@
                 // .done(function( data ) {
                 //     alert("cool");
                 // });
+          }
+          catch(err){
+              window.alert(err.message);
+          }
+    }
+    function sendResults(uResults){
+        try{
+                $.ajax({
+                    type: "POST",
+                    url: "/quizResults",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(uResults)
+              });
           }
           catch(err){
               window.alert(err.message);
