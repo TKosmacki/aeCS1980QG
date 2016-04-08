@@ -488,7 +488,7 @@ class categoryQuiz(webapp2.RequestHandler):
         if questions:
             qList = []
             for q in questions:
-                temp = q.to_dict(exclude=['image_urlQ','category','creator','accepted','up_voters','down_voters','create_date'])
+                temp = q.to_dict(exclude=['category','creator','accepted','up_voters','down_voters','create_date'])
                 qList.append(temp)
             jList = json.dumps(qList, default=obj_dict)
 
