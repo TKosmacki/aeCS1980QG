@@ -366,6 +366,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             return
             
         categoryScores = models.getCatUserScore(get_user_id())
+        logging.warning("passing params")
         page_params = {
             'upload_url': blobstore.create_upload_url('/profile'),
             'user_email': get_user_email(),
@@ -404,6 +405,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             else:
                 models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
 
+            time.sleep(1)
             self.redirect('/profile?id=' + id)
         # no image to upload
         except IndexError:
@@ -418,6 +420,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             time.sleep(1)
             id = get_user_id()
             models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
+            time.sleep(1)
             self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
