@@ -351,7 +351,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-   
+
         if q == []:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
@@ -364,7 +364,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             }
             render_template(self, 'createProfile.html' ,page_params)
             return
-            
+
         categoryScores = models.getCatUserScore(get_user_id())
         logging.warning("passing params")
         page_params = {
@@ -393,7 +393,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             interests = self.request.get("interests")
             employer = self.request.get("employer")
             bio = self.request.get("bio")
-            username= self.request.get('username')            
+            username= self.request.get('username')
             time.sleep(1)
             id = get_user_id()
             # if the uploaded file is an image
@@ -417,7 +417,7 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             employer = self.request.get("employer")
             bio = self.request.get("bio")
             username = self.request.get('username')
-            time.sleep(1)
+            time.sleep(5)
             id = get_user_id()
             models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
             time.sleep(1)
@@ -653,7 +653,7 @@ class checkUsername(webapp2.RequestHandler):
         result= {}
         result['exists'] = models.checkUsername(data['username'])
         self.response.out.write(json.dumps(result))
-        
+
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
