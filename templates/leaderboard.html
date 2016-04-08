@@ -3,74 +3,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<style>
-	table {
-	    width:100%;
-	}
-	table, th, td {
-	    border: 1px solid black;
-	    border-collapse: collapse;
-	}
-	th, td {
-	    padding: 5px;
-	    text-align: left;
-	}
-	table#leaderboard tr:nth-child(even) {
-	    background-color: #eee;
-	}
-	table#leaderboard tr:nth-child(odd) {
-	   background-color:#fff;
-	}
-	table#leaderboard th	{
-	    background-color: black;
-	    color: white;
-	}
-	</style>
+<style>
+    table {
+        width:100%;
+    }
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 5px;
+        text-align: left;
+    }
+    table#leaderboard tr:nth-child(even) {
+        background-color: #eee;
+    }
+    table#leaderboard tr:nth-child(odd) {
+       background-color:#fff;
+    }
+    table#leaderboard th	{
+        background-color: black;
+        color: white;
+}
+</style>
 </head>
 <body>
 </br></br></br>
 	<div class = "container ">
 	</br>
-		<div class = "container" align="right">
-			<h3><span style="float:left; font-size:5;">{{category}}</span>
-			<form action="/leaderboard" method="post">
-				<select id="Category" name="category" method="POST">
-					<option selected disabled>Category</option>
-					<option value="ALL">ALL</option>
-					<option value="PHARM 2001">PHARM 2001</option>
-					<option value="PHARM 3023">PHARM 3023</option>
-					<option value="PHARM 3028">PHARM 3028</option>
-					<option value="PHARM 3040">PHARM 3040</option>
-					<option value="PHARM 5218">PHARM 5218</option>
-				</select>
-				<button type="submit" value="submit" style="font-size:16px">Select</button>
-			</form>
-
-	</div>
-	<table id="leaderboard">
-	  <tr>
-		<th width='5%'>Rank</th>
-		<th>Points</th>
-	    <th>Name</th>
-	  </tr>
-	</table>
-	</div>
+    <div class = "container" align="right">
+        <h3><span style="float:left; font-size:5;">{{category}}</span>
+        <select style="font-size:5" class="selectpicker" id="category" name="category" method="POST">
+            <option selected disabled>Category</option>
+            <option value="ALL">ALL</option>
+            <option value="PHARM 2001">PHARM 2001</option>
+            <option value="PHARM 3023">PHARM 3023</option>
+            <option value="PHARM 3028">PHARM 3028</option>
+            <option value="PHARM 3040">PHARM 3040</option>
+            <option value="PHARM 5218">PHARM 5218</option>
+        </select>
+        <hr>
+    </div>
+    <div class= "container">
+        <table id="leaderboard">
+          <thead>
+            <th width='5%'>Rank</th>
+            <th>Points</th>
+            <th>Name</th>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+    </div>
 
 </body>
 <script type="text/javascript">
-var scoreList =  {{list|safe}};
-console.log(scoreList);
-var rank = 1;
-for (var prop in scoreList){
-  console.log("obj." + prop + " = " + scoreList[prop]);
-  var board = document.getElementById('leaderboard');
-  var newRow = board.insertRow(board.rows.length);
-  newRow.innerHTML = "<td>"+rank+"</td><td>"+scoreList[prop]+"</td><td>"+prop+"</td>";
-  rank++;
-}
-//alert(scoreList);
-var board = document.getElementById('leaderboard');
-
+    $(document).ready(function() {
+        $('#category').change(function(){
+            category = $('#category').val();
+            $.ajax({
+                type: "POST",
+                url: "/getNewCatScores",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"category":category}),
+                success: function(text){
+                    $("#leaderboard tbody").empty();
+                    var data = JSON.parse(text);
+                    var rank = 1;
+                    $.each(data, function(index, el) { 
+                        $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+el+"</td><td>"+index+"</td></tr>");
+                        rank++;
+                    });
+                },
+            });
+        });
+    });
+    var scoreList =  {{list|safe}};
+    console.log(scoreList);
+    var rank = 1;
+    for (var prop in scoreList){
+      console.log("obj." + prop + " = " + scoreList[prop]);
+      $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+scoreList[prop]+"</td><td>"+prop+"</td><tr>");
+      rank++;
+    }
+    //alert(scoreList);
+    var board = document.getElementById('leaderboard');
 </script>
 </html>
 {% endblock %}

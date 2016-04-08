@@ -550,12 +550,13 @@ class LeaderBoard(webapp2.RequestHandler):
             }
         render_template(self, 'leaderboard.html', page_params)
 
+class getNewCatScores(webapp2.RequestHandler):
     def post(self):
-        cat = self.request.get('category')
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        cat = data['category']
         logging.warning('cat: ['+ cat+']')
-        is_admin = 0
-        if users.is_current_user_admin():
-            is_admin = 1
         if (cat == 'ALL'):
             jAson = models.getAllUserScores()
         elif (len(cat) == 0) :
@@ -564,16 +565,7 @@ class LeaderBoard(webapp2.RequestHandler):
         else:
             jAson = models.getAllUserScoresForCat(cat)
         userList = json.dumps(jAson)
-        page_params = {
-            'category': cat,
-            'user_id': get_user_id(),
-            'list': jAson,
-            'user_email': get_user_email(),
-            'login_url': users.create_login_url(),
-            'logout_url': users.create_logout_url('/'),
-            'admin': is_admin,
-            }
-        render_template(self, 'leaderboard.html', page_params)
+        self.response.out.write(userList)    
 
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
@@ -666,5 +658,6 @@ mappings = [
   ('/firstLogin', LoginPageHandler),
   ('/leaderboard', LeaderBoard),
   ('/checkUsername', checkUsername),
+  ('/getNewCatScores', getNewCatScores),
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
