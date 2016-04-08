@@ -43,19 +43,6 @@ class MainPageHandler(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        q = models.check_if_user_exists(id)
-        if q == []:
-            page_params = {
-                'upload_url': blobstore.create_upload_url('/profile'),
-                'user_email': get_user_email(),
-                'login_url': users.create_login_url(),
-                'logout_url': users.create_logout_url('/'),
-                'user_id': get_user_id(),
-                'profile': models.get_User(id),
-                'admin': is_admin
-            }
-            render_template(self, 'createProfile.html' ,page_params)
-            return
         page_params = {
             'user_email': get_user_email(),
             'login_url': users.create_login_url('/firstLogin'),
@@ -533,6 +520,7 @@ class reportQuizHandler(webapp2.RequestHandler):
 
 class LeaderBoard(webapp2.RequestHandler):
     def get(self):
+        id = get_user_id()
         jAson = models.getAllUserScores()
         userList = json.dumps(jAson)
         is_admin = 0
