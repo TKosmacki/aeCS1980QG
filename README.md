@@ -1,5 +1,11 @@
 #Kanban : The Gang Makes a Prototype
 
+###Priorities from latest meeting: 
+
+1. Admin control of categories
+2. Explanations on results page
+3. Leaderboard by time period
+
 - [ ] Scoring System 
 - [ ] Leaderboard Page - show statistics
 - [ ] Badge Reward System
@@ -8,5 +14,6 @@
 - [ ] Question Submit - Username beyond just email addr
 - [ ] More diverse statistics on the profile page
 - [ ] Profile/Submit Question Touchup
-- Tags?
-- Quota Issues?
+
+* Tags?
+* Quota Issues?
