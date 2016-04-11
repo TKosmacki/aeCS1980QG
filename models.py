@@ -4,6 +4,7 @@ import logging
 import os
 import webapp2
 import datetime
+from datetime import date
 import time
 from operator import itemgetter
 from collections import OrderedDict
@@ -63,9 +64,7 @@ class Question(ndb.Model):
 class Score(ndb.Model):
     category = ndb.StringProperty()
     score = ndb.IntegerProperty()
-    day = ndb.StringProperty()
-    month = ndb.StringProperty()
-    year = ndb.StringProperty()
+    date = ndb.DateProperty(auto_now_add = True)
 
 #CREATORS
 ###############################################################################
@@ -79,10 +78,12 @@ def createUser(id):
 #updates Question with statistics
 #updates Score object per category
 def createAnswer(userid, questionKey, chosenAnswer, points = 0):
-    answer = Answer(parent=ndb.Key(User, userid), )
+    answer = Answer(parent=ndb.Key(User, userid))
     question = getQuestion(questionKey)
 
-    scoreList = Score.query(Score.category == question.category, ancestor = ndb.Key(User, userid)).fetch(1)
+    scoreList = Score.query(Score.category == question.category, Score.date ==
+            date.today(), ancestor = ndb.Key(User, userid)).fetch(1)
+
 
 
     answer.questionKey = questionKey
@@ -101,13 +102,13 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
         answer.correct = False
         correctFlag = False
 
-    #Score hasn't been created
-    if len(scoreList) == 0:
+    if len(scoreList) == 0: #Score hasn't been created
         if correctFlag == True:
             createScore(userid, question.category, points)
         else:
             createScore(userid, question.category, 0)
-    else:
+    else: #Score exists
+        
         if correctFlag:
             updateScore(userid, question.category, points)
 
@@ -248,7 +249,7 @@ def getUser(id):
     logging.warning("STARTING GET USER")
     key = ndb.Key(User, id)
     return key.get()
-    
+
 def get_image(image_id):
   return ndb.Key(urlsafe=image_id).get()
 
@@ -291,7 +292,7 @@ def checkUsername(username):
         if x.username == username:
             return True
     return False
-    
+
 #return: (list) of questions, oldest first
 def get_oldest_questions(num,val):
     if val: #searches for valid questions for reviewal
