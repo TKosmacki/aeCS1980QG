@@ -17,12 +17,12 @@ from google.appengine.api import memcache
 ###############################################################################
 class User(ndb.Model):
     user_id = ndb.StringProperty()
-    username = ndb.StringProperty()
-    name = ndb.StringProperty()
-    year = ndb.StringProperty()
-    interests = ndb.StringProperty()
+    username = ndb.StringProperty(default = "No Username")
+    name = ndb.StringProperty(default = "No Name")
+    year = ndb.StringProperty(default = "No Year")
+    interests = ndb.StringProperty(default = "No Interests")
     employer = ndb.StringProperty(default="University of Pittsburgh")
-    bio = ndb.StringProperty()
+    bio = ndb.StringProperty(default = "No Bio")
     image_url = ndb.BlobKeyProperty()
 
 class Answer(ndb.Model):
@@ -70,10 +70,10 @@ class Score(ndb.Model):
 #CREATORS
 ###############################################################################
 def createUser(id):
-    profile = User()
-    profile.user_id = id
-    profile.key = ndb.Key(User,id)
-    profile.put()
+    user = User()
+    user.user_id = id
+    user.key = ndb.Key(User,id)
+    user.put()
 
 #adds an Answer object to the Datastore, as a child of User 'userid'
 #updates Question with statistics
@@ -159,10 +159,17 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
 
 #MODIFIERS
 ###############################################################################
-def update_profile(id, name, year, interests, bio, employer,username, image_url = None):
-    profile = get_User(id)
-    profile.populate(name = name, year = year, interests = interests, bio = bio, employer = employer,username = username, image_url = image_url)
-    profile.put()
+def updateUser(id, name, year, interests, bio, employer,username, image_url = None):
+    user = ndb.Key(User, id).get()
+    user.name = name
+    user.year = year
+    user.interests = interests
+    user.bio = bio
+    user.employer = employer
+    user.username = username
+    user.image_url = image_url
+    user.put()
+    logging.warning("PUTTING PROFILE")
 
 def updateQuestion(urlkey,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
     questKey=ndb.Key(urlsafe=urlkey)
@@ -224,8 +231,7 @@ def delete_question(key):
 ###############################################################################
 def check_if_user_exists(id):
     result = list()
-    q = User.query(User.user_id == id)
-    q = q.fetch(1)
+    q = ndb.Key(User, id).get()
     return q
 
 #returns an iterable query object that has all answers of userid
@@ -238,17 +244,11 @@ def get_category_answers(inCategory):
     answers = Answer.query(Answer.category == inCategory)
     return answers
 
-def get_User(id):
-    query =  User.query(User.user_id == id).fetch(1)
-    if len(query) == 0:
-        return None
-    return query[0]
-    #result = memcache.get(id, namespace="profile")
-    #if not result:
-    #    result = ndb.Key(User, id).get()
-    #    memcache.set(id, result, namespace="profile")
-    #return result
-
+def getUser(id):
+    logging.warning("STARTING GET USER")
+    key = ndb.Key(User, id)
+    return key.get()
+    
 def get_image(image_id):
   return ndb.Key(urlsafe=image_id).get()
 
@@ -317,7 +317,7 @@ def getCategoryList():
 
 #returns JSON list of {category, score} for a given user
 def getCatUserScore(userid):
-    user = get_User(userid)
+    user = getUser(userid)
     scores = Score.query(ancestor = ndb.Key(User, userid))
     scoreList = []
     for score in scores:

@@ -55,7 +55,7 @@ class MainPageHandler(webapp2.RequestHandler):
 class LoginPageHandler(webapp2.RequestHandler):
     def get(self):
         id = get_user_id()
-        user = models.get_User(id)
+        user = models.getUser(id)
         if user is None:
             self.redirect('/profile?id=' + id)
         else:
@@ -75,7 +75,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(id),
+                'profile': models.getUser(id),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
@@ -93,7 +93,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
 class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         id = get_user_id()
-        q = models.get_User(id)
+        q = models.getUser(id)
         creator = q.username
         explanation = self.request.get('explanation')
         if not explanation:
@@ -157,7 +157,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(Uid),
+                'profile': models.getUser(Uid),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
@@ -181,7 +181,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             id = self.request.get('id')
             #explanation = models.getQuestionFromURL(id).explanation
             explanation = self.request.get('explanation')
-	    if not explanation:
+            if not explanation:
                 explanation = "None"
             category = models.getQuestionFromURL(id).category
             creator = models.getQuestionFromURL(id).creator
@@ -213,7 +213,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
         except IndexError:
             id = self.request.get('id')
             #explanation = models.getQuestionFromURL(id).explanation
-	    explanation = self.request.get('explanation')
+            explanation = self.request.get('explanation')
             if not explanation:
                 explanation = "None"
             category = models.getQuestionFromURL(id).category
@@ -255,7 +255,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(id),
+                'profile': models.getUser(id),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
@@ -287,7 +287,7 @@ class ReviewOldQuestions(webapp2.RequestHandler):
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(id),
+                'profile': models.getUser(id),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
@@ -330,6 +330,7 @@ class test(webapp2.RequestHandler):
 #Handles everything that happens on the profile page
 class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
+        logging.warning("STARTING PROFILE")
         if not get_user_email(): #stops from creating a profile if not logged in
             self.redirect("/")
             return
@@ -339,28 +340,30 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         if users.is_current_user_admin():
             is_admin = 1
 
-        if q == []:
+        if q == None:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
                 'user_email': get_user_email(),
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(id),
+                'profile': models.getUser(id),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
             return
 
+        user = models.getUser(id)
+        logging.warning(user.name)
+
         categoryScores = models.getCatUserScore(get_user_id())
-        logging.warning("passing params")
         page_params = {
             'upload_url': blobstore.create_upload_url('/profile'),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
             'user_id': get_user_id(),
-            'profile': models.get_User(id),
+            'profile': user,
             'numScores': len(categoryScores),
             'categoryScores':categoryScores,
             'admin': is_admin,
@@ -369,11 +372,12 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
 
     def post(self):
         #will need to be moved to occur after form submission
+        id = get_user_id()
+        user = models.getUser(id)
         try:
             upload_files = self.get_uploads()
             blob_info = upload_files[0]
             type = blob_info.content_type
-            id = get_user_id()
             models.createUser(id)
             name = self.request.get("name")
             year = self.request.get("year")
@@ -381,18 +385,19 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             employer = self.request.get("employer")
             bio = self.request.get("bio")
             username= self.request.get('username')
-            time.sleep(1)
             id = get_user_id()
             # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
-                models.update_profile(id, name, year, interests, bio, employer,username, image)
+                logging.warning("CALLING UPDATE, FILE IS IMAGE")
+                models.updateUser(id, name, year, interests, bio, employer,username, image)
 
             # if the uploaded file is not an image
             else:
-                models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
+                logging.warning("CALLING UPDATE, FILE NOT IMAGE")
+                models.updateUser(id, name, year, interests, bio,
+                        employer,username, user.image_url)
 
-            time.sleep(1)
             self.redirect('/profile?id=' + id)
         # no image to upload
         except IndexError:
@@ -404,16 +409,16 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             employer = self.request.get("employer")
             bio = self.request.get("bio")
             username = self.request.get('username')
-            time.sleep(5)
             id = get_user_id()
-            models.update_profile(id, name, year, interests, bio, employer,username, models.get_User(id).image_url)
-            time.sleep(1)
+            logging.warning("CALLING UPDATE WITH EXCEPTION")
+            models.updateUser(id, name, year, interests, bio,
+                    employer,username, user.image_url)
             self.redirect('/profile?id=' + id)
 
 class ImageHandler(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self):
     id = self.request.get("id")
-    profile = models.get_User(id)
+    profile = models.getUser(id)
     try:
      image = images.Image(blob_key=profile.image_url)
      self.send_blob(profile.image_url)
@@ -463,7 +468,7 @@ class categoryQuiz(webapp2.RequestHandler):
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(id),
+                'profile': models.getUser(id),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
@@ -534,7 +539,7 @@ class LeaderBoard(webapp2.RequestHandler):
                 'login_url': users.create_login_url(),
                 'logout_url': users.create_logout_url('/'),
                 'user_id': get_user_id(),
-                'profile': models.get_User(id),
+                'profile': models.getUser(id),
                 'admin': is_admin
             }
             render_template(self, 'createProfile.html' ,page_params)
@@ -565,7 +570,7 @@ class getNewCatScores(webapp2.RequestHandler):
         else:
             jAson = models.getAllUserScoresForCat(cat)
         userList = json.dumps(jAson)
-        self.response.out.write(userList)    
+        self.response.out.write(userList)
 
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
@@ -573,7 +578,6 @@ class addVote(webapp2.RequestHandler):
         id = self.request.get("id")
         email = get_user_email()
         models.addVote(id,email)
-        time.sleep(1)
         self.redirect("/ReviewNewQuestions") #maybe want a confirmation page
 
 #Downvoting a question
@@ -582,7 +586,6 @@ class decVote(webapp2.RequestHandler):
         id = self.request.get("id")
         email = get_user_email()
         models.decVote(id,email)
-        time.sleep(1)
         self.redirect("/ReviewNewQuestions")
 
 #Upvoting a question
