@@ -328,11 +328,20 @@ def getCatUserScore(userid):
     logging.warning("JSON: "+jsonList)
     return jsonList
 
-def getAllUserScores():
+def getAllUserScores(timePeriod = 0):
+    logging.warning("==========================================")
     users = User.query()
     scoreList = dict()
+    all = False
+    if(timePeriod == 0):
+        all = True
     for user in users:
-        scores = Score.query(ancestor = ndb.Key(User, user.user_id))
+        if all:
+            logging.warning("TIME PERIOD = FOREVER")
+            scores = Score.query(ancestor = ndb.Key(User, user.user_id))
+        else:
+            logging.warning("TIME PERIOD = "+str(timePeriod))
+            scores = Score.query(Score.date >= date.today() - datetime.timedelta(timePeriod), ancestor = ndb.Key(User,user.user_id))
         counter = 0
         for score in scores:
             counter += score.score
