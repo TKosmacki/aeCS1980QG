@@ -68,7 +68,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
-        if q == []:
+        if q == None:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
                 'user_email': get_user_email(),
@@ -150,7 +150,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(Uid)
-        if q == []:
+        if q == None:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
                 'user_email': get_user_email(),
@@ -248,7 +248,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
-        if q == []:
+        if q == None:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
                 'user_email': get_user_email(),
@@ -280,7 +280,7 @@ class ReviewOldQuestions(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
-        if q == []:
+        if q == None:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
                 'user_email': get_user_email(),
@@ -461,7 +461,7 @@ class categoryQuiz(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
-        if q == []:
+        if q == None:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
                 'user_email': get_user_email(),
@@ -532,7 +532,7 @@ class LeaderBoard(webapp2.RequestHandler):
         if users.is_current_user_admin():
             is_admin = 1
         q = models.check_if_user_exists(id)
-        if q == []:
+        if q == None:
             page_params = {
                 'upload_url': blobstore.create_upload_url('/profile'),
                 'user_email': get_user_email(),

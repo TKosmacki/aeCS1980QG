@@ -29,23 +29,24 @@
     </script>
 {% if user_email %}
     <div class="container">
-        <h3>Create Profile</h3>
+        <h3 style="display:inline">Create Profile</h3><br>
+        <span>You must create a profile before continuing!</span>
         <hr>
         <form role = "form" method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
             <div class="container col-lg-12">
                 <div class="container" style="margin-bottom:10px; display:none; color:red" id='doesNotExist'><i class="fa fa-exclamation-circle"> Username Taken</i></div>
-                <div class="container" style="margin-bottom:10px; display:none; color:red" id='invalid'><i class="fa fa-exclamation-circle"> Invalid Username</i></div>
+                <div class="container" style="margin-bottom:10px; display:none; color:red" id='invalid'><i class="fa fa-exclamation-circle"> Invalid Username (3-15 characters,uppercase,lowercase,numbers, and underscores)</i></div>
                 <div class="container" style="margin-bottom:10px; display:none; color:green" id='exists'><i class="fa fa-exclamation-circle"> Username Available</i></div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
-                    <span>User Name: </span><br>
+                    <span>User Name: *</span><br>
                     <input type="text" onkeyup="usernameValidation()" class="form-control" name="username" id="username" pattern=".{3,15}" title="3-15 characters,uppercase,lowercase,numbers,underscores" maxlength=15 required></input>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
-                    <span>Name: </span><br>
+                    <span>Name: *</span><br>
                     <input type="text" class="form-control" name="name" id="name" maxlength=70 required>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
-                    <span>Year: </span><br>
+                    <span>Year: *</span><br>
                     <input type="text" class="form-control" name="year" id="year" maxlength=10 required></input>
                 </div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
@@ -64,6 +65,7 @@
                     <span>Profile Picture: </span><br>
                     <input type="file" class="form-control" name="file" id="Location"></input>
                     <br>
+                    <hr>
                 </div>
                 <div class="col-lg-12">
                     <button id="submitForm" disabled=true type="submit" class="btn btn-primary pull-right">Submit</button>
