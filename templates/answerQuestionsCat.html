@@ -304,6 +304,10 @@
             var s2p = Math.round((s2 / total) * 100);
             var s3p = Math.round((s3 / total) * 100);
             var s4p = 100-(s1p+s2p+s3p);
+            if (isNaN(s1p)) s1p=0;
+            if (isNaN(s2p)) s2p=0;
+            if (isNaN(s3p)) s3p=0;
+            if (isNaN(s4p)) s4p=0;
             if (s4p<0){ s4p = 0; }
             var newResult = new result();
             if (selection != curr[counter].answerid){
