@@ -329,7 +329,6 @@ def getCatUserScore(userid):
     return jsonList
 
 def getAllUserScores(timePeriod = 0):
-    logging.warning("==========================================")
     users = User.query()
     scoreList = dict()
     all = False
@@ -345,7 +344,7 @@ def getAllUserScores(timePeriod = 0):
         counter = 0
         for score in scores:
             counter += score.score
-        scoreList[user.name] = counter
+        scoreList[user.username] = counter
 
     sortList = sorted(scoreList.items(), key=itemgetter(1), reverse=True)
     for x in sortList:
@@ -363,7 +362,7 @@ def getAllUserScoresForCat(param):
         counter = 0
         for score in scores:
             counter += score.score
-        scoreList[user.name] = counter
+        scoreList[user.username] = counter
 
     sortList = sorted(scoreList.items(), key=itemgetter(1), reverse=True)
     scoreList = OrderedDict(sortList)
