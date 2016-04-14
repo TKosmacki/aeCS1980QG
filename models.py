@@ -60,6 +60,7 @@ class Question(ndb.Model):
     score = ndb.IntegerProperty(default=0)
     image_urlQ = ndb.BlobKeyProperty()
     urlkey = ndb.StringProperty()
+    deleted = ndb.BooleanProperty(default=False)
 
 class Score(ndb.Model):
     category = ndb.StringProperty()
@@ -225,8 +226,14 @@ def decVote(id,email):
         return 1
     return 0
 
+def delete_question_perm(key):
+    return key.delete()
+
 def delete_question(key):
-    return ndb.Key(urlsafe=key).delete()
+    question =  getQuestionFromURL(key)
+    question.deleted = True
+    question.put()
+    return
 
 #GETTERS
 ###############################################################################
@@ -294,15 +301,10 @@ def checkUsername(username):
     return False
 
 #return: (list) of questions, oldest first
-def get_oldest_questions(num,val):
-    if val: #searches for valid questions for reviewal
-        query= Question.query(Question.accepted == True)
-        query.order(Question.create_date)
-    else: #search for invalid questions
-        query= Question.query(Question.accepted == False)
-        query.order(Question.create_date)
-
-    return query.fetch(num)
+def get_oldest_questions(val,deleted):
+    query= Question.query(Question.accepted == val, Question.deleted == deleted)
+    query.order(Question.create_date)
+    return query.fetch()
 
 #returns JSON list of unique categories
 def getCategoryList():
