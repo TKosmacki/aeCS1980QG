@@ -191,14 +191,6 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             answer3 = self.request.get('answer3')
             answer4 = self.request.get('answer4')
             answerid = self.request.get('answerid')
-            logging.warning(category)
-            logging.warning(creator)
-            logging.warning(questionIn)
-            logging.warning(answer1)
-            logging.warning(answer2)
-            logging.warning(answer3)
-            logging.warning(answer4)
-            logging.warning('Signed by anonymous user')
                 # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
@@ -224,15 +216,6 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             answer3 = self.request.get('answer3')
             answer4 = self.request.get('answer4')
             answerid = self.request.get('answerid')
-            logging.warning(explanation)
-            logging.warning(category)
-            logging.warning(creator)
-            logging.warning(questionIn)
-            logging.warning(answer1)
-            logging.warning(answer2)
-            logging.warning(answer3)
-            logging.warning(answer4)
-            logging.warning('Signed by anonymous user')
             models.updateQuestion(id,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,True, models.getQuestionFromURL(id).image_urlQ)
 
 
@@ -330,7 +313,6 @@ class test(webapp2.RequestHandler):
 #Handles everything that happens on the profile page
 class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
-        logging.warning("STARTING PROFILE")
         if not get_user_email(): #stops from creating a profile if not logged in
             self.redirect("/")
             return
@@ -354,7 +336,6 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             return
 
         user = models.getUser(id)
-        logging.warning(user.name)
 
         categoryScores = models.getCatUserScore(get_user_id())
         page_params = {
@@ -392,12 +373,10 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
-                logging.warning("CALLING UPDATE, FILE IS IMAGE")
                 models.updateUser(id, name, year, interests, bio, employer,username, image)
 
             # if the uploaded file is not an image
             else:
-                logging.warning("CALLING UPDATE, FILE NOT IMAGE")
                 models.updateUser(id, name, year, interests, bio,
                         employer,username, user.image_url)
 
@@ -413,7 +392,6 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             bio = self.request.get("bio")
             username = self.request.get('username')
             id = get_user_id()
-            logging.warning("CALLING UPDATE WITH EXCEPTION")
             models.updateUser(id, name, year, interests, bio,
                     employer,username, user.image_url)
             self.redirect('/profile?id=' + id)
@@ -443,14 +421,9 @@ class answerSingle(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers['Content-Type'] = 'application/json'
-        logging.warning("WHAT UP")
-        logging.warning(self.request.body)
         data = json.loads(self.request.body)
-        logging.warning(data['userID'])
-        logging.warning(data['qKey'])
 
         question = models.getQuestionFromURL(data['qKey'])
-        logging.warning(data['userSelection'])
         models.createAnswer(data['userID'],question.key,str(data['userSelection']), int(data['score']))
 
 def obj_dict(obj):
@@ -478,9 +451,6 @@ class categoryQuiz(webapp2.RequestHandler):
             return
         category = self.request.get('category')
         number = self.request.get('number')
-        logging.warning(category)
-        logging.warning(number)
-        logging.warning(int(number))
         questions = models.getQuestionsCat(category,int(number))
 
         if questions:
@@ -564,7 +534,6 @@ class getNewCatScores(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         data = json.loads(self.request.body)
         cat = data['category']
-        logging.warning('cat: ['+ cat+']')
         if (cat == 'ALL'):
             jAson = models.getAllUserScores()
         elif (len(cat) == 0) :
@@ -601,9 +570,7 @@ class addVoteQuiz(webapp2.RequestHandler):
         email = get_user_email()
         result = {}
         temp = models.addVote(id,email)
-        logging.warning(temp)
         result['incced'] = temp
-        logging.warning(result)
         self.response.out.write(json.dumps(result))
 
 #Downvoting a question
@@ -624,7 +591,6 @@ class deleteQuestion(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers['Content-Type'] = 'application/json'
         data = json.loads(self.request.body)
-        logging.warning("HERE")
         key = data['urlkey']
         models.delete_question(key)
         #need this for some reason, for redirect in javascript to work
@@ -635,7 +601,6 @@ class checkUsername(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers['Content-Type'] = 'application/json'
         data = json.loads(self.request.body)
-        logging.warning(data['username'])
         result= {}
         result['exists'] = models.checkUsername(data['username'])
         self.response.out.write(json.dumps(result))

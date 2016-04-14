@@ -108,7 +108,7 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
         else:
             createScore(userid, question.category, 0)
     else: #Score exists
-        
+
         if correctFlag:
             updateScore(userid, question.category, points)
 
@@ -150,8 +150,6 @@ def create_question(category,question,answer1,answer2,answer3,answer4,answerid,e
         accepted=valid,
         image_urlQ=image_urlQ,)
     question.put()
-
-    #logging.warning(question.key.urlsafe())
     question.urlkey = question.key.urlsafe()
     question.put()
     return question.key
@@ -170,7 +168,6 @@ def updateUser(id, name, year, interests, bio, employer,username, image_url = No
     user.username = username
     user.image_url = image_url
     user.put()
-    logging.warning("PUTTING PROFILE")
 
 def updateQuestion(urlkey,category,questionIn,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
     questKey=ndb.Key(urlsafe=urlkey)
@@ -246,7 +243,6 @@ def get_category_answers(inCategory):
     return answers
 
 def getUser(id):
-    logging.warning("STARTING GET USER")
     key = ndb.Key(User, id)
     return key.get()
 
@@ -258,7 +254,6 @@ def getQuestion(key):
     return ac_obj
 
 def getQuestionFromURL(key):
-    logging.warning(key)
     key = ndb.Key(urlsafe=key)
     return key.get()
 
@@ -266,7 +261,7 @@ def getQuestionsCat(category,number):
     q = Question.query(Question.category == category, Question.accepted ==
             True).fetch()
     if len(q) == 0:
-        logging.warning("There aren't any questions. Have you populated the database?")
+        logging.critical("There aren't any questions. Have you populated the database?")
         return None
     shuffle(q)
     results = list()
@@ -288,7 +283,6 @@ def checkUsername(username):
     qry = User.query()
     usernames = qry.fetch(projection=[User.username])
     for x in usernames:
-        logging.warning(x.username + " un: " + username)
         if x.username == username:
             return True
     return False
@@ -313,7 +307,6 @@ def getCategoryList():
         temp = item.to_dict(include=['category'])
         catList.append(temp)
     jsonList = json.dumps(catList, default = obj_dict)
-    logging.warning("JSON: "+jsonList)
     return jsonList
 
 #returns JSON list of {category, score} for a given user
@@ -325,7 +318,6 @@ def getCatUserScore(userid):
         temp = score.to_dict(include=['category', 'score'])
         scoreList.append(temp)
     jsonList = json.dumps(scoreList, default = obj_dict)
-    logging.warning("JSON: "+jsonList)
     return jsonList
 
 def getAllUserScores(timePeriod = 0):
@@ -336,10 +328,8 @@ def getAllUserScores(timePeriod = 0):
         all = True
     for user in users:
         if all:
-            logging.warning("TIME PERIOD = FOREVER")
             scores = Score.query(ancestor = ndb.Key(User, user.user_id))
         else:
-            logging.warning("TIME PERIOD = "+str(timePeriod))
             scores = Score.query(Score.date >= date.today() - datetime.timedelta(timePeriod), ancestor = ndb.Key(User,user.user_id))
         counter = 0
         for score in scores:
@@ -348,10 +338,8 @@ def getAllUserScores(timePeriod = 0):
 
     sortList = sorted(scoreList.items(), key=itemgetter(1), reverse=True)
     for x in sortList:
-        logging.warning(x[0]+"  "+x[0])
-    scoreList = OrderedDict(sortList)
+        scoreList = OrderedDict(sortList)
     jsonList = json.dumps(scoreList, default = obj_dict)
-    logging.warning("JSON: "+jsonList)
     return jsonList
 
 def getAllUserScoresForCat(param):
@@ -367,7 +355,6 @@ def getAllUserScoresForCat(param):
     sortList = sorted(scoreList.items(), key=itemgetter(1), reverse=True)
     scoreList = OrderedDict(sortList)
     jsonList = json.dumps(scoreList, default = obj_dict)
-    logging.warning("JSON: "+jsonList)
     return jsonList
 
 
