@@ -130,8 +130,6 @@
     <br><br><br><br>
     <div class="container" id="content">
         <div class = "container" style= "text-align:center; position:relative;">
-            <h4 style="display:inline;" id="counter"></h4>
-            <hr>
             <h4 id = "question" style="text-align:center"></h4>
         </div>
 
@@ -164,6 +162,7 @@
         </font>
 
         <div class="container" id="timer" style="text-align:center"><p>15</p></div>
+        <div class="container" style="text-align:center"><h4 style="display:inline;" id="counter"></h4></div>
     </div>
     <!--Results Modal-->
     <div class="modal fade" data-keyboard="false" data-backdrop="static" id ="results" role="dialog">
@@ -371,9 +370,10 @@
             else{
                 if (curr[counter].explanation != 'None'){
                     console.log(curr[counter].explanation);
-                    newResLine1 = newResLine1.concat('</br>');
+                    newResLine1 = newResLine1.concat("</br><span style='color:#808080'>");
                     newResLine1 = newResLine1.concat('Explanation: ');
                     newResLine1 = newResLine1.concat(curr[counter].explanation);
+                    newResLine1 = newResLine1.concat('</span>');
                 }
                 var newResline2 = "</span><span class='aligncenter' style='color:red;'>";
                 newResline2 = newResline2.concat(newResult.uAns);
