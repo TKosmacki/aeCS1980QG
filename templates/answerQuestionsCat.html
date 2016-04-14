@@ -143,6 +143,7 @@
             <div class="large-lg-12 text-center">
                     <img style="display:none;" id="img" src="" style= "text-align:center;" class="smaller-image"></img>
             </div>
+            <br>
             <div class = "col-lg-3"></div>
                 <div class="col-lg-3" style= "text-align:center; position:relative;">
                     <button onclick="submit(1)" id="answer1" type="submit" name="userAnswer" value=1 class="submit-a-button-1"></button>
@@ -358,6 +359,7 @@
             console.log(newResult.uAns);
             console.log(newResult.points);
             console.log(newResult.correct);
+            console.log(curr[counter].explanation);
             var newResLine1 = "<div class='container'><hr><span class='alignleft'>";
             newResLine1 = newResLine1.concat(counter+1);
             newResLine1 = newResLine1.concat(". ");
@@ -370,6 +372,12 @@
                 var newResline4 = "&nbsp;&nbsp;&nbsp;</span></br></div>";
             }
             else{
+                if (curr[counter].explanation != 'None'){
+                    console.log(curr[counter].explanation);
+                    newResLine1 = newResLine1.concat('</br>');
+                    newResLine1 = newResLine1.concat('Explanation: ');
+                    newResLine1 = newResLine1.concat(curr[counter].explanation);
+                }
                 var newResline2 = "</span><span class='aligncenter' style='color:red;'>";
                 newResline2 = newResline2.concat(newResult.uAns);
                 var newResline3 = "</span><span class='alignright' style='color:red;'>";

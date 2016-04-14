@@ -226,7 +226,7 @@ class ReviewNewQuestions(webapp2.RequestHandler):
     def get(self):
         id = get_user_id()
         #just loops and prints every question from query
-        review = models.get_oldest_questions(1000,False) #searches 1000 oldest invalid questions
+        review = models.get_oldest_questions(False,False) #searches 1000 oldest invalid questions
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
@@ -258,7 +258,7 @@ class ReviewOldQuestions(webapp2.RequestHandler):
     def get(self):
         id = get_user_id()
         #just loops and prints every question from query
-        review = models.get_oldest_questions(1000,True) #searches 1000 oldest valid questions
+        review = models.get_oldest_questions(True,False)
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
@@ -290,7 +290,7 @@ class test(webapp2.RequestHandler):
         if not users.is_current_user_admin(): #stops from running this if user is not admin
             self.redirect("/")
             return
-        if (len(models.get_oldest_questions(100,True)) > 3):
+        if (len(models.get_oldest_questions(True,False)) > 3):
             self.redirect("/")
             return
         models.populateQuestions()

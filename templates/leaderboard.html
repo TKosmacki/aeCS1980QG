@@ -28,9 +28,7 @@
 </style>
 </head>
 <body>
-</br></br></br>
-	<div class = "container ">
-	</br>
+    </br></br></br></br>
     <div class = "container" align="right">
         <h3><span style="float:left; font-size:5;">{{category}}</span>
         <select style="font-size:5" class="selectpicker" id="category" name="category" method="POST">
@@ -55,8 +53,8 @@
           </tbody>
         </table>
     </div>
-
 </body>
+
 <script type="text/javascript">
     $(document).ready(function(){
         $('#category').change(function(){
@@ -70,7 +68,7 @@
                     $("#leaderboard tbody").empty();
                     var data = JSON.parse(text);
                     var rank = 1;
-                    $.each(data, function(index, el) { 
+                    $.each(data, function(index, el) {
                         $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+index+"</td><td>"+el+"</td></tr>");
                         rank++;
                     });
@@ -84,7 +82,7 @@
         var rank = 1;
         for (var prop in scoreList){
           console.log("obj." + prop + " = " + scoreList[prop]);
-          $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+prop+"</td><td>"+scoreList[prop]+"</td><tr>");
+          $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+prop+"</td><td>"+scoreList[prop]+"</td></tr>");
           rank++;
         }
     });
