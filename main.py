@@ -534,13 +534,34 @@ class getNewCatScores(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         data = json.loads(self.request.body)
         cat = data['category']
+        time = data['time']
+        days = 0
+        if time == "All" or time == "Time":
+            if (cat == 'ALL'):
+                jAson = models.getAllUserScores()
+            elif (len(cat) == 0) :
+                cat = 'ALL'
+                jAson = models.getAllUserScores()
+            else:
+                jAson = models.getAllUserScoresForCat(cat)
+            userList = json.dumps(jAson)
+            self.response.out.write(userList)
+            return
+        logging.warning(time)
+        if time == "Past Week":
+            days = 7
+        if time == "Past Month":
+            days = 365
+        if time == "Past Year":
+            days = 30
+        logging.warning(days)
         if (cat == 'ALL'):
-            jAson = models.getAllUserScores()
+            jAson = models.getAllUserScores(days)
         elif (len(cat) == 0) :
             cat = 'ALL'
-            jAson = models.getAllUserScores()
+            jAson = models.getAllUserScores(days)
         else:
-            jAson = models.getAllUserScoresForCat(cat)
+            jAson = models.getAllUserScoresForCat(cat,days)
         userList = json.dumps(jAson)
         self.response.out.write(userList)
 

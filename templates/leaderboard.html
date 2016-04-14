@@ -40,8 +40,16 @@
             <option value="PHARM 3040">PHARM 3040</option>
             <option value="PHARM 5218">PHARM 5218</option>
         </select>
+        <select style="font-size:5" class="selectpicker" id="timePeriod" name="timePeriod" method="POST">
+            <option selected disabled>Time</option>
+            <option value="ALL">ALL</option>
+            <option value="Past Week">Past Week</option>
+            <option value="Pase Month">Past Month</option>
+            <option value="Past Year">Past Year</option>
+        </select>
         <hr>
     </div>
+    
     <div class= "container">
         <table id="leaderboard">
           <thead>
@@ -59,11 +67,38 @@
     $(document).ready(function(){
         $('#category').change(function(){
             category = $('#category').val();
+            timePeriod = $('#timePeriod').val();
+            if (timePeriod == null){
+                timePeriod = "All";
+            }
             $.ajax({
                 type: "POST",
                 url: "/getNewCatScores",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({"category":category}),
+                data: JSON.stringify({"category":category, "time":timePeriod}),
+                success: function(text){
+                    $("#leaderboard tbody").empty();
+                    var data = JSON.parse(text);
+                    var rank = 1;
+                    $.each(data, function(index, el) {
+                        $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+index+"</td><td>"+el+"</td></tr>");
+                        rank++;
+                    });
+                },
+            });
+        });
+        
+        $('#timePeriod').change(function(){
+            category = $('#category').val();
+            if (category == null){
+                category = "ALL";
+            }
+            timePeriod = $('#timePeriod').val();
+            $.ajax({
+                type: "POST",
+                url: "/getNewCatScores",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"category":category, "time":timePeriod}),
                 success: function(text){
                     $("#leaderboard tbody").empty();
                     var data = JSON.parse(text);
