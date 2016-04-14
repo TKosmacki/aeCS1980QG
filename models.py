@@ -67,6 +67,10 @@ class Score(ndb.Model):
     score = ndb.IntegerProperty()
     date = ndb.DateProperty(auto_now_add = True)
 
+class Category:
+    category = ndb.StringProperty()
+    accepted = ndb.BooleanProperty(default = True)
+
 #CREATORS
 ###############################################################################
 def createUser(id):
@@ -74,6 +78,13 @@ def createUser(id):
     user.user_id = id
     user.key = ndb.Key(User,id)
     user.put()
+
+def createCategory(categoryIn):
+    cat = Category()
+    cat.category = categoryIn
+    cat.key = ndb.Key(Category, categoryIn)
+    cat.put()
+
 
 #adds an Answer object to the Datastore, as a child of User 'userid'
 #updates Question with statistics
@@ -302,7 +313,7 @@ def get_oldest_questions(val,deleted):
 
 #returns JSON list of unique categories
 def getCategoryList():
-    query = Question.query(projection = [Question.category], distinct = True)
+    query = Category.query(projection = [category.category])
     catList = []
     list = query.fetch()
     for item in list:
@@ -344,11 +355,17 @@ def getAllUserScores(timePeriod = 0):
     jsonList = json.dumps(scoreList, default = obj_dict)
     return jsonList
 
-def getAllUserScoresForCat(param):
+def getAllUserScoresForCat(param, timePeriod = 0):
     users = User.query()
     scoreList = dict()
+    all = False
+    if(timePeriod == 0):
+        all = True
     for user in users:
-        scores = Score.query(Score.category == param, ancestor = ndb.Key(User, user.user_id))
+        if all:
+            scores = Score.query(Score.category == param, ancestor = ndb.Key(User, user.user_id))
+        else:
+            scores = Score.query(Score.date >= date.today() - datetime.timedelta(timePeriod), Score.category == param, ancestor = ndb.Key(User, user.user_id))
         counter = 0
         for score in scores:
             counter += score.score
