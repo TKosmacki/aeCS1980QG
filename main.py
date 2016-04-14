@@ -374,6 +374,9 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
         #will need to be moved to occur after form submission
         id = get_user_id()
         user = models.getUser(id)
+        if user is None:
+            models.createUser(id)
+            user = models.getUser(id)
         try:
             upload_files = self.get_uploads()
             blob_info = upload_files[0]

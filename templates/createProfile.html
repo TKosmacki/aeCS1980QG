@@ -32,10 +32,10 @@
         <h3 style="display:inline">Create Profile</h3><br>
         <span>You must create a profile before continuing!</span>
         <hr>
-        <form role = "form" method="post" class="form-horizontal" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
+        <form role = "form" method="post" class="form-horizontal" id="createProfile" action="{{upload_url}}" enctype="multipart/form-data"> <!--Need to process the information-->
             <div class="container col-lg-12">
                 <div class="container" style="margin-bottom:10px; display:none; color:red" id='doesNotExist'><i class="fa fa-exclamation-circle"> Username Taken</i></div>
-                <div class="container" style="margin-bottom:10px; display:none; color:red" id='invalid'><i class="fa fa-exclamation-circle"> Invalid Username (3-15 characters,uppercase,lowercase,numbers, and underscores)</i></div>
+                <div class="container" style="margin-bottom:10px; display:none; color:red" id='invalid'><i class="fa fa-exclamation-circle"> Invalid Username (3-15 characters, uppercase, lowercase, numbers, and underscores)</i></div>
                 <div class="container" style="margin-bottom:10px; display:none; color:green" id='exists'><i class="fa fa-exclamation-circle"> Username Available</i></div>
                 <div class="container col-lg-6" style="margin-bottom:10px">
                     <span>User Name: *</span><br>
@@ -68,7 +68,7 @@
                     <hr>
                 </div>
                 <div class="col-lg-12">
-                    <button id="submitForm" disabled=true type="submit" class="btn btn-primary pull-right">Submit</button>
+                    <button id="submitForm" onsubmit="validateForm()" disabled=true type="submit" class="btn btn-primary pull-right">Submit</button>
                 </div>
             </div>
         </form>
@@ -89,8 +89,7 @@
             x_timer = setTimeout(function(){
                 check_username_ajax(user_name);
             }, 1000);
-        }); 
-
+        });
         function check_username_ajax(username){
             if (username.length<3){ //dont want to send names <3 characters
                 $('#exists').hide();
@@ -127,6 +126,30 @@
             });
         }
     });
+    function validateForm(){
+            var username = $("#username").val();
+            if (username.length<3){ //dont want to send names <3 characters
+                alert("Username must be at least three characters long.");
+            }
+            var illegalChars = /\W/;
+            if (illegalChars.test(username)){//dont want to send characters with illegal characters
+                alert("Username must contain only uppercase and lowercase characters, numbers, and underscores.");
+            }
+            $.ajax({
+                type: "POST",
+                url: "/checkUsername",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({"username":username}),
+                success: function(text){
+                    if (text.exists == false){
+                        alert("Username already taken.");
+                    }
+                    if (text.exists == true){
+                        $("#createProfile").submit(); //at this point the username is valid and exists
+                    }
+                },
+            });
+        }
     </script>
 </html>
 {% endblock %}

@@ -48,8 +48,8 @@
         <table id="leaderboard">
           <thead>
             <th width='5%'>Rank</th>
-            <th>Points</th>
             <th>Name</th>
+            <th>Points</th>
           </thead>
           <tbody>
           </tbody>
@@ -58,7 +58,7 @@
 
 </body>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function(){
         $('#category').change(function(){
             category = $('#category').val();
             $.ajax({
@@ -71,23 +71,24 @@
                     var data = JSON.parse(text);
                     var rank = 1;
                     $.each(data, function(index, el) { 
-                        $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+el+"</td><td>"+index+"</td></tr>");
+                        $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+index+"</td><td>"+el+"</td></tr>");
                         rank++;
                     });
                 },
             });
         });
     });
-    var scoreList =  {{list|safe}};
-    console.log(scoreList);
-    var rank = 1;
-    for (var prop in scoreList){
-      console.log("obj." + prop + " = " + scoreList[prop]);
-      $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+scoreList[prop]+"</td><td>"+prop+"</td><tr>");
-      rank++;
-    }
+    $(document).ready(function(){
+        var scoreList =  {{list|safe}};
+        console.log(scoreList);
+        var rank = 1;
+        for (var prop in scoreList){
+          console.log("obj." + prop + " = " + scoreList[prop]);
+          $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+prop+"</td><td>"+scoreList[prop]+"</td><tr>");
+          rank++;
+        }
+    });
     //alert(scoreList);
-    var board = document.getElementById('leaderboard');
 </script>
 </html>
 {% endblock %}
