@@ -20,13 +20,13 @@
             </select>
         </br><hr>
             <div class="col-sm-6" style="display:table;">
-                <textarea type="text" name="questiontext" placeholder="Enter question here..."class="form-control" rows="6" METHOD=POST maxlength="144" required></textarea>
+                <textarea type="text" name="questiontext" placeholder="Enter question here..."class="form-control" rows="6" METHOD=POST maxlength="144" id="questionText"required></textarea>
             </div>
             <div class="col-sm-4" style="list-style-type:none;display:table;">
-                    <input type="textarea" class="red-text" placeholder="Answer #1" method=POST name="answer1" maxlength="30" required></input>
-                    <input type="textarea" class="blue-text" placeholder="Answer #2" method=POST name="answer2" maxlength="30" required></input>
-                    <input type="textarea" class="green-text" placeholder="Answer #3" method=POST name="answer3" maxlength="30" required></input>
-                    <input type="textarea" class="yellow-text" placeholder="Answer #4" method=POST name="answer4" maxlength="30" required></input>
+                    <input type="textarea" class="red-text" placeholder="Answer #1" method=POST name="answer1" maxlength="30" id="answer1" required></input>
+                    <input type="textarea" class="blue-text" placeholder="Answer #2" method=POST name="answer2" maxlength="30" id="answer2" required></input>
+                    <input type="textarea" class="green-text" placeholder="Answer #3" method=POST name="answer3" maxlength="30" id="answer3" required></input>
+                    <input type="textarea" class="yellow-text" placeholder="Answer #4" method=POST name="answer4" maxlength="30" id="answer4" required></input>
             </div>
         </div>
         <div class="container">
@@ -38,16 +38,16 @@
             <hr>
             Select the correct answer:</br>
             <div class="col-sm-2">
-                <button type="submit" style="width:100%;" name="answerid" value=1 class="submit-q-button-1">1</button>
+                <button type="submit" style="width:100%;" name="answerid" value=1 class="submit-q-button-1" id="select1">1</button>
             </div>
             <div class="col-sm-2">
-                <button type="submit" style="width:100%;" name="answerid" value=2 class="submit-q-button-2">2</button>
+                <button type="submit" style="width:100%;" name="answerid" value=2 class="submit-q-button-2" id="select2">2</button>
             </div>
             <div class="col-sm-2">
-                <button type="submit" style="width:100%;" name="answerid" value=3 class="submit-q-button-3">3</button>
+                <button type="submit" style="width:100%;" name="answerid" value=3 class="submit-q-button-3" id="select3">3</button>
             </div>
             <div class="col-sm-2">
-                <button type="submit" style="width:100%;" name="answerid" value=4 class="submit-q-button-4">4</button>
+                <button type="submit" style="width:100%;" name="answerid" value=4 class="submit-q-button-4" id="select4">4</button>
             </div>
         </form>
     </div>
