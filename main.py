@@ -635,6 +635,17 @@ class checkUsername(webapp2.RequestHandler):
         result['exists'] = models.checkUsername(data['username'])
         self.response.out.write(json.dumps(result))
 
+class addCategory(webapp2.RequestHandler):
+    def post(self):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        result= {}
+        exists = models.checkCategory(data['category'])
+        if not exists:
+            createCategory((data['category'])
+        result['exists'] = exists
+        self.response.out.write(json.dumps(result))
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),

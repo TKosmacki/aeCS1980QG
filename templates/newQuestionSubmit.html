@@ -11,14 +11,18 @@
         <h3>New Question Submission</h3>
         <hr>
         <form action="{{upload_urlQ}}" enctype="multipart/form-data" method="post"><font size = 5>
-            <span style="font-size:75%;">Select A Category:&nbsp;</span><select id="Category" name="category" method="POST" >
+            <div>
+            <span style="font-size:75%;">Select A Category:&nbsp;</span>
+            <select id="Category" name="category" method="POST" >
                 <option value="PHARM 2001">PHARM 2001</option>
                 <option value="PHARM 3023">PHARM 3023</option>
                 <option value="PHARM 3028">PHARM 3028</option>
                 <option value="PHARM 3040">PHARM 3040</option>
                 <option value="PHARM 5218">PHARM 5218</option>
             </select>
-        </br><hr>
+            <a class="btn btn-link" href="#submitcat" data-toggle="modal">Suggest a Category</a>
+            </div>
+            <hr>
             <div class="col-sm-6" style="display:table;">
                 <textarea type="text" name="questiontext" placeholder="Enter question here..."class="form-control" rows="6" METHOD=POST maxlength="144" id="questionText"required></textarea>
             </div>
@@ -49,8 +53,28 @@
             <div class="col-sm-2">
                 <button type="submit" style="width:100%;" name="answerid" value=4 class="submit-q-button-4" id="select4">4</button>
             </div>
+            </font>
         </form>
     </div>
+    <!--Report Modal-->
+    <div style="z-index:2147483646;" class="modal fade" id="submitcat" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+                <div class="modal-header">
+                    <he5>Category Suggestion</he5>
+                </div>
+                <div class="modal-body">
+                    Category Suggestion:<br><br>
+                    <input class="form-control" id="category" maxlength="30" required></input>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default text-right" data-dismiss="modal">Close</a>
+                    <button class="btn btn-primary" onclick="sendCategory()">Submit</button>
+                </div>
+			</div>
+		</div>
+	</div>
     {% else %}
     <div class = "intro container">
         <br><br><br>
@@ -59,4 +83,27 @@
 {% endif %}
 </body>
 </html>
+<script>
+    //AJAX
+    function sendCategory(){
+        var comment = document.getElementById('category').value;
+        //clear report question text box
+        document.getElementById('category').value= "";
+        var urlkey = curr[counter].urlkey;
+        $.ajax({
+            type: "POST",
+            url: "/addCategory",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({"category": category}),
+            success : function(text){
+                if (text.exists == true){
+                    alert("Category already exists.");
+                }
+                else{
+                    $('#category').modal('hide');
+                    confirm("Category suggestion added.");
+                }
+            }
+       });
+</script>
 {% endblock %}
