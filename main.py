@@ -114,13 +114,13 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
             # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
-                questionID = models.create_question(category,
+                questionID = models.createQuestion(category,
                         question,answer1,answer2,answer3,answer4,answerid,
                         explanation,creator,False,image)
 
             # if the uploaded file is not an image
             else:
-                questionID = models.create_question(category,
+                questionID = models.createQuestion(category,
                         question,answer1,answer2,answer3,answer4,answerid,
                         explanation,creator,False)
 
@@ -128,7 +128,7 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
 
         # no image to upload
         except IndexError:
-            questionID = models.create_question(category,
+            questionID = models.createQuestion(category,
                     question,answer1,answer2,answer3,answer4,answerid,
                     explanation,creator,False)
 

@@ -26,6 +26,8 @@ class User(ndb.Model):
     bio = ndb.StringProperty(default = "No Bio")
     image_url = ndb.BlobKeyProperty()
 
+#Created upon every answer in a quiz
+#Child of User that answers the Question
 class Answer(ndb.Model):
     questionKey = ndb.KeyProperty()
     chosenAnswer = ndb.StringProperty()
@@ -62,18 +64,23 @@ class Question(ndb.Model):
     urlkey = ndb.StringProperty()
     deleted = ndb.BooleanProperty(default=False)
 
+#One Score create per day per User per Category
+#allows leaderboard resolution down to the day
 class Score(ndb.Model):
     category = ndb.StringProperty()
     score = ndb.IntegerProperty()
     date = ndb.DateProperty(auto_now_add = True)
 
-#currently not linked to Questions, just for listing on menus
+#currently not linked to Questions or Scores, just for listing on menus
+#potentially room for optimization
 class Category(ndb.Model):
     category = ndb.StringProperty()
     accepted = ndb.BooleanProperty(default = False)
 
 #CREATORS
 ###############################################################################
+#id is generated in main via Google's User class
+#DIFFERENT FROM GOOGLES USER
 def createUser(id):
     user = User()
     user.user_id = id
@@ -85,7 +92,6 @@ def createCategory(categoryIn, acceptedIn=False):
     cat.category = categoryIn
     cat.accepted = acceptedIn
     cat.key = ndb.Key(Category, categoryIn)
-    logging.warning("putting category")
     cat.put()
 
 
@@ -98,8 +104,6 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
 
     scoreList = Score.query(Score.category == question.category, Score.date ==
             date.today(), ancestor = ndb.Key(User, userid)).fetch(1)
-
-
 
     answer.questionKey = questionKey
     answer.chosenAnswer = chosenAnswer
@@ -144,6 +148,7 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
     question.put()
     answer.put()
 
+
 def createScore(userid, category, points):
     scoreObj = Score(parent=ndb.Key(User, userid))
     scoreObj.category = category
@@ -152,7 +157,7 @@ def createScore(userid, category, points):
 
 
 #creates and stores question in database
-def create_question(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
+def createQuestion(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
     question = Question(category=category,
         question=question,
         answer1=answer1,
@@ -222,6 +227,8 @@ def addVote(id,email):
         question.put()
         return 1
     return 0
+
+#decrements the vote counter
 def decVote(id,email):
     question = getQuestionFromURL(id)
 
@@ -278,6 +285,7 @@ def getQuestionFromURL(key):
     key = ndb.Key(urlsafe=key)
     return key.get()
 
+#returns list of [number] Questions in [category]
 def getQuestionsCat(category,number):
     q = Question.query(Question.category == category, Question.accepted ==
             True).fetch()
@@ -300,6 +308,7 @@ def check_if_down_voted(has_down_voted, email):
         return True
     return False
 
+#checks if username is taken already
 def checkUsername(username):
     qry = User.query()
     usernames = qry.fetch(projection=[User.username])
@@ -326,6 +335,7 @@ def getCategoryList():
     return jsonList
 
 #returns JSON list of {category, score} for a given user
+#used in profile graph
 def getCatUserScore(userid):
     user = getUser(userid)
     scores = Score.query(ancestor = ndb.Key(User, userid))
@@ -336,6 +346,8 @@ def getCatUserScore(userid):
     jsonList = json.dumps(scoreList, default = obj_dict)
     return jsonList
 
+#returns JSON list of each User's total score, sorted largest to smallest
+#defaults to all time
 def getAllUserScores(timePeriod = 0):
     users = User.query()
     scoreList = dict()
@@ -358,7 +370,9 @@ def getAllUserScores(timePeriod = 0):
     jsonList = json.dumps(scoreList, default = obj_dict)
     return jsonList
 
-def getAllUserScoresForCat(param, timePeriod = 0):
+#returns JSON list of every User's scores for category
+#defaults to all time
+def getAllUserScoresForCat(category, timePeriod = 0):
     users = User.query()
     scoreList = dict()
     all = False
@@ -366,9 +380,9 @@ def getAllUserScoresForCat(param, timePeriod = 0):
         all = True
     for user in users:
         if all:
-            scores = Score.query(Score.category == param, ancestor = ndb.Key(User, user.user_id))
+            scores = Score.query(Score.category == category, ancestor = ndb.Key(User, user.user_id))
         else:
-            scores = Score.query(Score.date >= date.today() - datetime.timedelta(timePeriod), Score.category == param, ancestor = ndb.Key(User, user.user_id))
+            scores = Score.query(Score.date >= date.today() - datetime.timedelta(timePeriod), Score.category == category, ancestor = ndb.Key(User, user.user_id))
         counter = 0
         for score in scores:
             counter += score.score
@@ -402,7 +416,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM 2001", question, answer1, answer2, answer3,
+            createQuestion("PHARM 2001", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
     createCategory("PHARM 3023", True)
     for x in range(60,120, 6):
@@ -412,7 +426,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM 3023", question, answer1, answer2, answer3,
+            createQuestion("PHARM 3023", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
     createCategory("PHARM 3028", True)
@@ -423,7 +437,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM 3028", question, answer1, answer2, answer3,
+            createQuestion("PHARM 3028", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
     createCategory("PHARM 3040", True)
     for x in range(180,240, 6):
@@ -433,7 +447,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM 3040", question, answer1, answer2, answer3,
+            createQuestion("PHARM 3040", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
     createCategory("PHARM 5218", True)
     for x in range(240,300, 6):
@@ -443,7 +457,7 @@ def populateQuestions():
             answer3 = list[x+3]
             answer4 = list[x+4]
             answerid = list[x+5]
-            create_question("PHARM 5218", question, answer1, answer2, answer3,
+            createQuestion("PHARM 5218", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
 #creates one Answer per Question per User
