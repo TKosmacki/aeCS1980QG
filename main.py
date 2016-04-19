@@ -651,7 +651,6 @@ class addCategory(webapp2.RequestHandler):
         exists = models.checkCategory(data['category'])
         if not exists:
             models.createCategory(data['category'])
-            createCategory(data['category'])
         result['exists'] = exists
         self.response.out.write(json.dumps(result))
 
