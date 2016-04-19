@@ -253,6 +253,11 @@ def delete_question(key):
     question.put()
     return
 
+def changeCategoryStatus(category, status):
+    cat = ndb.key(Category, category).get()
+    cat.status = status
+    cat.put()
+
 #GETTERS
 ###############################################################################
 def check_if_user_exists(id):
@@ -263,7 +268,7 @@ def check_if_user_exists(id):
 def checkCategory(category):
     list = Category.query()
     for x in list:
-        if x.category == category:
+        if x.category == category.lower():
             return True
     return False
 
