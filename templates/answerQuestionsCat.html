@@ -189,7 +189,7 @@
                     <button onclick="vote(0)" class="btn btn-danger fa fa-arrow-down pull-left"></button>
                     <p style="display:inline" class="btn btn-link pull-left" id="numVotes">15 votes</p>
                     <a class="btn btn-default text-left" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
-                    <button class="btn btn-primary text-right" onclick="runNextQuestion()">Next Question</button>
+                    <button class="btn btn-primary text-right" id="nextquestionbutton" onclick="runNextQuestion()">Next Question</button>
                 </div>
             </div>
         </div>
@@ -220,7 +220,7 @@
 			<div class="modal-content">
                 <div class="modal-body">
                     Are You Ready?<br><br><br><br><br><br><br><br><br><br>
-                    <button class="btn btn-link" onclick= "runQuestion()"> Go! </button>
+                    <button class="btn btn-link" onclick= "runQuestion()" id="gobutton"> Go! </button>
                     <br>
                 </div>
 			</div>
