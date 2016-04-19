@@ -35,8 +35,6 @@
             document.getElementById("dropdown").style.display = "none";
         });
         var curr = {{catList|safe}};
-        console.log(curr.length);
-        console.log(curr[1].category);
         var dropdown = document.getElementById("category");
         var option = document.createElement("option");
         for (x = 0; x < curr.length; x++){

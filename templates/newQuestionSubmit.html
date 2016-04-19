@@ -4,6 +4,22 @@
 <head>
     <title>Add a Question</title>
 </head>
+<script>
+    $(document).ready(function() {
+        var curr = {{catList|safe}};
+        console.log(curr[0].category);
+        var dropdown = document.getElementById("catdropdown");
+        var option = document.createElement("option");
+        for (x = 0; x < curr.length; x++){
+            var option = document.createElement("option");
+            option.innerHTML = curr[x].category;
+            dropdown.appendChild(option);
+        }
+        $.each(curr, function(key, value) {
+            console.log(key, value);
+        });
+    });
+</script>
 <body>
 {% if user_email %}
     <br><br><br><br>
@@ -13,12 +29,7 @@
         <form action="{{upload_urlQ}}" enctype="multipart/form-data" method="post"><font size = 5>
             <div>
             <span style="font-size:75%;">Select A Category:&nbsp;</span>
-            <select id="Category" name="category" method="POST" >
-                <option value="PHARM 2001">PHARM 2001</option>
-                <option value="PHARM 3023">PHARM 3023</option>
-                <option value="PHARM 3028">PHARM 3028</option>
-                <option value="PHARM 3040">PHARM 3040</option>
-                <option value="PHARM 5218">PHARM 5218</option>
+            <select name="category"  id="catdropdown" method="POST" >
             </select>
             <a class="btn btn-link" href="#submitcat" data-toggle="modal">Suggest a Category</a>
             </div>
