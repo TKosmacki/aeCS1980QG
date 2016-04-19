@@ -646,7 +646,7 @@ class addCategory(webapp2.RequestHandler):
         result= {}
         exists = models.checkCategory(data['category'])
         if not exists:
-            createCategory((data['category'])
+            models.createCategory(data['category'])
         result['exists'] = exists
         self.response.out.write(json.dumps(result))
 ###############################################################################
@@ -674,5 +674,6 @@ mappings = [
   ('/leaderboard', LeaderBoard),
   ('/checkUsername', checkUsername),
   ('/getNewCatScores', getNewCatScores),
+  ('/addCategory', addCategory)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
