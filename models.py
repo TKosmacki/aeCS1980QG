@@ -67,9 +67,10 @@ class Score(ndb.Model):
     score = ndb.IntegerProperty()
     date = ndb.DateProperty(auto_now_add = True)
 
-class Category:
+#currently not linked to Questions, just for listing on menus
+class Category(ndb.Model):
     category = ndb.StringProperty()
-    accepted = ndb.BooleanProperty(default = True)
+    accepted = ndb.BooleanProperty(default = False)
 
 #CREATORS
 ###############################################################################
@@ -79,10 +80,12 @@ def createUser(id):
     user.key = ndb.Key(User,id)
     user.put()
 
-def createCategory(categoryIn):
+def createCategory(categoryIn, acceptedIn=False):
     cat = Category()
     cat.category = categoryIn
+    cat.accepted = acceptedIn
     cat.key = ndb.Key(Category, categoryIn)
+    logging.warning("putting category")
     cat.put()
 
 
@@ -313,7 +316,7 @@ def get_oldest_questions(val,deleted):
 
 #returns JSON list of unique categories
 def getCategoryList():
-    query = Category.query(projection = [category.category])
+    query = Category.query(projection = [Category.category])
     catList = []
     list = query.fetch()
     for item in list:
@@ -390,6 +393,8 @@ def populateQuestions():
 
     for line in txt:
         list.append(line.rstrip())
+    
+    createCategory("PHARM 2001", True)
     for x in range(0,60,6):
             question = list[x]
             answer1 = list[x+1]
@@ -399,6 +404,7 @@ def populateQuestions():
             answerid = list[x+5]
             create_question("PHARM 2001", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
+    createCategory("PHARM 3023", True)
     for x in range(60,120, 6):
             question = list[x]
             answer1 = list[x+1]
@@ -409,6 +415,7 @@ def populateQuestions():
             create_question("PHARM 3023", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
 
+    createCategory("PHARM 3028", True)
     for x in range(120,180, 6):
             question = list[x]
             answer1 = list[x+1]
@@ -418,6 +425,7 @@ def populateQuestions():
             answerid = list[x+5]
             create_question("PHARM 3028", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
+    createCategory("PHARM 3040", True)
     for x in range(180,240, 6):
             question = list[x]
             answer1 = list[x+1]
@@ -427,6 +435,7 @@ def populateQuestions():
             answerid = list[x+5]
             create_question("PHARM 3040", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
+    createCategory("PHARM 5218", True)
     for x in range(240,300, 6):
             question = list[x]
             answer1 = list[x+1]
