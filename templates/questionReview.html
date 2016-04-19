@@ -5,7 +5,7 @@
 <html>
 <br><br><br>
 <body>
-{% if user_email %}
+{% if admin %}
 	<div class = "container">
         {% if review.accepted %}
         <h3 style="display:inline;">Question:</h3>
@@ -165,7 +165,7 @@
 {% else %}
     <div class = "intro container">
         <br><br><br>
-        <h1 style="position:absolute; top:50%; left:20%;">You Must Be An Logged In to View This Page!</h1>
+        <h1 style="position:absolute; top:50%; left:20%;">You Must Be Admin to View This Page!</h1>
     </div>
 {% endif %}
 </body>
