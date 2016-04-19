@@ -268,7 +268,7 @@ def check_if_user_exists(id):
 def checkCategory(category):
     list = Category.query()
     for x in list:
-        if x.category == category.lower():
+        if x.category.lower() == category.lower():
             return True
     return False
 
@@ -346,6 +346,17 @@ def getCategoryList(accepted = True):
         catList.append(temp)
     jsonList = json.dumps(catList, default = obj_dict)
     return jsonList
+
+def getAllCategories():
+    query = Category.query()
+    catList = []
+    list = query.fetch()
+    for item in list:
+        temp = item.to_dict(include=['category'])
+        catList.append(temp)
+    jsonList = json.dumps(catList, default = obj_dict)
+    return jsonList
+
 
 #returns JSON list of {category, score} for a given user
 #used in profile graph
