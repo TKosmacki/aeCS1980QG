@@ -331,8 +331,9 @@ def get_oldest_questions(val,deleted):
     return query.fetch()
 
 #returns JSON list of unique categories
-def getCategoryList():
-    query = Category.query(projection = [Category.category])
+#defaults to only accepted questions
+def getCategoryList(accepted = True):
+    query = Category.query(Category.accepted == accepted)
     catList = []
     list = query.fetch()
     for item in list:
