@@ -260,6 +260,13 @@ def check_if_user_exists(id):
     q = ndb.Key(User, id).get()
     return q
 
+def checkCategory(category):
+    list = Category.query()
+    for x in list:
+        if x.category == category:
+            return True
+    return False
+
 #returns an iterable query object that has all answers of userid
 def get_user_answers(userKey):
     answers = Answer.query(ancestor=ndb.Key(User, userKey)).fetch()
@@ -459,6 +466,9 @@ def populateQuestions():
             answerid = list[x+5]
             createQuestion("PHARM 5218", question, answer1, answer2, answer3,
             answer4, answerid,"None","Stephen Curry",True)
+
+    #non-approved category for testing
+    createCategory("PHARM 6")
 
 #creates one Answer per Question per User
 def populateAnswers():
