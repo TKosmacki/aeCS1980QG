@@ -34,6 +34,19 @@
             $('#dropdown').animate({left:"15%"} , "slow");
             document.getElementById("dropdown").style.display = "none";
         });
+        var curr = {{catList|safe}};
+        console.log(curr.length);
+        console.log(curr[1].category);
+        var dropdown = document.getElementById("category");
+        var option = document.createElement("option");
+        for (x = 0; x < curr.length; x++){
+            var option = document.createElement("option");
+            option.innerHTML = curr[x].category;
+            dropdown.appendChild(option);
+        }
+        $.each(curr, function(key, value) {
+            console.log(key, value);
+        });
     });
 </script>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
@@ -69,11 +82,6 @@
                     <div class ="container col-md-8 col-md-offset-2">
                         Select a Category:
                         <select style="color:black" id="category" name="category" method="POST"><!--maybe pull in all categories from python-->
-                            <option value="PHARM 2001">PHARM 2001</option>
-                            <option value="PHARM 3023">PHARM 3023</option>
-                            <option value="PHARM 3028">PHARM 3028</option>
-                            <option value="PHARM 3040">PHARM 3040</option>
-                            <option value="PHARM 5218">PHARM 5218</option>
                         </select>
                         <br><br>
                         Select the Number of Questions:

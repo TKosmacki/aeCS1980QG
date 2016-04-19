@@ -414,7 +414,7 @@ def populateQuestions():
 
     for line in txt:
         list.append(line.rstrip())
-    
+
     createCategory("PHARM 2001", True)
     for x in range(0,60,6):
             question = list[x]
