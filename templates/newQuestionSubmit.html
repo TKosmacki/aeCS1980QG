@@ -82,14 +82,12 @@
     </div>
 {% endif %}
 </body>
-</html>
 <script>
     //AJAX
     function sendCategory(){
-        var comment = document.getElementById('category').value;
+        var category = document.getElementById('category').value;
         //clear report question text box
         document.getElementById('category').value= "";
-        var urlkey = curr[counter].urlkey;
         $.ajax({
             type: "POST",
             url: "/addCategory",
@@ -105,5 +103,8 @@
                 }
             }
        });
+    }
 </script>
+</html>
+
 {% endblock %}
