@@ -370,6 +370,8 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             bio = self.request.get("bio")
             username= self.request.get('username')
             id = get_user_id()
+            if username == "":
+                username = user.username
             # if the uploaded file is an image
             if type in ['image/jpeg', 'image/png', 'image/gif', 'image/webp']:
                 image = blob_info.key()
@@ -391,6 +393,8 @@ class ProfileHandler(blobstore_handlers.BlobstoreUploadHandler):
             employer = self.request.get("employer")
             bio = self.request.get("bio")
             username = self.request.get('username')
+            if username == "":
+                username = user.username
             id = get_user_id()
             models.updateUser(id, name, year, interests, bio,
                     employer,username, user.image_url)
