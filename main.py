@@ -43,7 +43,10 @@ class MainPageHandler(webapp2.RequestHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
+        logging.warning(models.getCategoryList())
+        newList = models.getCategoryList()
         page_params = {
+            'catList': newList,
             'user_email': get_user_email(),
             'login_url': users.create_login_url('/firstLogin'),
             'logout_url': users.create_logout_url('/'),
@@ -635,6 +638,17 @@ class checkUsername(webapp2.RequestHandler):
         result['exists'] = models.checkUsername(data['username'])
         self.response.out.write(json.dumps(result))
 
+class addCategory(webapp2.RequestHandler):
+    def post(self):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'application/json'
+        data = json.loads(self.request.body)
+        result= {}
+        exists = models.checkCategory(data['category'])
+        if not exists:
+            createCategory((data['category'])
+        result['exists'] = exists
+        self.response.out.write(json.dumps(result))
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
