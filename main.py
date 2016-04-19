@@ -73,7 +73,9 @@ class SubmitPageHandler(webapp2.RequestHandler):
         if id is not None:
             q = models.check_if_user_exists(id)
             if q == None:
+                newList = models.getCategoryList()
                 page_params = {
+                    'catList': newList,
                     'upload_url': blobstore.create_upload_url('/profile'),
                     'user_email': get_user_email(),
                     'login_url': users.create_login_url(),
@@ -84,7 +86,9 @@ class SubmitPageHandler(webapp2.RequestHandler):
                 }
                 render_template(self, 'createProfile.html' ,page_params)
                 return
+        newList = models.getCategoryList()
         page_params = {
+            'catList': newList,
             'upload_urlQ': blobstore.create_upload_url('/NewQuestion'),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
@@ -649,6 +653,7 @@ class addCategory(webapp2.RequestHandler):
             models.createCategory(data['category'])
         result['exists'] = exists
         self.response.out.write(json.dumps(result))
+
 ###############################################################################
 mappings = [
   ('/', MainPageHandler),
