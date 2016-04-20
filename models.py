@@ -268,7 +268,7 @@ def check_if_user_exists(id):
 def checkCategory(category):
     list = Category.query()
     for x in list:
-        if x.category.lower() == category.lower():
+        if x.category.strip().lower() == category.strip().lower():
             return True
     return False
 
