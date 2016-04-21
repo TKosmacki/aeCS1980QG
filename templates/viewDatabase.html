@@ -19,7 +19,7 @@
 			<thead>
 				<tr>
                     <th>Question</th>
-					<th>Class</th>
+					<th>Category</th>
 					<th>Score</th>
 					<th>Create Date</th>
 					<th>Creator</th>
@@ -29,7 +29,7 @@
 			<tfoot>
 				<tr>
                     <th>Question</th>
-					<th>Class</th>
+					<th>Category</th>
 					<th>Score</th>
 					<th>Create Date</th>
 					<th>Creator</th>
@@ -41,7 +41,7 @@
 			{% for question_obj in review %}
 					<tr.table-hover>
 						<th><a href="/ReviewQuestion?id={{question_obj.urlkey}}">{{question_obj.question}}</a></th>
-                        <th>{{question_obj.category}}</th>
+                        <th>{{question_obj.categoryText}}</th>
 						<th>{{question_obj.rating}}</th>
 						<th>{{question_obj.create_date}}</th>
 						<th>{{question_obj.creator}}</th>

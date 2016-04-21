@@ -15,3 +15,8 @@ indexes:
   properties:
   - name: category
   - name: date
+
+- kind: Score
+  ancestor: yes
+  properties:
+  - name: date
