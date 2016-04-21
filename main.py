@@ -73,9 +73,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
         if id is not None:
             q = models.check_if_user_exists(id)
             if q == None:
-                newList = models.getCategoryList()
                 page_params = {
-                    'catList': newList,
                     'upload_url': blobstore.create_upload_url('/profile'),
                     'user_email': get_user_email(),
                     'login_url': users.create_login_url(),
