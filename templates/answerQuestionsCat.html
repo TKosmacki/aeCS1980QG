@@ -185,10 +185,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="vote(1)" class="btn btn-success fa fa-arrow-up pull-left"></button>
-                    <button onclick="vote(0)" class="btn btn-danger fa fa-arrow-down pull-left"></button>
-                    <p style="display:inline" class="btn btn-link pull-left" id="numVotes">15 votes</p>
-                    <a class="btn btn-default text-left" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"> Report Question </a>
+                    <button onclick="vote(1)" class="btn btn-success pull-left"><i class = "fa fa-arrow-up"></i></button>
+                    <button onclick="vote(0)" class="btn btn-danger pull-left"><i class = "fa fa-arrow-down"></i></button>
+                    <p style="display:inline" class="btn btn-link pull-left" id="numVotes"></p>
+                    <a class="btn btn-info text-left" id="report" href="#sendreport" style="text-align: right" data-toggle="modal"><i class="fa fa-flag" aria-hidden="true"></i></a>
                     <button class="btn btn-primary text-right" id="nextquestionbutton" onclick="runNextQuestion()">Next Question</button>
                 </div>
             </div>
@@ -218,9 +218,11 @@
     <div style="z-index:2147483646;" class="modal fade" id="getready" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
+                <div class="modal-header" style="text-align:center">
+                    <h3 style="display:inline">Are You Ready!?</h3>
+                </div>
                 <div class="modal-body">
-                    Are You Ready?<br><br><br><br><br><br><br><br><br><br>
-                    <button class="btn btn-link" onclick= "runQuestion()" id="gobutton"> Go! </button>
+                    <button class="btn btn-link" style="text-align:center" onclick= "runQuestion()" id="gobutton"><br><h4>Go!</h4></button>
                     <br>
                 </div>
 			</div>
