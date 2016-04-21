@@ -580,6 +580,37 @@ class getNewCatScores(webapp2.RequestHandler):
         userList = json.dumps(jAson)
         self.response.out.write(userList)
 
+class reviewCategoryTable(webapp2.RequestHandler):
+    def get(self):
+        id = get_user_id()
+        newList = models.getCategoryList()
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
+        if id is not None:
+            q = models.check_if_user_exists(id)
+            if q == None:
+                page_params = {
+                    'upload_url': blobstore.create_upload_url('/profile'),
+                    'user_email': get_user_email(),
+                    'login_url': users.create_login_url(),
+                    'logout_url': users.create_logout_url('/'),
+                    'user_id': get_user_id(),
+                    'profile': models.getUser(id),
+                    'admin': is_admin
+                }
+                render_template(self, 'createProfile.html' ,page_params)
+                return
+        page_params = {
+            'user_id': get_user_id(),
+            'catList': newList,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
+            }
+        render_template(self, 'reviewCategories.html', page_params)
+
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
     def post(self):
@@ -678,6 +709,7 @@ mappings = [
   ('/leaderboard', LeaderBoard),
   ('/checkUsername', checkUsername),
   ('/getNewCatScores', getNewCatScores),
-  ('/addCategory', addCategory)
+  ('/addCategory', addCategory),
+  ('/reviewCategories', reviewCategoryTable)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
