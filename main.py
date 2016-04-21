@@ -157,8 +157,9 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        if id is not None:
-            q = models.check_if_user_exists(id)
+        logging.warning(Uid)
+        if Uid is not None:
+            q = models.check_if_user_exists(Uid)
             if q == None:
                 page_params = {
                     'upload_url': blobstore.create_upload_url('/profile'),
@@ -176,7 +177,7 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
-            'user_id': id,
+            'user_id': Uid,
             'review': review,
             'admin' : is_admin
         }

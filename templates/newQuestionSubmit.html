@@ -4,22 +4,6 @@
 <head>
     <title>Add a Question</title>
 </head>
-<script>
-    $(document).ready(function() {
-        var curr = {{catList|safe}};
-        console.log(curr[0].category);
-        var dropdown = document.getElementById("catdropdown");
-        var option = document.createElement("option");
-        for (x = 0; x < curr.length; x++){
-            var option = document.createElement("option");
-            option.innerHTML = curr[x].category;
-            dropdown.appendChild(option);
-        }
-        $.each(curr, function(key, value) {
-            console.log(key, value);
-        });
-    });
-</script>
 <body>
 {% if user_email %}
     <br><br><br><br>
@@ -94,6 +78,14 @@
 {% endif %}
 </body>
 <script>
+    $(document).ready(function() {
+        var curr = {{catList|safe}};
+        var option = $("#catdropdown");
+        $.each(curr, function(key, value) {
+            var Ivalue = '<option value=' + value.category +'>' + value.category + '</option>';
+            option.append(Ivalue);
+        });
+    });
     //AJAX
     function sendCategory(){
         var category = document.getElementById('category').value;
