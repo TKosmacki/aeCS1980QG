@@ -583,7 +583,8 @@ class getNewCatScores(webapp2.RequestHandler):
 class reviewCategoryTable(webapp2.RequestHandler):
     def get(self):
         id = get_user_id()
-        newList = models.getCategoryList()
+        trueList = models.getCategoryList(True)
+        falseList = models.getCategoryList(False)
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
@@ -603,7 +604,8 @@ class reviewCategoryTable(webapp2.RequestHandler):
                 return
         page_params = {
             'user_id': get_user_id(),
-            'catList': newList,
+            'trueCatList': trueList,
+            'falseCatList': falseList,
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),

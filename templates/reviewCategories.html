@@ -32,29 +32,44 @@
     <div class="container">
         <div class="container col-lg-12">
             <h3 style="text-align:center; display:inline">Categories</h3>
+            <hr>
         </div>
         <div class = "container col-lg-12"><br></div>
-        <div class="container col-lg-12">
-            <table id="leaderboard">
+        <div class="container col-lg-4"></div>
+        <div class="container col-lg-4">
+            <table id="acceptedboard">
               <thead>
-                <th width='5%'>Accept</th>
                 <th width='5%'>Remove</th>
                 <th>Category</th>
               </thead>
               <tbody>
               </tbody>
             </table>
+            <hr>
+            <table id="newBoard">
+              <thead>
+                <th width='5%'>Add</th>
+                <th>Category</th>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
         </div>
+        <div class="container col-lg-4"></div>
     </div>
 </body>
 
 <script type="text/javascript">
     $(document).ready(function(){
-        var curr = {{catList|safe}};
-        var yes = "YES";
-        var no = "NO";
+        var curr = {{trueCatList|safe}};
+        var falseList = {{falseCatList|safe}};
         $.each(curr, function(key, value) {
-            $('#leaderboard tbody').append("<tr><td>"+yes+"</td><td>"+no+"</td><td>"+value.category+"</td></tr>");
+            var no = "<a href=\"removeCategory?=cat='"+value.category+"'\">NO</a>";
+            $('#acceptedboard tbody').append("<tr><td>"+no+"</td><td>"+value.category+"</td></tr>");
+        });
+        $.each(falseList, function(key, value) {
+            var yes = "<a href=\"addCategory?=cat='"+value.category+"'\">NO</a>";
+            $('#newBoard tbody').append("<tr><td>"+yes+"</td><td>"+value.category+"</td></tr>");
         });
     });
 </script>
