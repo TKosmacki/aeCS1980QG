@@ -37,6 +37,7 @@ class Answer(ndb.Model):
 
 class Question(ndb.Model):
     category = ndb.KeyProperty()
+    categoryText = ndb.StringProperty()
     question = ndb.StringProperty()
     answer1 = ndb.StringProperty()
     answer2 = ndb.StringProperty()
@@ -164,6 +165,7 @@ def createQuestion(category,question,answer1,answer2,answer3,answer4,answerid,ex
     catKey = ndb.Key(Category, category)
     question = Question(
         category = catKey,
+        categoryText = catKey.get().category,
         question=question,
         answer1=answer1,
         answer2=answer2,
