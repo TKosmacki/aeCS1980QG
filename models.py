@@ -31,12 +31,12 @@ class User(ndb.Model):
 class Answer(ndb.Model):
     questionKey = ndb.KeyProperty()
     chosenAnswer = ndb.StringProperty()
-    category = ndb.StringProperty()
+    category = ndb.KeyProperty()
     create_datetime = ndb.DateTimeProperty(auto_now_add = True)
     correct = ndb.BooleanProperty()
 
 class Question(ndb.Model):
-    category = ndb.StringProperty()
+    category = ndb.KeyProperty()
     question = ndb.StringProperty()
     answer1 = ndb.StringProperty()
     answer2 = ndb.StringProperty()
@@ -67,7 +67,8 @@ class Question(ndb.Model):
 #One Score create per day per User per Category
 #allows leaderboard resolution down to the day
 class Score(ndb.Model):
-    category = ndb.StringProperty()
+    category = ndb.KeyProperty()
+    categoryText = ndb.StringProperty()
     score = ndb.IntegerProperty()
     date = ndb.DateProperty(auto_now_add = True)
 
@@ -123,6 +124,7 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
 
     if len(scoreList) == 0: #Score hasn't been created
         if correctFlag == True:
+            logging.warning("creating score" + str(question.category))
             createScore(userid, question.category, points)
         else:
             createScore(userid, question.category, 0)
@@ -152,13 +154,16 @@ def createAnswer(userid, questionKey, chosenAnswer, points = 0):
 def createScore(userid, category, points):
     scoreObj = Score(parent=ndb.Key(User, userid))
     scoreObj.category = category
+    scoreObj.categoryText = category.get().category
     scoreObj.score = points
     scoreObj.put()
 
 
 #creates and stores question in database
 def createQuestion(category,question,answer1,answer2,answer3,answer4,answerid,explanation,creator,valid,image_urlQ = None):
-    question = Question(category=category,
+    catKey = ndb.Key(Category, category)
+    question = Question(
+        category = catKey,
         question=question,
         answer1=answer1,
         answer2=answer2,
@@ -168,7 +173,7 @@ def createQuestion(category,question,answer1,answer2,answer3,answer4,answerid,ex
         explanation=explanation,
         creator=creator,
         accepted=valid,
-        image_urlQ=image_urlQ,)
+        image_urlQ=image_urlQ)
     question.put()
     question.urlkey = question.key.urlsafe()
     question.put()
@@ -299,7 +304,7 @@ def getQuestionFromURL(key):
 
 #returns list of [number] Questions in [category]
 def getQuestionsCat(category,number):
-    q = Question.query(Question.category == category, Question.accepted ==
+    q = Question.query(Question.category == ndb.Key(Category, category), Question.accepted ==
             True).fetch()
     if len(q) == 0:
         logging.critical("There aren't any questions. Have you populated the database?")
@@ -365,7 +370,7 @@ def getCatUserScore(userid):
     scores = Score.query(ancestor = ndb.Key(User, userid))
     scoreList = []
     for score in scores:
-        temp = score.to_dict(include=['category', 'score'])
+        temp = score.to_dict(include=['categoryText', 'score'])
         scoreList.append(temp)
     jsonList = json.dumps(scoreList, default = obj_dict)
     return jsonList
@@ -397,6 +402,7 @@ def getAllUserScores(timePeriod = 0):
 #returns JSON list of every User's scores for category
 #defaults to all time
 def getAllUserScoresForCat(category, timePeriod = 0):
+    category = ndb.Key(Category, category)
     users = User.query()
     scoreList = dict()
     all = False
