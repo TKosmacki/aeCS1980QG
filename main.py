@@ -532,8 +532,10 @@ class LeaderBoard(webapp2.RequestHandler):
                 }
                 render_template(self, 'createProfile.html' ,page_params)
                 return
+        newList = models.getCategoryList()
         page_params = {
             'category': 'ALL',
+            'catList': newList,
             'user_id': get_user_id(),
             'list': jAson,
             'user_email': get_user_email(),
