@@ -81,7 +81,7 @@
         var curr = {{catList|safe}};
         var option = $("#catdropdown");
         $.each(curr, function(key, value) {
-            var Ivalue = '<option value=' + value.category +'>' + value.category + '</option>';
+            var Ivalue = "<option value='"+value.category+"'>" + value.category + "</option>";
             option.append(Ivalue);
         });
     });
