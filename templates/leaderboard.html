@@ -114,10 +114,8 @@
     });
     $(document).ready(function(){
         var scoreList =  {{list|safe}};
-        console.log(scoreList);
         var rank = 1;
         for (var prop in scoreList){
-          console.log("obj." + prop + " = " + scoreList[prop]);
           $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+prop+"</td><td>"+scoreList[prop]+"</td></tr>");
           rank++;
         }

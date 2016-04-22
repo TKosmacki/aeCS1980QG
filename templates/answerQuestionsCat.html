@@ -368,11 +368,6 @@
                 newResult.uAns = 'Timeout';
             }
             newResult.points = score;
-            console.log(newResult.qTxt);
-            console.log(newResult.uAns);
-            console.log(newResult.points);
-            console.log(newResult.correct);
-            console.log(curr[counter].explanation);
             var newResLine1 = "<div class='container'><hr><span class='alignleft'>";
             newResLine1 = newResLine1.concat(counter+1);
             newResLine1 = newResLine1.concat(". ");
@@ -386,7 +381,6 @@
             }
             else{
                 if (curr[counter].explanation != 'None'){
-                    console.log(curr[counter].explanation);
                     newResLine1 = newResLine1.concat("</br><span style='color:#808080'>");
                     newResLine1 = newResLine1.concat('Explanation: ');
                     newResLine1 = newResLine1.concat(curr[counter].explanation);
