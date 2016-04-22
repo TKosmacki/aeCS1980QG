@@ -38,11 +38,6 @@
             Category: &nbsp
             <select style="font-size:5" class="selectpicker" id="category" name="category" method="POST">
                 <option selected value="ALL">All</option>
-                <option value="PHARM 2001">PHARM 2001</option>
-                <option value="PHARM 3023">PHARM 3023</option>
-                <option value="PHARM 3028">PHARM 3028</option>
-                <option value="PHARM 3040">PHARM 3040</option>
-                <option value="PHARM 5218">PHARM 5218</option>
             </select>
         </div>
         <div class = "container col-lg-6" align="right">
@@ -52,7 +47,7 @@
                 <option value="Past Week">Past Week</option>
                 <option value="Past Month">Past Month</option>
                 <option value="Past Year">Past Year</option>
-            </select> 
+            </select>
         </div>
         <div class = "container col-lg-12"><br></div>
         <div class="container col-lg-12">
@@ -93,7 +88,7 @@
                 },
             });
         });
-        
+
         $('#timePeriod').change(function(){
             category = $('#category').val();
             if (category == null){
@@ -126,6 +121,14 @@
           $('#leaderboard tbody').append("<tr><td>"+rank+"</td><td>"+prop+"</td><td>"+scoreList[prop]+"</td></tr>");
           rank++;
         }
+    });
+    $(document).ready(function() {
+        var curr = {{catList|safe}};
+        var option = $("#category");
+        $.each(curr, function(key, value) {
+            var Ivalue = '<option value=' + value.category +'>' + value.category + '</option>';
+            option.append(Ivalue);
+        });
     });
     //alert(scoreList);
 </script>

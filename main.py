@@ -73,9 +73,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
         if id is not None:
             q = models.check_if_user_exists(id)
             if q == None:
-                newList = models.getCategoryList()
                 page_params = {
-                    'catList': newList,
                     'upload_url': blobstore.create_upload_url('/profile'),
                     'user_email': get_user_email(),
                     'login_url': users.create_login_url(),
@@ -534,8 +532,10 @@ class LeaderBoard(webapp2.RequestHandler):
                 }
                 render_template(self, 'createProfile.html' ,page_params)
                 return
+        newList = models.getCategoryList()
         page_params = {
             'category': 'ALL',
+            'catList': newList,
             'user_id': get_user_id(),
             'list': jAson,
             'user_email': get_user_email(),
@@ -581,6 +581,55 @@ class getNewCatScores(webapp2.RequestHandler):
             jAson = models.getAllUserScoresForCat(cat,days)
         userList = json.dumps(jAson)
         self.response.out.write(userList)
+
+class reviewCategoryTable(webapp2.RequestHandler):
+    def get(self):
+        id = get_user_id()
+        trueList = models.getCategoryList(True)
+        falseList = models.getCategoryList(False)
+        is_admin = 0
+        if users.is_current_user_admin():
+            is_admin = 1
+        if id is not None:
+            q = models.check_if_user_exists(id)
+            if q == None:
+                page_params = {
+                    'upload_url': blobstore.create_upload_url('/profile'),
+                    'user_email': get_user_email(),
+                    'login_url': users.create_login_url(),
+                    'logout_url': users.create_logout_url('/'),
+                    'user_id': get_user_id(),
+                    'profile': models.getUser(id),
+                    'admin': is_admin
+                }
+                render_template(self, 'createProfile.html' ,page_params)
+                return
+        page_params = {
+            'user_id': get_user_id(),
+            'trueCatList': trueList,
+            'falseCatList': falseList,
+            'user_email': get_user_email(),
+            'login_url': users.create_login_url(),
+            'logout_url': users.create_logout_url('/'),
+            'admin': is_admin,
+            }
+        render_template(self, 'reviewCategories.html', page_params)
+
+class addNewCategory(webapp2.RequestHandler):
+    def post(self):
+        cat = self.request.get("cat")
+        logging.warning(cat)
+        models.changeCategoryStatus(cat,True)
+        time.sleep(.1)
+        self.redirect("/reviewCategories")
+
+class removeNewCategory(webapp2.RequestHandler):
+    def post(self):
+        cat = self.request.get("cat")
+        logging.warning(cat)
+        models.changeCategoryStatus(cat,False)
+        time.sleep(.1)
+        self.redirect("/reviewCategories")
 
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
@@ -680,6 +729,9 @@ mappings = [
   ('/leaderboard', LeaderBoard),
   ('/checkUsername', checkUsername),
   ('/getNewCatScores', getNewCatScores),
-  ('/addCategory', addCategory)
+  ('/addCategory', addCategory),
+  ('/reviewCategories', reviewCategoryTable),
+  ('/addNewCategory', addNewCategory),
+  ('/removeNewCategory', removeNewCategory)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)
