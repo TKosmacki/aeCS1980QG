@@ -52,7 +52,7 @@ class Question(ndb.Model):
     answer3Selections = ndb.IntegerProperty(default=0)
     answer4Selections = ndb.IntegerProperty(default=0)
     totalAnswers = ndb.IntegerProperty(default=0)
-    explanation = ndb.StringProperty(default="No Explanation Provided")
+    explanation = ndb.StringProperty()
     create_date = ndb.DateProperty(auto_now_add=True)
     accepted = ndb.BooleanProperty(default=False)
     up_voters = ndb.StringProperty(repeated=True)
@@ -313,8 +313,8 @@ def getQuestionsCat(category,number):
         return None
     shuffle(q)
     results = list()
-    for i in range(0,number):
-        results.append(q[i])
+    for item in q:
+        results.append(item)
     return results
 
 def check_if_up_voted(has_up_voted,email):

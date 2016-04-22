@@ -219,10 +219,25 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
                 <div class="modal-header" style="text-align:center">
+                    {% if num != 0 %}
                     <h1 style="display:inline">Are You Ready!?</h1>
+                    {% else %}
+                    <h1 style="display:inline">No Questions Found</h1>
+                    {% endif %}
                 </div>
                 <div class="modal-body" style="text-align:center">
+                    {% if num != 0 %}
+                    {% if num == 1 %}
+                        <span> We found {{num}} question. </span><br>
+                    {% else %}
+                        <span> We found {{num}} questions. </span><br>
+                    {% endif %}
                     <button class="btn btn-link" style="color: green" onclick= "runQuestion()" id="gobutton"><br><h2>Click Here to Start</h2></button>
+                    {% endif %}
+                    {% if num == 0 %}
+                    <a href = "/submitNew"><h2>Click Here to Submit New Questions</h2></a>
+                    {% endif %}
+                    <a href = "/"><h5 style="display:inline"><br>Return Home</h5></a>
                     <br>
                 </div>
 			</div>
