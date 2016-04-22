@@ -313,8 +313,12 @@ def getQuestionsCat(category,number):
         return None
     shuffle(q)
     results = list()
-    for item in q:
-        results.append(item)
+    if len(q) >= number:
+        for i in range(0,number):
+            results.append(q[i])
+    else:
+        for item in q:
+            results.append(item)
     return results
 
 def check_if_up_voted(has_up_voted,email):
