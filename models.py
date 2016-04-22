@@ -260,9 +260,9 @@ def delete_question(key):
     question.put()
     return
 
-def changeCategoryStatus(category, status):
-    cat = ndb.key(Category, category).get()
-    cat.status = status
+def changeCategoryStatus(category, statusIn):
+    cat = ndb.Key(Category, category).get()
+    cat.accepted = statusIn
     cat.put()
 
 #GETTERS

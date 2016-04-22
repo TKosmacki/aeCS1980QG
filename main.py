@@ -613,6 +613,22 @@ class reviewCategoryTable(webapp2.RequestHandler):
             }
         render_template(self, 'reviewCategories.html', page_params)
 
+class addNewCategory(webapp2.RequestHandler):
+    def post(self):
+        cat = self.request.get("cat")
+        logging.warning(cat)
+        models.changeCategoryStatus(cat,True)
+        time.sleep(.1)
+        self.redirect("/reviewCategories")
+
+class removeNewCategory(webapp2.RequestHandler):
+    def post(self):
+        cat = self.request.get("cat")
+        logging.warning(cat)
+        models.changeCategoryStatus(cat,False)
+        time.sleep(.1)
+        self.redirect("/reviewCategories")
+
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
     def post(self):
@@ -712,6 +728,8 @@ mappings = [
   ('/checkUsername', checkUsername),
   ('/getNewCatScores', getNewCatScores),
   ('/addCategory', addCategory),
-  ('/reviewCategories', reviewCategoryTable)
+  ('/reviewCategories', reviewCategoryTable),
+  ('/addNewCategory', addNewCategory),
+  ('/removeNewCategory', removeNewCategory)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

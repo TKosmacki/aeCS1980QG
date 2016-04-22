@@ -37,18 +37,20 @@
         <div class = "container col-lg-12"><br></div>
         <div class="container col-lg-4"></div>
         <div class="container col-lg-4">
-            <table id="acceptedboard">
+            In rotation:
+            <table id="acceptedBoard">
               <thead>
-                <th width='5%'>Remove</th>
+                <th width='20%'>Action</th>
                 <th>Category</th>
               </thead>
               <tbody>
               </tbody>
             </table>
             <hr>
+            Out of rotation:
             <table id="newBoard">
               <thead>
-                <th width='5%'>Add</th>
+                <th width='20%'>Action</th>
                 <th>Category</th>
               </thead>
               <tbody>
@@ -56,7 +58,9 @@
             </table>
         </div>
         <div class="container col-lg-4"></div>
+        <br>
     </div>
+    <br>
 </body>
 
 <script type="text/javascript">
@@ -64,12 +68,16 @@
         var curr = {{trueCatList|safe}};
         var falseList = {{falseCatList|safe}};
         $.each(curr, function(key, value) {
-            var no = "<a href=\"removeCategory?=cat='"+value.category+"'\">NO</a>";
-            $('#acceptedboard tbody').append("<tr><td>"+no+"</td><td>"+value.category+"</td></tr>");
+            var newNo1 = "<form method='post' style='display:inline-block' class='horizontal-form' action='/removeNewCategory'>";
+            var newNo2 = "<input type='hidden' name='cat' value='"+value.category+"'></input>";
+            var newNo3 = "<button class='btn btn-danger' type='submit'>REMOVE</button></form>";
+            $('#acceptedBoard tbody').append("<tr><td>"+newNo1+newNo2+newNo3+"</td><td>"+value.category+"</td></tr>");
         });
         $.each(falseList, function(key, value) {
-            var yes = "<a href=\"addCategory?=cat='"+value.category+"'\">NO</a>";
-            $('#newBoard tbody').append("<tr><td>"+yes+"</td><td>"+value.category+"</td></tr>");
+            var newNo1 = "<form method='post' style='display:inline-block' class='horizontal-form' action='/addNewCategory'>";
+            var newNo2 = "<input type='hidden' name='cat' value='"+value.category+"'></input>";
+            var newNo3 = "<button class='btn btn-success' type='submit'>ADD</button></form>";
+            $('#newBoard tbody').append("<tr><td>"+newNo1+newNo2+newNo3+"</td><td>"+value.category+"</td></tr>");
         });
     });
 </script>
