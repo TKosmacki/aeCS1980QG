@@ -476,7 +476,7 @@ class categoryQuiz(webapp2.RequestHandler):
                 temp = q.to_dict(exclude=['category','creator','accepted','up_voters','down_voters','create_date'])
                 qList.append(temp)
             jList = json.dumps(qList, default=obj_dict)
-            
+
         page_params = {
             'user_id': get_user_id(),
             'num': num,
@@ -634,6 +634,14 @@ class removeNewCategory(webapp2.RequestHandler):
         time.sleep(.1)
         self.redirect("/reviewCategories")
 
+class deleteCategory(webapp2.RequestHandler):
+    def post(self):
+        cat = self.request.get("cat")
+        logging.warning(cat)
+        models.deleteCategoryPerm(cat)
+        time.sleep(.1)
+        self.redirect("/reviewCategories")
+
 #Upvoting a question
 class addVote(webapp2.RequestHandler):
     def post(self):
@@ -735,6 +743,7 @@ mappings = [
   ('/addCategory', addCategory),
   ('/reviewCategories', reviewCategoryTable),
   ('/addNewCategory', addNewCategory),
-  ('/removeNewCategory', removeNewCategory)
+  ('/removeNewCategory', removeNewCategory),
+  ('/deleteCategory', deleteCategory)
 ]
 app = webapp2.WSGIApplication(mappings, debug=True)

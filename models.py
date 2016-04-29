@@ -265,6 +265,9 @@ def changeCategoryStatus(category, statusIn):
     cat.accepted = statusIn
     cat.put()
 
+def deleteCategoryPerm(category):
+    return ndb.Key(Category, category).delete()
+
 #GETTERS
 ###############################################################################
 def check_if_user_exists(id):
