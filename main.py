@@ -96,6 +96,7 @@ class SubmitPageHandler(webapp2.RequestHandler):
         }
         render_template(self, 'newQuestionSubmit.html', page_params)
 
+#Gets all of the information submitted by the user about a new question
 class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         id = get_user_id()
@@ -149,15 +150,14 @@ class NewQuestion(blobstore_handlers.BlobstoreUploadHandler):
 #Used for reviewing a single question, whether from the tables or from email
 class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
-        id = self.request.get('id')
-        Uid = get_user_id()
-        review = models.getQuestionFromURL(id)
+        questionID = self.request.get('id')
+        id = get_user_id()
+        review = models.getQuestionFromURL(questionID)
         is_admin = 0
         if users.is_current_user_admin():
             is_admin = 1
-        logging.warning(Uid)
-        if Uid is not None:
-            q = models.check_if_user_exists(Uid)
+        if id is not None:
+            q = models.check_if_user_exists(id)
             if q == None:
                 page_params = {
                     'upload_url': blobstore.create_upload_url('/profile'),
@@ -171,11 +171,11 @@ class ReviewSingleQuestion(blobstore_handlers.BlobstoreUploadHandler):
                 render_template(self, 'createProfile.html' ,page_params)
                 return
         page_params = {
-            'upload_urlQE': blobstore.create_upload_url('/ReviewQuestion?id=' + id),
+            'upload_urlQE': blobstore.create_upload_url('/ReviewQuestion?id=' + questionID),
             'user_email': get_user_email(),
             'login_url': users.create_login_url(),
             'logout_url': users.create_logout_url('/'),
-            'user_id': Uid,
+            'user_id': id,
             'review': review,
             'admin' : is_admin
         }
@@ -295,7 +295,9 @@ class ReviewOldQuestions(webapp2.RequestHandler):
         }
         render_template(self, 'viewDatabase.html', page_params)
 
-class test(webapp2.RequestHandler):
+#Created for populating the database with some answers,categories, and questions, for testing
+#purposes, necessary to run before anything else works when databse is empty. /meanstackakalamestack
+class Setup(webapp2.RequestHandler):
     def get(self):
         if not users.is_current_user_admin(): #stops from running this if user is not admin
             self.redirect("/")
@@ -442,7 +444,7 @@ class answerSingle(webapp2.RequestHandler):
 def obj_dict(obj):
     return obj.__dict__
 
-#Fetches the quiz and passes the questions and relevant information to the page.
+#Fetches the quiz and passes the relevenat material pertaining to the questions with it.
 class categoryQuiz(webapp2.RequestHandler):
     def get(self):
         id = get_user_id()
@@ -473,6 +475,7 @@ class categoryQuiz(webapp2.RequestHandler):
             num = len(questions)
             qList = []
             for q in questions:
+                #exclude removes the properties we do no need to have passed to the html from the question object
                 temp = q.to_dict(exclude=['category','creator','accepted','up_voters','down_voters','create_date'])
                 qList.append(temp)
             jList = json.dumps(qList, default=obj_dict)
@@ -513,6 +516,7 @@ class reportQuizHandler(webapp2.RequestHandler):
         subject = "A question has been reported"
         mail.send_mail(sender_address , "bogdanbg24@gmail.com" , subject, body)
 
+#Grabs all of the users scores for all time and sends JSON object to html
 class LeaderBoard(webapp2.RequestHandler):
     def get(self):
         id = get_user_id()
@@ -547,7 +551,11 @@ class LeaderBoard(webapp2.RequestHandler):
             'admin': is_admin,
             }
         render_template(self, 'leaderboard.html', page_params)
-
+        
+#AJAX Handler for Leaderboard
+#Updates the leaderboard when the dropdown boxes are changed
+#Sends back JSON object with updated list of usernames and their scores
+#in the current category. Returns all users who have a score
 class getNewCatScores(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
@@ -723,7 +731,7 @@ mappings = [
   ('/NewQuestion', NewQuestion),
   ('/ReviewQuestion', ReviewSingleQuestion),
   ('/deleteQuestion', deleteQuestion),
-  ('/meanstackakalamestack', test),
+  ('/meanstackakalamestack', Setup),
   ('/ReviewNewQuestions', ReviewNewQuestions),
   ('/ReviewOldQuestions', ReviewOldQuestions),
   ('/answerSingle',answerSingle),

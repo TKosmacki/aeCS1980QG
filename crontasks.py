@@ -8,7 +8,7 @@ class validate_questions(webapp2.RequestHandler):
         review = models.get_oldest_questions(False,False) #searches 1000 oldest invalid questions
         if review:
             for question in review:
-                if question.rating > 3:
+                if question.rating > 1:
                     question.accepted = True
                     question.up_voters = []
                     question.down_voters = []
